@@ -1,0 +1,23 @@
+.ts-reason {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--ts-space-sm);
+  padding: 6px 10px;
+  border-radius: var(--ts-radius-md);
+  font-family: var(--ts-font-family);
+  font-size: var(--ts-font-size-md);
+}
+.ts-reason__lead { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.ts-reason__dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.ts-reason__weight { font-weight: 600; }
+.ts-reason.is-active .ts-reason__label { color: var(--ts-color-text-primary); font-weight: 500; }
+.ts-reason--positive.is-active { background: var(--ts-color-surface-positive); }
+.ts-reason--positive.is-active .ts-reason__dot { background: var(--ts-color-signal-positive); }
+.ts-reason--positive .ts-reason__weight { color: var(--ts-color-signal-positive); }
+.ts-reason--negative.is-active { background: var(--ts-color-surface-negative); }
+.ts-reason--negative.is-active .ts-reason__dot { background: var(--ts-color-signal-negative); }
+.ts-reason--negative .ts-reason__weight { color: var(--ts-color-signal-negative); }
+.ts-reason.is-inactive { opacity: 0.45; }
+.ts-reason.is-inactive .ts-reason__label { color: var(--ts-color-text-muted); }
+.ts-reason.is-inactive .ts-reason__dot { background: var(--ts-color-signal-inactive); }

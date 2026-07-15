@@ -1,0 +1,13 @@
+.ts-pill {
+  display: inline-block;
+  font-family: var(--ts-font-family);
+  font-size: var(--ts-font-size-xs);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 4px 10px;
+  border-radius: var(--ts-radius-pill);
+}
+.ts-pill--positive { background: var(--ts-color-surface-positive); color: var(--ts-color-signal-positive); }
+.ts-pill--negative { background: var(--ts-color-surface-negative); color: var(--ts-color-signal-negative); }
+.ts-pill--warning { background: #fdf3e0; color: #a86e14; }
+.ts-pill--neutral { background: #eef0f3; color: var(--ts-color-text-muted); }

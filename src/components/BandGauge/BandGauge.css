@@ -1,0 +1,27 @@
+.ts-gauge { font-family: var(--ts-font-family); max-width: 368px; }
+.ts-gauge__track { position: relative; display: flex; gap: 4px; height: 18px; align-items: center; }
+.ts-gauge__band { flex: 1 1 0; height: 10px; border-radius: 5px; }
+.ts-gauge__band--low { background: var(--ts-color-score-low); }
+.ts-gauge__band--medium { background: var(--ts-color-score-medium); }
+.ts-gauge__band--high { background: var(--ts-color-score-high); }
+.ts-gauge__marker {
+  position: absolute;
+  top: 0;
+  width: 3px;
+  height: 18px;
+  border-radius: 1.5px;
+  background: var(--ts-color-text-primary);
+  transform: translateX(-50%);
+}
+.ts-gauge__ticks {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 10px;
+  color: var(--ts-color-text-muted);
+}
+.ts-gauge__caption {
+  margin: var(--ts-space-sm) 0 0;
+  font-size: var(--ts-font-size-xs);
+  color: var(--ts-color-text-muted);
+}

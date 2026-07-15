@@ -1,0 +1,22 @@
+.ts-btn {
+  font-family: var(--ts-font-family);
+  font-size: var(--ts-font-size-lg);
+  border-radius: var(--ts-radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  background: none;
+  transition: filter 120ms ease, background-color 120ms ease;
+}
+.ts-btn:focus-visible { outline: 2px solid var(--ts-color-signal-final); outline-offset: 2px; }
+.ts-btn--md { padding: 9px 18px; font-weight: 500; }
+.ts-btn--sm { padding: 5px 12px; font-size: var(--ts-font-size-sm); font-weight: 500; }
+.ts-btn--primary {
+  background: var(--ts-color-score-high);
+  color: var(--ts-color-text-inverse);
+  font-weight: 600;
+}
+.ts-btn--primary:hover { filter: brightness(0.94); }
+.ts-btn--secondary { border-color: var(--ts-color-border-default); color: var(--ts-color-text-primary); }
+.ts-btn--danger { border-color: var(--ts-color-border-default); color: var(--ts-color-signal-negative); }
+.ts-btn--ghost { border-color: var(--ts-color-border-default); color: var(--ts-color-text-muted); }
+.ts-btn--secondary:hover, .ts-btn--danger:hover, .ts-btn--ghost:hover { background: #f5f6f8; }

@@ -1,0 +1,12 @@
+.ts-waterfall { font-family: var(--ts-font-family); max-width: 100%; height: auto; }
+.ts-waterfall__baseline { stroke: var(--ts-color-border-default); stroke-dasharray: 4 4; }
+.ts-waterfall__bar--positive { fill: var(--ts-color-signal-positive); }
+.ts-waterfall__bar--negative { fill: var(--ts-color-signal-negative); }
+.ts-waterfall__bar--neutral { fill: var(--ts-color-signal-neutral); }
+.ts-waterfall__bar--final { fill: var(--ts-color-signal-final); }
+.ts-waterfall__value { font-size: 10px; font-weight: 500; }
+.ts-waterfall__value--positive { fill: var(--ts-color-signal-positive); }
+.ts-waterfall__value--negative { fill: var(--ts-color-signal-negative); }
+.ts-waterfall__value--neutral { fill: var(--ts-color-signal-neutral); }
+.ts-waterfall__value--final { fill: var(--ts-color-signal-final); }
+.ts-waterfall__label { font-size: 10px; fill: var(--ts-color-text-muted); }

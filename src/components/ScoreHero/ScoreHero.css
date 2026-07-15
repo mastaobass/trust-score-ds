@@ -1,0 +1,16 @@
+.ts-hero { font-family: var(--ts-font-family); display: flex; flex-direction: column; gap: var(--ts-space-md); max-width: 368px; }
+.ts-hero__eyebrow {
+  margin: 0;
+  font-size: var(--ts-font-size-xs);
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--ts-color-text-muted);
+}
+.ts-hero__score { margin: 0; display: flex; align-items: baseline; gap: var(--ts-space-sm); }
+.ts-hero__value { font-size: var(--ts-font-size-display); font-weight: 700; line-height: 1; }
+.ts-hero__value--low { color: var(--ts-color-score-low); }
+.ts-hero__value--medium { color: var(--ts-color-score-medium); }
+.ts-hero__value--high { color: var(--ts-color-score-high); }
+.ts-hero__denominator { font-size: var(--ts-font-size-xl); font-weight: 500; color: var(--ts-color-text-muted); }
+.ts-hero__meta { display: flex; align-items: center; gap: var(--ts-space-sm); }
+.ts-hero__confidence { font-size: var(--ts-font-size-sm); font-weight: 500; color: var(--ts-color-text-muted); }
