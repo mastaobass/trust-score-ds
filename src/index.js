@@ -5,4 +5,6 @@ export { default as BandGauge } from "./components/BandGauge/BandGauge";
 export { default as WaterfallChart } from "./components/WaterfallChart/WaterfallChart";
 export { default as ScoreHero } from "./components/ScoreHero/ScoreHero";
 export { default as TrustScoreModal } from "./components/TrustScoreModal/TrustScoreModal";
+export { default as ReviewQueue } from "./components/ReviewQueue/ReviewQueue";
 export { BANDS, bandFor, gaugePosition } from "./lib/score";
+export { QUEUE } from "./lib/queue";

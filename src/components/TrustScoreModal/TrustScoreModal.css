@@ -1,8 +1,13 @@
 .ts-lightbox {
-  background: var(--ts-color-surface-overlay);
-  padding: 48px 24px;
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: color-mix(in srgb, var(--ts-color-surface-overlay) 72%, transparent);
+  padding: 32px 16px 48px;
   display: flex;
   justify-content: center;
+  align-items: flex-start;
+  overflow: auto;
   font-family: var(--ts-font-family);
 }
 .ts-modal {
@@ -12,6 +17,7 @@
   width: 1020px;
   max-width: 100%;
   overflow: hidden;
+  margin-block: auto;
 }
 .ts-modal__header {
   display: flex;
@@ -25,6 +31,7 @@
 .ts-modal__close {
   border: none; background: none; cursor: pointer;
   font-size: 22px; line-height: 1; color: var(--ts-color-text-muted);
+  width: 44px; height: 44px;
 }
 .ts-modal__close:focus-visible { outline: 2px solid var(--ts-color-signal-final); outline-offset: 2px; }
 .ts-modal__content { padding: var(--ts-space-xl) var(--ts-space-xxl); display: flex; flex-direction: column; gap: var(--ts-space-xl); }
@@ -32,7 +39,7 @@
 .ts-modal__chart { flex: 1 1 0; min-width: 0; }
 .ts-modal__section-title { margin: 0; font-size: var(--ts-font-size-lg); font-weight: 600; color: var(--ts-color-text-primary); }
 .ts-modal__section-subtitle { margin: 2px 0 8px; font-size: var(--ts-font-size-sm); color: var(--ts-color-text-muted); }
-.ts-modal__reasons-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--ts-space-md); }
+.ts-modal__reasons-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--ts-space-md); gap: 12px; flex-wrap: wrap; }
 .ts-modal__columns { display: flex; gap: var(--ts-space-xxl); }
 .ts-modal__column { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: var(--ts-space-xs); }
 .ts-modal__column-title {
@@ -48,11 +55,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
   padding: 18px 28px 20px;
   border-top: 1px solid var(--ts-color-border-default);
+  flex-wrap: wrap;
 }
 .ts-modal__feedback { display: flex; align-items: center; gap: 10px; font-size: var(--ts-font-size-md); color: var(--ts-color-text-muted); }
-.ts-modal__actions { display: flex; gap: var(--ts-space-md); }
+.ts-modal__actions { display: flex; gap: var(--ts-space-md); flex-wrap: wrap; }
 @media (max-width: 900px) {
   .ts-modal__overview, .ts-modal__columns { flex-direction: column; }
 }

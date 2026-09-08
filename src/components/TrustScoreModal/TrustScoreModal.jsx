@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import Button from "../Button/Button";
 import ScoreHero from "../ScoreHero/ScoreHero";
 import WaterfallChart from "../WaterfallChart/WaterfallChart";
@@ -24,19 +25,42 @@ export default function TrustScoreModal({
   onClose,
   onFeedback,
 }) {
+  const closeRef = useRef(null);
   const activeCount = [...positiveReasons, ...negativeReasons].filter((r) => r.active).length;
   const totalCount = positiveReasons.length + negativeReasons.length;
   const sorted = (rows) => [...rows].sort((a, b) => Number(b.active) - Number(a.active));
 
+  useEffect(() => {
+    const prev = document.activeElement;
+    closeRef.current?.focus();
+    const onKey = (e) => {
+      if (e.key === "Escape") onClose?.();
+    };
+    window.addEventListener("keydown", onKey);
+    const original = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = original;
+      prev?.focus?.();
+    };
+  }, [onClose]);
+
   return (
-    <div className="ts-lightbox">
-      <div className="ts-modal" role="dialog" aria-modal="true" aria-label={title}>
+    <div className="ts-lightbox" onClick={onClose}>
+      <div
+        className="ts-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-label={title}
+        onClick={(e) => e.stopPropagation()}
+      >
         <header className="ts-modal__header">
           <div>
             <h2 className="ts-modal__title">{title}</h2>
             {transaction && <p className="ts-modal__subtitle">{transaction}</p>}
           </div>
-          <button type="button" className="ts-modal__close" aria-label="Close" onClick={onClose}>
+          <button ref={closeRef} type="button" className="ts-modal__close" aria-label="Close" onClick={onClose}>
             ×
           </button>
         </header>
