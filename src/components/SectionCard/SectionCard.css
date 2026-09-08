@@ -1,0 +1,14 @@
+.ts-card {
+  background: var(--ts-color-surface-default);
+  border: 1px solid var(--ts-color-border-default);
+  border-radius: var(--ts-radius-md);
+  padding: 18px 20px;
+  font-family: var(--ts-font-family);
+}
+.ts-card__title {
+  margin: 0 0 16px;
+  font-size: var(--ts-font-size-xl);
+  font-weight: 600;
+  color: var(--ts-color-text-primary);
+}
+.ts-card__body { display: flex; flex-direction: column; gap: 8px; }

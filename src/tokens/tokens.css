@@ -1,46 +1,36 @@
-/* Generated from tokens.json — keep in sync (or wire up Style Dictionary later). */
+/* Generated from tokens.json. Keep in sync with the Figma Trust Score Tokens collection. */
 :root {
-  /* color/text */
   --ts-color-text-primary: #171c29;
   --ts-color-text-muted: #6b7382;
   --ts-color-text-inverse: #ffffff;
-
-  /* color/surface */
   --ts-color-surface-default: #ffffff;
   --ts-color-surface-overlay: #121721;
   --ts-color-surface-positive: #e6f7eb;
   --ts-color-surface-negative: #fcf0ed;
-
-  /* color/border */
+  --ts-color-surface-warning: #fdf3e0;
+  --ts-color-surface-raised: #f2f3f6;
+  --ts-color-surface-page: #edf0f4;
   --ts-color-border-default: #e3e6eb;
-
-  /* color/score — bands of the 0.0–99.9 scale */
   --ts-color-score-low: #d64a45;
   --ts-color-score-medium: #eda838;
   --ts-color-score-high: #2e9961;
-
-  /* color/signal — waterfall + reason semantics */
   --ts-color-signal-positive: #2e9961;
   --ts-color-signal-negative: #d64a45;
   --ts-color-signal-neutral: #9ea6b3;
   --ts-color-signal-final: #212b42;
   --ts-color-signal-inactive: #c7ccd4;
-
-  /* space */
+  --ts-color-signal-warning: #a86e14;
+  --ts-color-accent-primary: #2563eb;
   --ts-space-xs: 4px;
   --ts-space-sm: 8px;
   --ts-space-md: 12px;
   --ts-space-lg: 16px;
   --ts-space-xl: 24px;
   --ts-space-xxl: 28px;
-
-  /* radius */
   --ts-radius-sm: 3px;
   --ts-radius-md: 8px;
   --ts-radius-lg: 16px;
   --ts-radius-pill: 999px;
-
-  /* type */
   --ts-font-family: "Inter", system-ui, -apple-system, sans-serif;
   --ts-font-size-xs: 11px;
   --ts-font-size-sm: 12px;

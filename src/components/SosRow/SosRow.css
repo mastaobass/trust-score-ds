@@ -1,0 +1,25 @@
+.ts-sos {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border: 1px solid var(--ts-color-border-default);
+  border-radius: var(--ts-radius-md);
+  background: var(--ts-color-surface-default);
+  font-family: var(--ts-font-family);
+  font-size: var(--ts-font-size-lg);
+  color: var(--ts-color-text-primary);
+}
+.ts-sos__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 600;
+  flex: none;
+}
+.ts-sos--pass .ts-sos__badge { background: var(--ts-color-surface-positive); color: var(--ts-color-signal-positive); }
+.ts-sos--warn .ts-sos__badge { background: var(--ts-color-surface-warning); color: var(--ts-color-signal-warning); }

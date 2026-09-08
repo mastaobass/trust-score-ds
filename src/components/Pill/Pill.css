@@ -9,5 +9,5 @@
 }
 .ts-pill--positive { background: var(--ts-color-surface-positive); color: var(--ts-color-signal-positive); }
 .ts-pill--negative { background: var(--ts-color-surface-negative); color: var(--ts-color-signal-negative); }
-.ts-pill--warning { background: #fdf3e0; color: #a86e14; }
-.ts-pill--neutral { background: #eef0f3; color: var(--ts-color-text-muted); }
+.ts-pill--warning { background: var(--ts-color-surface-warning); color: var(--ts-color-signal-warning); }
+.ts-pill--neutral { background: var(--ts-color-surface-raised); color: var(--ts-color-text-muted); }

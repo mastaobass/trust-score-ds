@@ -1,0 +1,14 @@
+.ts-field { margin: 0; }
+.ts-field__label {
+  margin: 0 0 4px;
+  font-family: var(--ts-font-family);
+  font-size: var(--ts-font-size-xs);
+  font-weight: 600;
+  color: var(--ts-color-text-muted);
+}
+.ts-field__value {
+  margin: 0;
+  font-family: var(--ts-font-family);
+  font-size: var(--ts-font-size-lg);
+  color: var(--ts-color-text-primary);
+}

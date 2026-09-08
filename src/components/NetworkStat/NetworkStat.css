@@ -1,0 +1,33 @@
+.ts-stat {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--ts-font-family);
+}
+.ts-stat__value {
+  width: 52px;
+  flex: none;
+  font-size: var(--ts-font-size-xl);
+  font-weight: 600;
+  color: var(--ts-color-text-primary);
+}
+.ts-stat__label {
+  width: 92px;
+  flex: none;
+  font-size: var(--ts-font-size-md);
+  color: var(--ts-color-text-muted);
+}
+.ts-stat__track {
+  display: block;
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--ts-color-surface-raised);
+  overflow: hidden;
+}
+.ts-stat__fill {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  background: var(--ts-color-accent-primary);
+}
