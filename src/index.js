@@ -1,6 +1,12 @@
 export { default as Button } from "./components/Button/Button";
 export { default as Pill } from "./components/Pill/Pill";
 export { default as ReasonRow } from "./components/ReasonRow/ReasonRow";
+export { default as VerificationChip } from "./components/VerificationChip/VerificationChip";
+export { default as StatusChip } from "./components/StatusChip/StatusChip";
+export { default as SosRow } from "./components/SosRow/SosRow";
+export { default as FieldRow } from "./components/FieldRow/FieldRow";
+export { default as NetworkStat } from "./components/NetworkStat/NetworkStat";
+export { default as SectionCard } from "./components/SectionCard/SectionCard";
 export { default as BandGauge } from "./components/BandGauge/BandGauge";
 export { default as WaterfallChart } from "./components/WaterfallChart/WaterfallChart";
 export { default as ScoreHero } from "./components/ScoreHero/ScoreHero";

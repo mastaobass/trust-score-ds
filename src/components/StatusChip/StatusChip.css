@@ -1,0 +1,13 @@
+.ts-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: var(--ts-radius-md);
+  font-family: var(--ts-font-family);
+  font-size: var(--ts-font-size-sm);
+  font-weight: 500;
+}
+.ts-status--review { background: var(--ts-color-surface-warning); color: var(--ts-color-signal-warning); }
+.ts-status--approved { background: var(--ts-color-surface-positive); color: var(--ts-color-signal-positive); }
+.ts-status--held { background: var(--ts-color-surface-raised); color: var(--ts-color-text-muted); }
+.ts-status--declined { background: var(--ts-color-surface-negative); color: var(--ts-color-signal-negative); }
