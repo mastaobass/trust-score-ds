@@ -1,9 +1,9 @@
-name: Deploy Storybook to GitHub Pages
+name: Deploy Storybook and review console to GitHub Pages
 
 on:
   push:
     branches: [main]
-  workflow_dispatch:   # lets you trigger a deploy manually from the Actions tab
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -24,7 +24,11 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      - run: npm run build
+        env:
+          CONSOLE_BASE: /trust-score-ds/console/
       - run: npm run build-storybook
+      - run: mkdir -p storybook-static/console && cp -a dist/. storybook-static/console/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

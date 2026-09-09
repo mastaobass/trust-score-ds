@@ -2,10 +2,13 @@
 
 A fraud-risk-score explainer managed in code. Vite + React + Storybook.
 
+**Live review console:** https://mastaobass.github.io/trust-score-ds/console/
+
+Open a queue row to the Payments Fraud case. The score explainer lives on the case (Velocities → Explain score), not on the table.
+
 **Live Storybook:** https://mastaobass.github.io/trust-score-ds/?path=/story/compositions-reviewqueue--loaded
 
-The product slice is a review console: ten reconstructed payments, click a row,
-get the explainer modal. Isolated components still live in Storybook.
+Storybook still isolates the table and modal as components. The console above is the product path.
 
 ## Constraints (read this first)
 
@@ -20,7 +23,7 @@ get the explainer modal. Isolated components still live in Storybook.
 
 ```bash
 npm install
-npm run dev         # review console
+npm run dev         # review console (queue → case)
 npm run storybook   # component kit
 ```
 
@@ -30,7 +33,7 @@ npm run storybook   # component kit
 - Score primitives: `Button`, `Pill`, `ReasonRow`
 - Case primitives: `VerificationChip`, `StatusChip`, `SosRow`, `FieldRow`, `NetworkStat`, `SectionCard`
 - Components: `BandGauge`, `WaterfallChart`, `ScoreHero`
-- Compositions: `TrustScoreModal`, `ReviewQueue`
+- Compositions: `TrustScoreModal`, `ReviewQueue`, `CaseDetail`
 
 ## Design and code sync
 
@@ -39,10 +42,14 @@ Figma file: [Fraud-Risk-Score-Explainer](https://www.figma.com/design/4xUv7jvv0s
 - Page **Score Modal**: light/dark explainer. The `Modal` component lives here.
 - Page **Case Detail View**: reconstructed case-management screens (mostly flattened frames).
 - Page **Kit**: componentized primitives plus a ReviewQueue composition.
+- Page **Transaction Queue**: product queue composition.
 - Variable collection **Trust Score Tokens** (Light / Dark).
 
 Code Connect needs an Organization plan, which this file does not have. Sync is a deliberate step.
 
 ## Free deployment
 
-`npm run build-storybook` deploys to GitHub Pages via `.github/workflows/deploy.yml`.
+GitHub Actions deploys two surfaces to GitHub Pages:
+
+- `/` Storybook
+- `/console/` the review console (queue → case)

@@ -90,17 +90,36 @@
   border-bottom: 1px solid var(--ts-color-border-default);
   vertical-align: middle;
 }
-.ts-queue__table tbody tr {
-  cursor: pointer;
-}
+.ts-queue__table tbody tr.ts-queue-row { cursor: pointer; }
 .ts-queue__table tbody tr:hover,
 .ts-queue__table tbody tr.is-selected,
-.ts-queue__table tbody tr:focus-visible {
+.ts-queue__table tbody tr:focus-within {
   background: #f4f6f8;
 }
-.ts-queue__table tbody tr:focus-visible {
+.ts-queue-row__merchant {
+  color: inherit;
+  font-weight: 500;
+  text-decoration: none;
+}
+.ts-queue-row__merchant:hover { color: var(--ts-color-accent-primary, #2563eb); text-decoration: underline; }
+.ts-queue-row__link {
+  position: static;
+  display: inline;
+  color: var(--ts-color-accent-primary, #2563eb);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: var(--ts-font-family);
+  font-size: var(--ts-font-size-sm);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  padding: 0;
+}
+.ts-queue-row__link:hover { text-decoration: underline; }
+.ts-queue-row__link:focus-visible {
   outline: 2px solid var(--ts-color-signal-final);
-  outline-offset: -2px;
+  outline-offset: 2px;
 }
 .ts-queue__merchant { font-weight: 500; }
 .ts-queue__mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: var(--ts-font-size-md); color: var(--ts-color-text-muted); }
