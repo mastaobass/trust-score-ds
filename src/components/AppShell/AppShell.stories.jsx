@@ -15,6 +15,11 @@ export default {
     email: "email@example.com",
     org: "Bancolombia",
     activeNavId: "case-management",
+    breadcrumbs: [
+      { label: "Kount 360" },
+      { label: "Payments Fraud" },
+      { label: "Case Queue" },
+    ],
   },
 };
 
