@@ -21,7 +21,8 @@ export const Default = {
   parameters: {
     docs: {
       description: {
-        story: "Right cluster: search, notifications, user, email, then org. Tools are decorative.",
+        story:
+          "Right cluster, left to right: Search, notification bell, bank name (switch banks), then user icon with email (profile and sign out).",
       },
     },
   },
