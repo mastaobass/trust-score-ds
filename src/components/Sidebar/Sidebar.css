@@ -1,0 +1,63 @@
+.ts-sidebar {
+  width: 80px;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  padding: var(--ts-space-lg) var(--ts-space-md);
+  background: var(--ts-color-surface-raised);
+  font-family: var(--ts-font-family);
+}
+.ts-sidebar__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ts-space-md);
+}
+.ts-sidebar__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border: 1px solid var(--ts-color-border-default);
+  border-radius: var(--ts-radius-nav);
+  background: var(--ts-color-surface-default);
+  cursor: default;
+  color: var(--ts-color-text-muted);
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+.ts-sidebar__item:focus-visible {
+  outline: 2px solid var(--ts-color-accent-primary);
+  outline-offset: 2px;
+}
+.ts-sidebar__item--active {
+  background: var(--ts-color-accent-primary);
+  border-color: transparent;
+  cursor: default;
+}
+.ts-sidebar__item--active .ts-sidebar__icon {
+  filter: brightness(0) invert(1);
+}
+.ts-sidebar__icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ts-sidebar__icons--stack {
+  flex-direction: column;
+  gap: 0;
+  height: 48px;
+  overflow: hidden;
+}
+.ts-sidebar__icon {
+  display: block;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.ts-sidebar__item[aria-disabled="true"] {
+  pointer-events: none;
+}

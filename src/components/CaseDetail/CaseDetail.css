@@ -4,23 +4,6 @@
   color: var(--ts-color-text-primary);
   font-family: var(--ts-font-family);
 }
-.ts-case__top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  min-height: 48px;
-  padding: 0 20px;
-  background: var(--ts-color-surface-overlay);
-  color: var(--ts-color-text-inverse);
-  font-size: var(--ts-font-size-sm);
-}
-.ts-case__brand {
-  margin: 0;
-  font-size: var(--ts-font-size-lg);
-  font-weight: 600;
-}
-.ts-case__brand span { opacity: 0.45; font-weight: 400; margin: 0 8px; }
 .ts-case__crumb {
   display: flex;
   align-items: center;

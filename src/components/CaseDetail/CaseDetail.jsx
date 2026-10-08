@@ -48,9 +48,6 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
   if (!item) {
     return (
       <div className="ts-case">
-        <header className="ts-case__top">
-          <p>Trust Score | Review console</p>
-        </header>
         <main className="ts-case__missing">
           <h1>No case for that order</h1>
           <p>The queue only holds the reconstructed payments in this console.</p>
@@ -105,12 +102,6 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
 
   return (
     <div className="ts-case">
-      <header className="ts-case__top">
-        <p className="ts-case__brand">
-          Trust Score <span>|</span> Review console
-        </p>
-        <p>Payments fraud reconstruction</p>
-      </header>
       <div className="ts-case__crumb">
         <a href="#/" onClick={(e) => { e.preventDefault(); onBack(); }}>
           Transaction queue

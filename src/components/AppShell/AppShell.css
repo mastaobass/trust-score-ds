@@ -1,0 +1,22 @@
+.ts-app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  background: var(--ts-color-surface-page);
+  font-family: var(--ts-font-family);
+}
+.ts-app-shell__body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  align-items: stretch;
+}
+.ts-app-shell__main {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+}
+.ts-app-shell__main > .ts-queue,
+.ts-app-shell__main > .ts-case {
+  min-height: 100%;
+}

@@ -1,0 +1,51 @@
+.ts-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ts-space-lg);
+  min-height: 56px;
+  padding: var(--ts-space-lg) 32px;
+  background: var(--ts-color-surface-default);
+  border-bottom: 1px solid var(--ts-color-border-default);
+  color: var(--ts-color-text-primary);
+  font-family: var(--ts-font-family);
+  box-sizing: border-box;
+}
+.ts-topbar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--ts-space-lg);
+  white-space: nowrap;
+}
+.ts-topbar__equifax {
+  font-size: var(--ts-font-size-xl);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+.ts-topbar__pipe {
+  font-size: var(--ts-font-size-lg);
+  font-weight: 400;
+  color: var(--ts-color-text-muted);
+}
+.ts-topbar__product {
+  font-size: var(--ts-font-size-lg);
+  font-weight: 400;
+}
+.ts-topbar__account {
+  display: flex;
+  align-items: center;
+  gap: var(--ts-space-lg);
+  font-size: var(--ts-font-size-sm);
+  white-space: nowrap;
+}
+.ts-topbar__email {
+  font-weight: 400;
+}
+.ts-topbar__org {
+  font-weight: 600;
+}
+.ts-topbar__chevron {
+  margin-left: 0.35em;
+  color: var(--ts-color-text-muted);
+  font-size: 0.85em;
+}

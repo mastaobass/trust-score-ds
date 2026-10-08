@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import AppShell from "./components/AppShell/AppShell";
 import ReviewQueue from "./components/ReviewQueue/ReviewQueue";
 import CaseDetail from "./components/CaseDetail/CaseDetail";
 import { QUEUE } from "./lib/queue";
@@ -29,26 +30,26 @@ export default function App() {
     window.location.hash = "/";
   }, []);
 
-  if (route.name === "case") {
-    return (
-      <CaseDetail
-        id={route.id}
-        rows={rows}
-        onRowsChange={setRows}
-        flash={flash}
-        onFlash={setFlash}
-        onBack={back}
-        onOpen={openCase}
-      />
-    );
-  }
-
   return (
-    <ReviewQueue
-      rows={rows}
-      onRowsChange={setRows}
-      onOpenCase={openCase}
-      flash={flash}
-    />
+    <AppShell activeNavId="case-management">
+      {route.name === "case" ? (
+        <CaseDetail
+          id={route.id}
+          rows={rows}
+          onRowsChange={setRows}
+          flash={flash}
+          onFlash={setFlash}
+          onBack={back}
+          onOpen={openCase}
+        />
+      ) : (
+        <ReviewQueue
+          rows={rows}
+          onRowsChange={setRows}
+          onOpenCase={openCase}
+          flash={flash}
+        />
+      )}
+    </AppShell>
   );
 }
