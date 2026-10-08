@@ -15,8 +15,11 @@
   flex: 1;
   min-width: 0;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
 }
 .ts-app-shell__main > .ts-queue,
 .ts-app-shell__main > .ts-case {
-  min-height: 100%;
+  flex: 1;
+  min-height: 0;
 }

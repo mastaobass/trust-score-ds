@@ -30,8 +30,22 @@ export default function App() {
     window.location.hash = "/";
   }, []);
 
+  const breadcrumbs =
+    route.name === "case"
+      ? [
+          { label: "Kount 360" },
+          { label: "Payments Fraud" },
+          { label: "Case Queue", href: "#/" },
+          { label: "Case Details" },
+        ]
+      : [
+          { label: "Kount 360" },
+          { label: "Payments Fraud" },
+          { label: "Case Queue" },
+        ];
+
   return (
-    <AppShell activeNavId="case-management">
+    <AppShell activeNavId="case-management" breadcrumbs={breadcrumbs}>
       {route.name === "case" ? (
         <CaseDetail
           id={route.id}

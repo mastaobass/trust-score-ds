@@ -4,22 +4,6 @@
   color: var(--ts-color-text-primary);
   font-family: var(--ts-font-family);
 }
-.ts-case__crumb {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 36px;
-  padding: 0 20px;
-  background: var(--ts-color-surface-default);
-  border-bottom: 1px solid var(--ts-color-border-default);
-  font-size: var(--ts-font-size-sm);
-  color: var(--ts-color-text-muted);
-}
-.ts-case__crumb a {
-  color: var(--ts-color-accent-primary, #2563eb);
-  font-weight: 500;
-  text-decoration: none;
-}
 .ts-case__main { padding: 16px 20px 48px; max-width: 1280px; margin: 0 auto; }
 .ts-case__header { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; margin-bottom: 12px; }
 .ts-case__back { color: var(--ts-color-text-primary); font-size: var(--ts-font-size-xl); font-weight: 600; text-decoration: none; }

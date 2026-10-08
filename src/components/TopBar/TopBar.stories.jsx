@@ -17,7 +17,16 @@ export default {
   },
 };
 
-export const Default = {};
+export const Default = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Right cluster, left to right: Search, notification bell, bank name (switch banks), then user icon with email (profile and sign out).",
+      },
+    },
+  },
+};
 
 export const CustomAccount = {
   args: {

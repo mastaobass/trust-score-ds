@@ -102,14 +102,6 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
 
   return (
     <div className="ts-case">
-      <div className="ts-case__crumb">
-        <a href="#/" onClick={(e) => { e.preventDefault(); onBack(); }}>
-          Transaction queue
-        </a>
-        <span>/</span>
-        <span>Case #{item.id}</span>
-      </div>
-
       <main className="ts-case__main">
         <div className="ts-case__header">
           <a href="#/" className="ts-case__back" onClick={(e) => { e.preventDefault(); onBack(); }}>

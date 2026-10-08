@@ -20,7 +20,7 @@ const SIDEBAR_ITEMS = [
   { id: "audit-log", label: "Audit Log", icon: clockIcon },
 ];
 
-/** 80px icon rail. Non-active items are non-navigating until routes exist. */
+/** 80px icon rail. Items are 48×48. Non-active items show hover; disabled items do not. */
 export default function Sidebar({
   activeId = "case-management",
   items = SIDEBAR_ITEMS,
@@ -31,6 +31,7 @@ export default function Sidebar({
       <ul className="ts-sidebar__list">
         {items.map((item) => {
           const active = item.id === activeId;
+          const disabled = Boolean(item.disabled);
           const iconSrcs = item.icons ?? (item.icon ? [item.icon] : []);
           return (
             <li key={item.id}>
@@ -39,8 +40,8 @@ export default function Sidebar({
                 className={`ts-sidebar__item${active ? " ts-sidebar__item--active" : ""}`}
                 aria-label={item.label}
                 aria-current={active ? "page" : undefined}
-                aria-disabled={active ? undefined : true}
-                tabIndex={active ? 0 : -1}
+                aria-disabled={disabled ? true : undefined}
+                tabIndex={disabled ? -1 : 0}
               >
                 <span
                   className={`ts-sidebar__icons${iconSrcs.length > 1 ? " ts-sidebar__icons--stack" : ""}`}
