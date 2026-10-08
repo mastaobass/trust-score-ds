@@ -17,7 +17,15 @@ export default {
   },
 };
 
-export const Default = {};
+export const Default = {
+  parameters: {
+    docs: {
+      description: {
+        story: "Right cluster: search, notifications, user, email, then org. Tools are decorative.",
+      },
+    },
+  },
+};
 
 export const CustomAccount = {
   args: {
