@@ -6,7 +6,8 @@ body {
 }
 body {
   min-height: 100svh;
-  background: #f4f6f8;
+  background: var(--ts-color-surface-page);
+  color: var(--ts-color-text-primary);
   font-family: var(--ts-font-family);
   -webkit-font-smoothing: antialiased;
 }
