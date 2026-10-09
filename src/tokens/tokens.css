@@ -1,5 +1,7 @@
 /* Generated from tokens.json. Keep in sync with the Figma Trust Score Tokens collection. */
-:root {
+:root,
+html[data-theme="light"] {
+  color-scheme: light;
   --ts-color-text-primary: #171c29;
   --ts-color-text-muted: #6b7382;
   --ts-color-text-inverse: #ffffff;
@@ -40,4 +42,56 @@
   --ts-font-size-xl: 16px;
   --ts-font-size-xxl: 20px;
   --ts-font-size-display: 56px;
+}
+
+html[data-theme="system"] {
+  color-scheme: light dark;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --ts-color-text-primary: #f4f6fa;
+  --ts-color-text-muted: #a3acba;
+  --ts-color-text-inverse: #ffffff;
+  --ts-color-surface-default: #1c2230;
+  --ts-color-surface-overlay: #243044;
+  --ts-color-surface-positive: #143024;
+  --ts-color-surface-negative: #3a1e1c;
+  --ts-color-surface-warning: #3a2e14;
+  --ts-color-surface-raised: #171c29;
+  --ts-color-surface-page: #0f1218;
+  --ts-color-border-default: #2c3344;
+}
+
+@media (prefers-color-scheme: dark) {
+  html[data-theme="system"],
+  html:not([data-theme="light"]):not([data-theme="dark"]) {
+    color-scheme: dark;
+    --ts-color-text-primary: #f4f6fa;
+    --ts-color-text-muted: #a3acba;
+    --ts-color-text-inverse: #ffffff;
+    --ts-color-surface-default: #1c2230;
+    --ts-color-surface-overlay: #243044;
+    --ts-color-surface-positive: #143024;
+    --ts-color-surface-negative: #3a1e1c;
+    --ts-color-surface-warning: #3a2e14;
+    --ts-color-surface-raised: #171c29;
+    --ts-color-surface-page: #0f1218;
+    --ts-color-border-default: #2c3344;
+  }
+}
+
+/* Icon SVGs are external images with dark strokes. Invert them on dark surfaces. */
+html[data-theme="dark"] .ts-sidebar__icon,
+html[data-theme="dark"] .ts-topbar img {
+  filter: brightness(0) invert(1);
+}
+
+@media (prefers-color-scheme: dark) {
+  html[data-theme="system"] .ts-sidebar__icon,
+  html[data-theme="system"] .ts-topbar img,
+  html:not([data-theme="light"]):not([data-theme="dark"]) .ts-sidebar__icon,
+  html:not([data-theme="light"]):not([data-theme="dark"]) .ts-topbar img {
+    filter: brightness(0) invert(1);
+  }
 }

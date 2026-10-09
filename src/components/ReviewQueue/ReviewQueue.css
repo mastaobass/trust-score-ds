@@ -1,6 +1,6 @@
 .ts-queue {
   min-height: 100svh;
-  background: #f4f6f8;
+  background: var(--ts-color-surface-page);
   color: var(--ts-color-text-primary);
   font-family: var(--ts-font-family);
   text-align: left;
@@ -88,7 +88,7 @@
 .ts-queue__table tbody tr:hover,
 .ts-queue__table tbody tr.is-selected,
 .ts-queue__table tbody tr:focus-within {
-  background: #f4f6f8;
+  background: var(--ts-color-surface-page);
 }
 .ts-queue-row__merchant {
   color: inherit;

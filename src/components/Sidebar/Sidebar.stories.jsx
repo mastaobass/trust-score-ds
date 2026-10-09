@@ -13,7 +13,7 @@ export default {
   },
   decorators: [
     (Story) => (
-      <div style={{ minHeight: 480, display: "flex", background: "#edf0f4" }}>
+      <div style={{ minHeight: 480, display: "flex", background: "var(--ts-color-surface-page)" }}>
         <Story />
       </div>
     ),

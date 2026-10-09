@@ -3,9 +3,9 @@
   align-items: center;
   min-height: 36px;
   padding: 0 20px;
-  background: #f7f7fa;
+  background: var(--ts-color-surface-raised);
   border-bottom: 1px solid var(--ts-color-border-default);
-  color: #666e7d;
+  color: var(--ts-color-text-muted);
   font-family: var(--ts-font-family);
   font-size: 12px;
   font-weight: 400;
@@ -27,10 +27,10 @@
   gap: 8px;
 }
 .ts-breadcrumb__sep {
-  color: #666e7d;
+  color: var(--ts-color-text-muted);
 }
 .ts-breadcrumb__link {
-  color: #666e7d;
+  color: var(--ts-color-text-muted);
   font-weight: 400;
   text-decoration: none;
 }

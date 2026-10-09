@@ -22,7 +22,7 @@ export const Default = {
     docs: {
       description: {
         story:
-          "Right cluster, left to right: Search, notification bell, bank name (switch banks), then user icon with email (profile and sign out).",
+          "Right cluster, left to right: Search, notification bell, bank name, then user icon with email. The user menu includes Appearance: System, Light, or Dark.",
       },
     },
   },

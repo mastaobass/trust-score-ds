@@ -30,8 +30,8 @@
   transition: background-color 120ms ease, border-color 120ms ease;
 }
 .ts-sidebar__item:hover:not(.ts-sidebar__item--active):not([aria-disabled="true"]) {
-  background: #eef0f4;
-  border-color: #d5dae3;
+  background: var(--ts-color-surface-raised);
+  border-color: var(--ts-color-border-default);
   cursor: pointer;
 }
 .ts-sidebar__item:focus-visible {

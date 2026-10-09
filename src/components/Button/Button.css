@@ -19,4 +19,4 @@
 .ts-btn--secondary { border-color: var(--ts-color-border-default); color: var(--ts-color-text-primary); }
 .ts-btn--danger { border-color: var(--ts-color-border-default); color: var(--ts-color-signal-negative); }
 .ts-btn--ghost { border-color: var(--ts-color-border-default); color: var(--ts-color-text-muted); }
-.ts-btn--secondary:hover, .ts-btn--danger:hover, .ts-btn--ghost:hover { background: #f5f6f8; }
+.ts-btn--secondary:hover, .ts-btn--danger:hover, .ts-btn--ghost:hover { background: var(--ts-color-surface-raised); }
