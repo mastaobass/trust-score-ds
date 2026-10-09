@@ -2,9 +2,11 @@ import { useEffect, useId, useRef, useState } from "react";
 import searchIcon from "./assets/search.svg";
 import bellIcon from "./assets/bell.svg";
 import userIcon from "./assets/user.svg";
+import { getTheme, setTheme, subscribeTheme, THEMES } from "../../lib/theme";
 import "./TopBar.css";
 
 const DEFAULT_BANKS = ["Bancolombia", "Northwind Bank", "Harbor Credit"];
+const THEME_LABEL = { light: "Light", dark: "Dark", system: "System" };
 
 /** Brand strip. Search and the bell are decorative. Bank and user menus open locally. */
 export default function TopBar({
@@ -15,14 +17,18 @@ export default function TopBar({
 }) {
   const [open, setOpen] = useState(null);
   const [bank, setBank] = useState(org);
+  const [theme, setThemeState] = useState(getTheme);
   const rootRef = useRef(null);
   const bankMenuId = useId();
   const userMenuId = useId();
+  const appearanceId = useId();
   const bankOptions = banks.includes(org) ? banks : [org, ...banks];
 
   useEffect(() => {
     setBank(org);
   }, [org]);
+
+  useEffect(() => subscribeTheme((next) => setThemeState(next)), []);
 
   useEffect(() => {
     function onPointerDown(event) {
@@ -41,6 +47,23 @@ export default function TopBar({
 
   function toggle(menu) {
     setOpen((current) => (current === menu ? null : menu));
+  }
+
+  function chooseTheme(next) {
+    setTheme(next);
+    setThemeState(next);
+  }
+
+  function onThemeKey(event) {
+    const index = THEMES.indexOf(theme);
+    if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+      event.preventDefault();
+      chooseTheme(THEMES[(index + 1) % THEMES.length]);
+    }
+    if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+      event.preventDefault();
+      chooseTheme(THEMES[(index + THEMES.length - 1) % THEMES.length]);
+    }
   }
 
   return (
@@ -120,6 +143,30 @@ export default function TopBar({
                 <button type="button" role="menuitem" onClick={() => setOpen(null)}>
                   Sign out
                 </button>
+              </li>
+              <li className="ts-topbar__appearance">
+                <div className="ts-topbar__appearance-label" id={appearanceId}>
+                  Appearance
+                </div>
+                <div
+                  className="ts-topbar__theme"
+                  role="radiogroup"
+                  aria-labelledby={appearanceId}
+                  onKeyDown={onThemeKey}
+                >
+                  {THEMES.map((value) => (
+                    <button
+                      key={value}
+                      type="button"
+                      role="radio"
+                      aria-checked={theme === value}
+                      tabIndex={theme === value ? 0 : -1}
+                      onClick={() => chooseTheme(value)}
+                    >
+                      {THEME_LABEL[value]}
+                    </button>
+                  ))}
+                </div>
               </li>
             </ul>
           ) : null}

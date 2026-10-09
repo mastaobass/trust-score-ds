@@ -28,7 +28,7 @@ export const EmptyMain = {
     <AppShell {...args}>
       <div style={{ padding: 24 }}>
         <h1 style={{ margin: "0 0 8px", fontSize: 20 }}>Case Management</h1>
-        <p style={{ margin: 0, color: "#6b7382" }}>
+        <p style={{ margin: 0, color: "var(--ts-color-text-muted)" }}>
           Queue and case views render here inside the console chrome.
         </p>
       </div>
@@ -43,8 +43,9 @@ export const WithPlaceholderPanel = {
         style={{
           margin: 20,
           padding: 24,
-          background: "#fff",
-          border: "1px solid #e3e6eb",
+          background: "var(--ts-color-surface-default)",
+          border: "1px solid var(--ts-color-border-default)",
+          color: "var(--ts-color-text-primary)",
           borderRadius: 8,
           minHeight: 320,
         }}
