@@ -2,11 +2,54 @@ import { useEffect, useId, useRef, useState } from "react";
 import searchIcon from "./assets/search.svg";
 import bellIcon from "./assets/bell.svg";
 import userIcon from "./assets/user.svg";
-import { getTheme, setTheme, subscribeTheme, THEMES } from "../../lib/theme";
+import { getTheme, setTheme, subscribeTheme } from "../../lib/theme";
 import "./TopBar.css";
 
 const DEFAULT_BANKS = ["Bancolombia", "Northwind Bank", "Harbor Credit"];
-const THEME_LABEL = { light: "Light", dark: "Dark", system: "System" };
+const APPEARANCE = ["system", "light", "dark"];
+const THEME_LABEL = { system: "System", light: "Light", dark: "Dark" };
+
+function ThemeIcon({ name }) {
+  const props = {
+    width: 16,
+    height: 16,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    "aria-hidden": true,
+  };
+  if (name === "system") {
+    return (
+      <svg {...props}>
+        <rect x="3" y="4" width="18" height="12" rx="2" stroke="currentColor" strokeWidth="2" />
+        <path d="M8 20h8M12 16v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      </svg>
+    );
+  }
+  if (name === "light") {
+    return (
+      <svg {...props}>
+        <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="2" />
+        <path
+          d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+      </svg>
+    );
+  }
+  return (
+    <svg {...props}>
+      <path
+        d="M21 14.5A8.5 8.5 0 1 1 9.5 3a7 7 0 0 0 11.5 11.5z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 /** Brand strip. Search and the bell are decorative. Bank and user menus open locally. */
 export default function TopBar({
@@ -55,14 +98,15 @@ export default function TopBar({
   }
 
   function onThemeKey(event) {
-    const index = THEMES.indexOf(theme);
+    const index = APPEARANCE.indexOf(theme);
+    const current = index === -1 ? 0 : index;
     if (event.key === "ArrowRight" || event.key === "ArrowDown") {
       event.preventDefault();
-      chooseTheme(THEMES[(index + 1) % THEMES.length]);
+      chooseTheme(APPEARANCE[(current + 1) % APPEARANCE.length]);
     }
     if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
       event.preventDefault();
-      chooseTheme(THEMES[(index + THEMES.length - 1) % THEMES.length]);
+      chooseTheme(APPEARANCE[(current + APPEARANCE.length - 1) % APPEARANCE.length]);
     }
   }
 
@@ -154,7 +198,7 @@ export default function TopBar({
                   aria-labelledby={appearanceId}
                   onKeyDown={onThemeKey}
                 >
-                  {THEMES.map((value) => (
+                  {APPEARANCE.map((value) => (
                     <button
                       key={value}
                       type="button"
@@ -163,7 +207,8 @@ export default function TopBar({
                       tabIndex={theme === value ? 0 : -1}
                       onClick={() => chooseTheme(value)}
                     >
-                      {THEME_LABEL[value]}
+                      <ThemeIcon name={value} />
+                      <span>{THEME_LABEL[value]}</span>
                     </button>
                   ))}
                 </div>

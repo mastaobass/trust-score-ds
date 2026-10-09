@@ -165,10 +165,19 @@
   background: var(--ts-color-surface-raised);
 }
 .ts-topbar__theme button {
-  padding: 6px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 6px 2px;
   text-align: center;
-  font-size: var(--ts-font-size-sm);
+  font-size: var(--ts-font-size-xs);
+  line-height: 1.2;
   color: var(--ts-color-text-muted);
+}
+.ts-topbar__theme svg {
+  display: block;
 }
 .ts-topbar__theme button[aria-checked="true"] {
   background: var(--ts-color-surface-default);
