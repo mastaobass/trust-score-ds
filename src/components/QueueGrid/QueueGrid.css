@@ -13,6 +13,22 @@
   display: flex;
   align-items: center;
 }
+.ts-queue-grid .ag-cell .ts-pill,
+.ts-queue-grid .ts-queue-score,
+.ts-queue-grid .ts-queue-score strong {
+  line-height: 1;
+}
+.ts-queue-grid .ag-cell .ts-pill {
+  display: inline-flex;
+  align-items: center;
+  height: auto;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+.ts-queue-grid .ts-queue-score {
+  white-space: nowrap;
+  min-width: 0;
+}
 .ts-queue-grid__empty {
   color: var(--ts-color-text-muted);
   font-family: var(--ts-font-family);

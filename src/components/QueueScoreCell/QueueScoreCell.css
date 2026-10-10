@@ -4,4 +4,5 @@
   gap: 8px;
   color: var(--ts-color-text-primary);
   font-variant-numeric: tabular-nums;
+  line-height: 1;
 }

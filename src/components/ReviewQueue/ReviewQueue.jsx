@@ -28,6 +28,7 @@ export default function ReviewQueue({
   const [optionsOpen, setOptionsOpen] = useState(true);
   const [density, setDensity] = useState("comfortable");
   const [gridApi, setGridApi] = useState(null);
+  const [shown, setShown] = useState(null);
 
   const rows = rowsProp ?? internalRows;
   const setRows = onRowsChange ?? setInternalRows;
@@ -134,6 +135,8 @@ export default function ReviewQueue({
             onChange={setQuickFilter}
             optionsOpen={optionsOpen}
             onToggleOptions={() => setOptionsOpen((open) => !open)}
+            shown={shown ?? rows.length}
+            total={rows.length}
           />
           <div className="ts-queue__workspace">
             <section className="ts-queue__panel ts-queue__panel--grid">
@@ -144,6 +147,7 @@ export default function ReviewQueue({
                 productPath={productPath}
                 onOpen={openRow}
                 onReady={setGridApi}
+                onDisplayedCount={setShown}
               />
             </section>
             {optionsOpen ? (

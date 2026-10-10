@@ -27,6 +27,7 @@ export default function QueueGrid({
   productPath = false,
   onOpen,
   onReady,
+  onDisplayedCount,
 }) {
   const [theme, setTheme] = useState(buildQueueTheme);
   const size = QUEUE_DENSITY[density] ?? QUEUE_DENSITY.comfortable;
@@ -71,6 +72,7 @@ export default function QueueGrid({
           suppressCellFocus={false}
           overlayNoRowsTemplate='<span class="ts-queue-grid__empty">No matching transactions</span>'
           onGridReady={(event) => onReady?.(event.api)}
+          onModelUpdated={(event) => onDisplayedCount?.(event.api.getDisplayedRowCount())}
           onRowClicked={openFromEvent}
           onCellKeyDown={(event) => {
             if (event.event?.key === "Enter") openFromEvent(event);
