@@ -1,0 +1,100 @@
+.ts-queue-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ts-space-lg);
+  width: 240px;
+  flex: 0 0 240px;
+  padding: 16px;
+  background: var(--ts-color-surface-default);
+  border: 1px solid var(--ts-color-border-default);
+  border-radius: var(--ts-radius-md);
+  color: var(--ts-color-text-primary);
+  font-family: var(--ts-font-family);
+}
+.ts-queue-options__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.ts-queue-options__head h2 {
+  margin: 0;
+  font-size: var(--ts-font-size-md);
+  font-weight: 600;
+}
+.ts-queue-options__hide {
+  border: 0;
+  background: transparent;
+  color: var(--ts-color-accent-primary);
+  font: inherit;
+  font-size: var(--ts-font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+.ts-queue-options__hide:hover {
+  text-decoration: underline;
+}
+.ts-queue-options__group {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.ts-queue-options__group legend {
+  padding: 0;
+  margin-bottom: 8px;
+  font-size: var(--ts-font-size-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ts-color-text-muted);
+}
+.ts-queue-options__group ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ts-queue-options__group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--ts-font-size-md);
+  cursor: pointer;
+}
+.ts-queue-options__group input {
+  accent-color: var(--ts-color-accent-primary);
+}
+.ts-queue-options__density {
+  display: grid;
+  gap: 4px;
+}
+.ts-queue-options__density button {
+  padding: 6px 8px;
+  border: 1px solid transparent;
+  border-radius: var(--ts-radius-sm);
+  background: transparent;
+  color: var(--ts-color-text-muted);
+  font: inherit;
+  font-size: var(--ts-font-size-sm);
+  text-align: left;
+  cursor: pointer;
+}
+.ts-queue-options__density button[aria-checked="true"] {
+  background: var(--ts-color-surface-raised);
+  border-color: var(--ts-color-border-default);
+  color: var(--ts-color-text-primary);
+  font-weight: 600;
+}
+.ts-queue-options__density button:hover {
+  background: var(--ts-color-surface-page);
+}
+@media (max-width: 860px) {
+  .ts-queue-options {
+    width: 100%;
+    flex-basis: auto;
+  }
+}

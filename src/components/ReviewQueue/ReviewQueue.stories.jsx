@@ -9,7 +9,7 @@ export default {
     docs: {
       description: {
         component:
-          "Transaction queue. A row opens the Payments Fraud case. The score explainer is on that case, not a modal from this table.",
+          "Transaction queue built on AG Grid Community. A row opens the Payments Fraud case. The score explainer is on that case, not a modal from this table.",
       },
     },
   },

@@ -12,5 +12,13 @@ export { default as WaterfallChart } from "./components/WaterfallChart/Waterfall
 export { default as ScoreHero } from "./components/ScoreHero/ScoreHero";
 export { default as TrustScoreModal } from "./components/TrustScoreModal/TrustScoreModal";
 export { default as ReviewQueue } from "./components/ReviewQueue/ReviewQueue";
+export { default as QueueToolbar } from "./components/QueueToolbar/QueueToolbar";
+export { default as QueueGrid } from "./components/QueueGrid/QueueGrid";
+export { default as QueueOptionsPanel } from "./components/QueueOptionsPanel/QueueOptionsPanel";
+export { default as QueueScoreCell } from "./components/QueueScoreCell/QueueScoreCell";
+export { default as QueueStatusCell } from "./components/QueueStatusCell/QueueStatusCell";
+export { default as QueueMerchantCell } from "./components/QueueMerchantCell/QueueMerchantCell";
+export { default as QueueOpenCell } from "./components/QueueOpenCell/QueueOpenCell";
+export { createQueueColumnDefs } from "./components/QueueGrid/queueColumnDefs";
 export { BANDS, bandFor, gaugePosition } from "./lib/score";
 export { QUEUE } from "./lib/queue";
