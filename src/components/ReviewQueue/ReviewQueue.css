@@ -16,27 +16,12 @@
   align-items: flex-end;
   padding: 28px 24px 8px;
 }
-.ts-queue__eyebrow {
-  margin: 0;
-  font-size: var(--ts-font-size-xs);
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ts-color-text-muted);
-}
 .ts-queue__title {
-  margin: 6px 0 8px;
+  margin: 0;
   font-size: var(--ts-font-size-xxl);
   font-weight: 600;
   letter-spacing: -0.02em;
   color: var(--ts-color-text-primary);
-}
-.ts-queue__lede {
-  margin: 0;
-  max-width: 62ch;
-  font-size: var(--ts-font-size-lg);
-  line-height: 1.5;
-  color: var(--ts-color-text-muted);
 }
 .ts-queue__count {
   margin: 0;

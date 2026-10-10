@@ -60,13 +60,7 @@ export default function ReviewQueue({
   return (
     <div className="ts-queue">
       <header className="ts-queue__header">
-        <div>
-          <p className="ts-queue__eyebrow">Payments fraud · Review console</p>
-          <h1 className="ts-queue__title">Transaction queue</h1>
-          <p className="ts-queue__lede">
-            Open a row to work the payments-fraud case. The score explainer lives on the case, not on this table.
-          </p>
-        </div>
+        <h1 className="ts-queue__title">Transaction queue</h1>
         <p className="ts-queue__count">
           {view === "loaded" ? (
             <>
