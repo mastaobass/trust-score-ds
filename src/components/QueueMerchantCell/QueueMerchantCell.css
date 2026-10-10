@@ -1,0 +1,20 @@
+.ts-queue-merchant {
+  color: inherit;
+  font-weight: 500;
+  font-family: var(--ts-font-family);
+  font-size: inherit;
+  text-decoration: none;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+}
+.ts-queue-merchant:hover {
+  color: var(--ts-color-accent-primary);
+  text-decoration: underline;
+}
+.ts-queue-merchant:focus-visible {
+  outline: 2px solid var(--ts-color-accent-primary);
+  outline-offset: 2px;
+}

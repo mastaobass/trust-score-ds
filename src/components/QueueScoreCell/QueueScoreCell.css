@@ -1,0 +1,7 @@
+.ts-queue-score {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ts-color-text-primary);
+  font-variant-numeric: tabular-nums;
+}

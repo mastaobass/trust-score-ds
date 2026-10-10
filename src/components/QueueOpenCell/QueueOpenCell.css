@@ -1,0 +1,20 @@
+.ts-queue-open {
+  display: inline;
+  color: var(--ts-color-accent-primary);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font-family: var(--ts-font-family);
+  font-size: var(--ts-font-size-sm);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  padding: 0;
+}
+.ts-queue-open:hover {
+  text-decoration: underline;
+}
+.ts-queue-open:focus-visible {
+  outline: 2px solid var(--ts-color-accent-primary);
+  outline-offset: 2px;
+}
