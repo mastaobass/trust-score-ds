@@ -5,7 +5,10 @@ export default {
   component: Button,
   tags: ["autodocs"],
   argTypes: {
-    variant: { control: "select", options: ["primary", "secondary", "danger", "ghost"] },
+    variant: {
+      control: "select",
+      options: ["primary", "secondary", "danger", "ghost", "accent", "critical", "raised"],
+    },
     size: { control: "radio", options: ["md", "sm"] },
   },
   args: { children: "Approve", variant: "primary", size: "md" },

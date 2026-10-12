@@ -20,3 +20,29 @@
 .ts-btn--danger { border-color: var(--ts-color-border-default); color: var(--ts-color-signal-negative); }
 .ts-btn--ghost { border-color: var(--ts-color-border-default); color: var(--ts-color-text-muted); }
 .ts-btn--secondary:hover, .ts-btn--danger:hover, .ts-btn--ghost:hover { background: var(--ts-color-surface-raised); }
+.ts-btn--accent {
+  background: var(--ts-color-accent-primary);
+  color: var(--ts-color-text-inverse);
+  font-weight: 600;
+}
+.ts-btn--critical {
+  background: var(--ts-color-score-low);
+  color: var(--ts-color-text-inverse);
+  font-weight: 600;
+}
+.ts-btn--raised {
+  background: var(--ts-color-surface-raised);
+  border-color: var(--ts-color-border-default);
+  color: var(--ts-color-text-primary);
+  font-weight: 600;
+}
+.ts-btn--accent:hover, .ts-btn--critical:hover { filter: brightness(0.94); }
+.ts-btn--raised:hover { background: var(--ts-color-surface-page); }
+.ts-btn:disabled,
+.ts-btn:disabled:hover {
+  background: var(--ts-color-signal-inactive);
+  color: var(--ts-color-text-muted);
+  border-color: transparent;
+  cursor: not-allowed;
+  filter: none;
+}
