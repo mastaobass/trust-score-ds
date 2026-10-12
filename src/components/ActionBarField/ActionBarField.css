@@ -1,0 +1,74 @@
+.ts-action-field {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: 36px;
+  border: 1px solid var(--ts-color-border-default);
+  border-radius: var(--ts-radius-md);
+  background: var(--ts-color-surface-default);
+  color: var(--ts-color-text-primary);
+  font-family: var(--ts-font-family);
+  font-size: var(--ts-font-size-sm);
+}
+.ts-action-field--note,
+.ts-action-field--text {
+  background: var(--ts-color-surface-raised);
+}
+.ts-action-field select,
+.ts-action-field input {
+  appearance: none;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ts-color-text-primary);
+  font: inherit;
+  outline: none;
+}
+.ts-action-field select {
+  padding: 0 32px 0 12px;
+  cursor: pointer;
+}
+.ts-action-field select:has(option[value=""]:checked),
+.ts-action-field input::placeholder {
+  color: var(--ts-color-text-muted);
+}
+.ts-action-field--note input,
+.ts-action-field--text input {
+  padding: 0 12px;
+}
+.ts-action-field--note input {
+  padding-right: 64px;
+}
+.ts-action-field__chevron {
+  position: absolute;
+  right: 10px;
+  pointer-events: none;
+}
+.ts-action-field__count {
+  position: absolute;
+  right: 12px;
+  color: var(--ts-color-text-muted);
+  font-size: var(--ts-font-size-sm);
+  pointer-events: none;
+}
+.ts-action-field--chip {
+  padding: 0 12px;
+  color: var(--ts-color-text-muted);
+  white-space: nowrap;
+}
+.ts-action-field:focus-within {
+  outline: 2px solid var(--ts-color-accent-primary);
+  outline-offset: 2px;
+}
+html[data-theme="dark"] .ts-action-field__chevron {
+  filter: brightness(0) invert(1);
+}
+@media (prefers-color-scheme: dark) {
+  html[data-theme="system"] .ts-action-field__chevron,
+  html:not([data-theme="light"]):not([data-theme="dark"]) .ts-action-field__chevron {
+    filter: brightness(0) invert(1);
+  }
+}
