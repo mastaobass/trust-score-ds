@@ -1,4 +1,7 @@
 export { default as Button } from "./components/Button/Button";
+export { default as ActionBar } from "./components/ActionBar/ActionBar";
+export { default as ActionBarSection } from "./components/ActionBarSection/ActionBarSection";
+export { default as ActionBarField } from "./components/ActionBarField/ActionBarField";
 export { default as Pill } from "./components/Pill/Pill";
 export { default as ReasonRow } from "./components/ReasonRow/ReasonRow";
 export { default as VerificationChip } from "./components/VerificationChip/VerificationChip";

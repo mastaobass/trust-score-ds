@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import ActionBar from "../ActionBar/ActionBar";
 import Button from "../Button/Button";
 import FieldRow from "../FieldRow/FieldRow";
 import NetworkStat from "../NetworkStat/NetworkStat";
@@ -130,67 +131,22 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
           </div>
         </div>
 
-        <div className="ts-abar">
-          <section>
-            <h3 className="ts-abar__label">Decision</h3>
-            <div className="ts-abar__row">
-              <Button variant="primary" size="sm" disabled={closed} onClick={() => decide("approved")}>
-                Approve
-              </Button>
-              <Button variant="danger" size="sm" disabled={closed} onClick={() => decide("declined")}>
-                Decline
-              </Button>
-              <Button variant="secondary" size="sm" disabled={closed} onClick={() => decide("held")}>
-                Hold
-              </Button>
-            </div>
-          </section>
-          <section className="ts-abar__note">
-            <h3 className="ts-abar__label">Note</h3>
-            <div className="ts-abar__row">
-              <input
-                value={note}
-                maxLength={NOTE_MAX}
-                placeholder={`Enter note  ${note.length}/${NOTE_MAX}`}
-                onChange={(e) => setNote(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    submitNote();
-                  }
-                }}
-              />
-              <Button variant="secondary" size="sm" disabled={!note.trim()} onClick={submitNote}>
-                Add note
-              </Button>
-            </div>
-          </section>
-          <section>
-            <h3 className="ts-abar__label">Controls</h3>
-            <div className="ts-abar__row">
-              <Button variant="ghost" size="sm" onClick={cycleAssign}>
-                Assign user
-              </Button>
-              <Button variant="ghost" size="sm" onClick={() => setHistoryOpen((v) => !v)}>
-                History
-              </Button>
-            </div>
-          </section>
-          <section>
-            <h3 className="ts-abar__label">Reversals</h3>
-            <div className="ts-abar__row">
-              <Button variant="ghost" size="sm" onClick={() => patch({}, { kind: "Chargeback", detail: "Chargeback marked on the case" })}>
-                Chargeback
-              </Button>
-              <Button variant="ghost" size="sm" onClick={() => patch({}, { kind: "Fraud", detail: "Fraud status updated" })}>
-                Fraud status
-              </Button>
-              <Button variant="ghost" size="sm" onClick={() => patch({}, { kind: "Refund", detail: "Refund recorded on the case" })}>
-                Refunds
-              </Button>
-            </div>
-          </section>
-        </div>
+        <ActionBar
+          variant="paymentsFraud"
+          note={note}
+          onNoteChange={setNote}
+          onAddNote={submitNote}
+          noteMax={NOTE_MAX}
+          disabled={closed}
+          onApprove={() => decide("approved")}
+          onDecline={() => decide("declined")}
+          onHold={() => decide("held")}
+          onAssign={cycleAssign}
+          onHistory={() => setHistoryOpen((v) => !v)}
+          onChargeback={() => patch({}, { kind: "Chargeback", detail: "Chargeback marked on the case" })}
+          onFraudStatus={() => patch({}, { kind: "Fraud", detail: "Fraud status updated" })}
+          onRefunds={() => patch({}, { kind: "Refund", detail: "Refund recorded on the case" })}
+        />
 
         <div className="ts-banner">
           <span>
