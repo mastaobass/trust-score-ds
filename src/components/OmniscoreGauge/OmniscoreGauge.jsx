@@ -82,7 +82,7 @@ export default function OmniscoreGauge({
   label = "Omniscore",
   onExpand,
   className = "",
-  showCard = true,
+  showCard = false,
 }) {
   const score = clampScore(value);
   const resolved = {

@@ -11,10 +11,15 @@ export default {
   args: {
     value: 63,
     label: "Omniscore",
-    showCard: true,
+    showCard: false,
   },
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component: "Gauge primitive. Case Detail wraps it in a Widget. Pass showCard for the standalone card chrome.",
+      },
+    },
   },
 };
 
@@ -37,7 +42,7 @@ export const Dark = {
   globals: { theme: "dark" },
 };
 
-/** Gauge without card chrome. */
-export const GaugeOnly = {
-  args: { value: 63, showCard: false },
+/** Standalone card chrome. The case page uses Widget instead. */
+export const WithCard = {
+  args: { value: 63, showCard: true },
 };
