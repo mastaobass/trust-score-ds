@@ -48,7 +48,8 @@ function describeArc(cx, cy, r, startAngle, endAngle) {
  */
 const ARC_START = 135;
 const ARC_SPAN = 270;
-const BAND_SPAN = ARC_SPAN / 3;
+const BAND_GAP = 4; // degrees between outer bands
+const BAND_SPAN = (ARC_SPAN - BAND_GAP * 2) / 3;
 
 const CX = 100;
 const CY = 100;
@@ -92,12 +93,15 @@ export default function OmniscoreGauge({
   const display = score.toFixed(1);
   const meterName = `${label} ${display} of ${SCORE_MAX}`;
 
-  const bands = BAND_IDS.map((id, i) => ({
-    id,
-    start: ARC_START + i * BAND_SPAN,
-    end: ARC_START + (i + 1) * BAND_SPAN,
-    active: id === activeId,
-  }));
+  const bands = BAND_IDS.map((id, i) => {
+    const start = ARC_START + i * (BAND_SPAN + BAND_GAP);
+    return {
+      id,
+      start,
+      end: start + BAND_SPAN,
+      active: id === activeId,
+    };
+  });
 
   const gauge = (
     <div
