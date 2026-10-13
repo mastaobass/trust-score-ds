@@ -20,7 +20,7 @@ export const PaymentsFraud = {
     docs: {
       description: {
         story:
-          "Payments fraud case bar: Approve and Decline, a 250-character note, assign and history, and reversal actions. Pass onHold to add Hold under Controls.",
+          "Payments fraud case bar: Approve and Decline, a 250-character note, History, Assign User, Lists, Reason Codes, and reversal actions. Pass onHold to add Hold under Controls.",
       },
     },
   },
