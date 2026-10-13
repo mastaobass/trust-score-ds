@@ -2,20 +2,20 @@
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
-  gap: 16px 24px;
-  padding: 13px 18px;
+  gap: var(--ts-space-lg) var(--ts-space-xl);
+  padding: var(--ts-space-md) var(--ts-space-lg);
   background: var(--ts-color-surface-default);
   border: 1px solid var(--ts-color-border-default);
   border-radius: var(--ts-radius-nav);
 }
 .ts-action-bar--app {
-  gap: 12px 16px;
+  gap: var(--ts-space-md) var(--ts-space-lg);
 }
 .ts-action-bar .ts-btn--sm {
   display: inline-flex;
   align-items: center;
   height: 36px;
-  padding: 0 14px;
+  padding: 0 var(--ts-space-lg);
 }
 .ts-action-bar__note,
 .ts-action-bar__review {

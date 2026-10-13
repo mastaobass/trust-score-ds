@@ -12,6 +12,9 @@ export { default as NetworkStat } from "./components/NetworkStat/NetworkStat";
 export { default as SectionCard } from "./components/SectionCard/SectionCard";
 export { default as BandGauge } from "./components/BandGauge/BandGauge";
 export { default as OmniscoreGauge } from "./components/OmniscoreGauge/OmniscoreGauge";
+export { default as Widget } from "./components/Widget/Widget";
+export { default as WidgetGrid } from "./components/WidgetGrid/WidgetGrid";
+export { default as LayoutDrawer } from "./components/WidgetGrid/LayoutDrawer";
 export { default as WaterfallChart } from "./components/WaterfallChart/WaterfallChart";
 export { default as ScoreHero } from "./components/ScoreHero/ScoreHero";
 export { default as TrustScoreModal } from "./components/TrustScoreModal/TrustScoreModal";
@@ -34,4 +37,6 @@ export { default as QueueMerchantCell } from "./components/QueueMerchantCell/Que
 export { default as QueueOpenCell } from "./components/QueueOpenCell/QueueOpenCell";
 export { createQueueColumnDefs } from "./components/QueueGrid/queueColumnDefs";
 export { BANDS, bandFor, gaugePosition } from "./lib/score";
+export { CASE_LAYOUTS_KEY, WIDGET_SIZES, useCaseLayouts } from "./lib/caseLayouts";
+export { listCaseWidgets } from "./lib/caseWidgetContent";
 export { QUEUE } from "./lib/queue";

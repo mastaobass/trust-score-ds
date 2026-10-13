@@ -43,6 +43,8 @@ export default function ActionBar({
   onHold,
   onAssign,
   onHistory,
+  onLists,
+  onReasonCodes,
   onChargeback,
   onFraudStatus,
   onRefunds,
@@ -150,11 +152,17 @@ export default function ActionBar({
         </Button>
       </ActionBarSection>
       <ActionBarSection label="Controls">
+        <Button variant="accent" size="sm" onClick={onHistory}>
+          History
+        </Button>
         <Button variant="accent" size="sm" onClick={onAssign}>
           Assign User
         </Button>
-        <Button variant="accent" size="sm" onClick={onHistory}>
-          History
+        <Button variant="raised" size="sm" onClick={onLists}>
+          Lists
+        </Button>
+        <Button variant="raised" size="sm" onClick={onReasonCodes}>
+          Reason Codes
         </Button>
         {onHold ? (
           <Button variant="raised" size="sm" disabled={disabled} onClick={onHold}>
