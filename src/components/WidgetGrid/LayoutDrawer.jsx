@@ -34,8 +34,7 @@ export default function LayoutDrawer({
 
   return (
     <div className="ts-layout-drawer">
-      <button type="button" className="ts-layout-drawer__backdrop" aria-label="Close settings" onClick={onClose} />
-      <aside className="ts-layout-drawer__panel" role="dialog" aria-modal="true" aria-labelledby={titleId}>
+      <aside className="ts-layout-drawer__panel" role="dialog" aria-labelledby={titleId}>
         <header className="ts-layout-drawer__header">
           <h2 id={titleId} className="ts-layout-drawer__title">Settings</h2>
           <button type="button" className="ts-layout-drawer__close" onClick={onClose} aria-label="Close">

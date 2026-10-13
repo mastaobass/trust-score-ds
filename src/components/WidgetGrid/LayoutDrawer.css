@@ -1,12 +1,5 @@
-.ts-layout-drawer { position: fixed; inset: 0; z-index: 30; }
-.ts-layout-drawer__backdrop {
-  position: absolute;
-  inset: 0;
-  border: 0;
-  background: color-mix(in srgb, var(--ts-color-signal-final) 40%, transparent);
-  cursor: pointer;
-}
-.ts-layout-drawer__panel {
+.ts-layout-drawer { position: fixed; inset: 0; z-index: 30; pointer-events: none; }
+.ts-layout-drawer__panel { pointer-events: auto;
   position: absolute;
   top: 0;
   right: 0;
