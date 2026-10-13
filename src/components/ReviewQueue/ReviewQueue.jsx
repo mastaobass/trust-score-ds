@@ -1,10 +1,16 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import Button from "../Button/Button";
 import CaseDetail from "../CaseDetail/CaseDetail";
 import QueueGrid from "../QueueGrid/QueueGrid";
 import QueueOptionsPanel from "../QueueOptionsPanel/QueueOptionsPanel";
 import QueueToolbar from "../QueueToolbar/QueueToolbar";
+import QueueViews from "../QueueViews/QueueViews";
 import { QUEUE } from "../../lib/queue";
+import {
+  applyQueueView,
+  getStoredQueueViewId,
+  setStoredQueueViewId,
+} from "../../lib/queueViews";
 import "./ReviewQueue.css";
 
 /**
@@ -29,6 +35,9 @@ export default function ReviewQueue({
   const [density, setDensity] = useState("comfortable");
   const [gridApi, setGridApi] = useState(null);
   const [shown, setShown] = useState(null);
+  const [merchantViewId, setMerchantViewId] = useState(getStoredQueueViewId);
+  const merchantViewIdRef = useRef(merchantViewId);
+  merchantViewIdRef.current = merchantViewId;
 
   const rows = rowsProp ?? internalRows;
   const setRows = onRowsChange ?? setInternalRows;
@@ -41,6 +50,21 @@ export default function ReviewQueue({
       else setCaseId(id);
     },
     [productPath, onOpenCase],
+  );
+
+  // Stable callback so QueueGrid’s onReady cleanup does not clear the API on view change.
+  const handleGridReady = useCallback((api) => {
+    setGridApi(api);
+    if (api) applyQueueView(api, merchantViewIdRef.current);
+  }, []);
+
+  const handleMerchantViewChange = useCallback(
+    (viewId) => {
+      const next = setStoredQueueViewId(viewId);
+      setMerchantViewId(next);
+      applyQueueView(gridApi, next);
+    },
+    [gridApi],
   );
 
   if (!productPath && caseId) {
@@ -132,6 +156,7 @@ export default function ReviewQueue({
             shown={shown ?? rows.length}
             total={rows.length}
           />
+          <QueueViews value={merchantViewId} onChange={handleMerchantViewChange} />
           <div className="ts-queue__workspace">
             <section className="ts-queue__panel ts-queue__panel--grid">
               <QueueGrid
@@ -140,7 +165,7 @@ export default function ReviewQueue({
                 density={density}
                 productPath={productPath}
                 onOpen={openRow}
-                onReady={setGridApi}
+                onReady={handleGridReady}
                 onDisplayedCount={setShown}
               />
             </section>
