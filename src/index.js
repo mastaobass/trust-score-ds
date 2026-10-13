@@ -16,8 +16,17 @@ export { default as ScoreHero } from "./components/ScoreHero/ScoreHero";
 export { default as TrustScoreModal } from "./components/TrustScoreModal/TrustScoreModal";
 export { default as ReviewQueue } from "./components/ReviewQueue/ReviewQueue";
 export { default as QueueToolbar } from "./components/QueueToolbar/QueueToolbar";
+export { default as QueueViews } from "./components/QueueViews/QueueViews";
 export { default as QueueGrid } from "./components/QueueGrid/QueueGrid";
 export { default as QueueOptionsPanel } from "./components/QueueOptionsPanel/QueueOptionsPanel";
+export {
+  QUEUE_VIEWS,
+  QUEUE_VIEW_KEY,
+  getQueueView,
+  getStoredQueueViewId,
+  setStoredQueueViewId,
+  applyQueueView,
+} from "./lib/queueViews";
 export { default as QueueScoreCell } from "./components/QueueScoreCell/QueueScoreCell";
 export { default as QueueStatusCell } from "./components/QueueStatusCell/QueueStatusCell";
 export { default as QueueMerchantCell } from "./components/QueueMerchantCell/QueueMerchantCell";
