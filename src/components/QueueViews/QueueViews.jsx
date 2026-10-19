@@ -6,7 +6,7 @@ export default function QueueViews({ value, onChange }) {
   return (
     <div className="ts-queue-views">
       <span className="ts-queue-views__label" id="ts-queue-views-label">
-        Merchant view
+        Merchant
       </span>
       <div
         className="ts-queue-views__options"

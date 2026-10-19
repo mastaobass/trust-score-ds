@@ -1,8 +1,11 @@
-/** Seeded merchant column presets for the Case Queue. Columns only — no row filtering. */
+/** Merchant filter presets for the Case Queue. All vs single-merchant; columns + row filter. */
 
 export const QUEUE_VIEW_KEY = "ts-queue-view";
 
-/** All queue colIds from createQueueColumnDefs(), in default order. */
+/** AG Grid Community selection column id — never hide via applyQueueView. */
+export const QUEUE_SELECT_COL_ID = "ag-Grid-SelectionColumn";
+
+/** Data column ids from createQueueColumnDefs(), in the All-view default order. */
 export const QUEUE_COL_IDS = [
   "merchant",
   "id",
@@ -14,35 +17,19 @@ export const QUEUE_COL_IDS = [
   "open",
 ];
 
+/** Order when a single merchant is selected: Order first, Merchant hidden. */
+const MERCHANT_ORDER = ["id", "amount", "payment", "score", "status", "time", "open", "merchant"];
+
 /**
- * Merchant presets derived from names already present in QUEUE.
- * `visibleColIds` is the source of truth when the preset is applied;
- * optional `order` reorders columns when present.
+ * Merchant filter options. `all` shows every row + Merchant column;
+ * other ids filter rows to that merchant and hide Merchant.
  */
 export const QUEUE_VIEWS = [
-  {
-    id: "northwind-outfitters",
-    label: "Northwind Outfitters",
-    visibleColIds: ["merchant", "id", "amount", "payment", "score", "status", "time", "open"],
-  },
-  {
-    id: "harbor-co",
-    label: "Harbor & Co",
-    visibleColIds: ["merchant", "id", "amount", "score", "status", "open"],
-    order: ["merchant", "id", "amount", "score", "status", "open", "payment", "time"],
-  },
-  {
-    id: "atlas-provisions",
-    label: "Atlas Provisions",
-    visibleColIds: ["merchant", "id", "amount", "status", "time", "open"],
-    order: ["merchant", "id", "amount", "status", "time", "open", "payment", "score"],
-  },
-  {
-    id: "lumen-digital",
-    label: "Lumen Digital",
-    visibleColIds: ["merchant", "id", "amount", "payment", "score", "status", "open"],
-    order: ["merchant", "id", "score", "amount", "payment", "status", "open", "time"],
-  },
+  { id: "all", label: "All" },
+  { id: "northwind-outfitters", label: "Northwind Outfitters" },
+  { id: "harbor-co", label: "Harbor & Co" },
+  { id: "atlas-provisions", label: "Atlas Provisions" },
+  { id: "lumen-digital", label: "Lumen Digital" },
 ];
 
 export function getQueueView(id) {
@@ -69,22 +56,28 @@ export function setStoredQueueViewId(id) {
   return view.id;
 }
 
-/** Apply a preset’s visibility (and optional order) via AG Grid Community column state. */
+/** Rows for the current merchant filter (All = unfiltered). */
+export function filterQueueRows(rows, viewId) {
+  const view = getQueueView(viewId);
+  if (view.id === "all") return rows;
+  return rows.filter((row) => row.merchant === view.label);
+}
+
+/**
+ * Apply All vs merchant column layout via AG Grid Community column state.
+ * Selection column stays visible and pinned; never listed as hideable data.
+ */
 export function applyQueueView(api, viewId) {
   if (!api || api.isDestroyed?.()) return null;
   const view = getQueueView(viewId);
-  const visible = new Set(view.visibleColIds);
-  const orderedIds = view.order ?? QUEUE_COL_IDS;
+  const isAll = view.id === "all";
+  const orderedIds = isAll ? QUEUE_COL_IDS : MERCHANT_ORDER;
   const state = orderedIds.map((colId) => ({
     colId,
-    hide: !visible.has(colId),
+    hide: !isAll && colId === "merchant",
   }));
-  // Include any colIds missing from order so nothing is left unstated.
-  for (const colId of QUEUE_COL_IDS) {
-    if (!orderedIds.includes(colId)) {
-      state.push({ colId, hide: !visible.has(colId) });
-    }
-  }
-  api.applyColumnState({ state, applyOrder: Boolean(view.order) });
+  // Keep the pinned selection column visible regardless of merchant filter.
+  state.unshift({ colId: QUEUE_SELECT_COL_ID, hide: false });
+  api.applyColumnState({ state, applyOrder: true });
   return view.id;
 }

@@ -2,12 +2,13 @@ import { useEffect, useMemo, useState } from "react";
 import { AllCommunityModule } from "ag-grid-community";
 import { AgGridProvider, AgGridReact } from "ag-grid-react";
 import { subscribeTheme } from "../../lib/theme";
-import { createQueueColumnDefs } from "./queueColumnDefs";
+import { createQueueColumnDefs, getQueueSelectionColumnDef } from "./queueColumnDefs";
 import { QUEUE_DENSITY } from "./queueMeta";
 import { buildQueueTheme } from "./queueTheme";
 import "./QueueGrid.css";
 
 const columnDefs = createQueueColumnDefs();
+const selectionColumnDef = getQueueSelectionColumnDef();
 
 const defaultColDef = {
   sortable: true,
@@ -16,9 +17,18 @@ const defaultColDef = {
   suppressMovable: false,
 };
 
+const rowSelection = {
+  mode: "multiRow",
+  checkboxes: true,
+  headerCheckbox: true,
+  enableClickSelection: false,
+  selectAll: "filtered",
+};
+
 /**
  * Community grid for the review queue.
  * Sort, filter, and column move are on by default. Row activation opens the case.
+ * Multi-row checkboxes live in a pinned selection column (AG Grid 36).
  */
 export default function QueueGrid({
   rows,
@@ -51,7 +61,11 @@ export default function QueueGrid({
 
   function openFromEvent(event) {
     const target = event.event?.target;
-    if (target?.closest?.("a, button")) return;
+    // Ignore interactive cells and selection checkboxes so select does not open the case.
+    if (target?.closest?.("a, button, input, .ag-checkbox, .ag-selection-checkbox, .ag-header-select-all")) {
+      return;
+    }
+    if (event.column?.getColId?.() === "ag-Grid-SelectionColumn") return;
     if (event.data?.id) onOpen?.(event.data.id);
   }
 
@@ -70,6 +84,8 @@ export default function QueueGrid({
           getRowId={(params) => params.data.id}
           animateRows={false}
           suppressCellFocus={false}
+          rowSelection={rowSelection}
+          selectionColumnDef={selectionColumnDef}
           overlayNoRowsTemplate='<span class="ts-queue-grid__empty">No matching transactions</span>'
           onGridReady={(event) => onReady?.(event.api)}
           onModelUpdated={(event) => onDisplayedCount?.(event.api.getDisplayedRowCount())}

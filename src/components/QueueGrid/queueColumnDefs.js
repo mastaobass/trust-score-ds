@@ -1,4 +1,5 @@
 import { money } from "../../lib/queue";
+import { QUEUE_SELECT_COL_ID } from "../../lib/queueViews";
 import QueueMerchantCell from "../QueueMerchantCell/QueueMerchantCell";
 import QueueOpenCell from "../QueueOpenCell/QueueOpenCell";
 import QueueScoreCell from "../QueueScoreCell/QueueScoreCell";
@@ -6,6 +7,26 @@ import QueueStatusCell from "../QueueStatusCell/QueueStatusCell";
 import { STATUS_LABEL } from "./queueMeta";
 
 export { QUEUE_DENSITY, SCORE_TONE, STATUS_LABEL, STATUS_TONE } from "./queueMeta";
+export { QUEUE_SELECT_COL_ID };
+
+/**
+ * Pinned-left multi-select column config for AG Grid 36 `selectionColumnDef`.
+ * Col id is fixed by the grid as QUEUE_SELECT_COL_ID — not a normal columnDef.
+ */
+export function getQueueSelectionColumnDef() {
+  return {
+    pinned: "left",
+    lockPinned: true,
+    lockPosition: "left",
+    suppressMovable: true,
+    width: 48,
+    maxWidth: 48,
+    minWidth: 48,
+    resizable: false,
+    sortable: false,
+    headerName: "",
+  };
+}
 
 /** Column definition factory for the review queue. */
 export function createQueueColumnDefs() {
