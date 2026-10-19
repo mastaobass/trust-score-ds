@@ -1,10 +1,12 @@
 import { useCallback, useMemo, useRef, useState } from "react";
+import ActionBar from "../ActionBar/ActionBar";
 import Button from "../Button/Button";
 import CaseDetail from "../CaseDetail/CaseDetail";
 import Pill from "../Pill/Pill";
 import QueueGrid from "../QueueGrid/QueueGrid";
 import QueueOptionsPanel from "../QueueOptionsPanel/QueueOptionsPanel";
 import QueueToolbar from "../QueueToolbar/QueueToolbar";
+import { ANALYSTS } from "../../lib/cases";
 import { QUEUE } from "../../lib/queue";
 import {
   applyQueueView,
@@ -33,11 +35,13 @@ export default function ReviewQueue({
   const [internalRows, setInternalRows] = useState(QUEUE);
   const [caseId, setCaseId] = useState(null);
   const [note, setNote] = useState(flash ?? null);
+  const [actionNote, setActionNote] = useState("");
   const [quickFilter, setQuickFilter] = useState("");
   const [optionsOpen, setOptionsOpen] = useState(false);
   const [density, setDensity] = useState("comfortable");
   const [gridApi, setGridApi] = useState(null);
   const [shown, setShown] = useState(null);
+  const [selectedRows, setSelectedRows] = useState([]);
   const [merchantViewId, setMerchantViewId] = useState(getStoredQueueViewId);
   const merchantViewIdRef = useRef(merchantViewId);
   merchantViewIdRef.current = merchantViewId;
@@ -47,6 +51,8 @@ export default function ReviewQueue({
   const viewRows = useMemo(() => filterQueueRows(rows, merchantViewId), [rows, merchantViewId]);
   const reviewCount = rows.filter((row) => row.status === "review").length;
   const productPath = typeof onOpenCase === "function";
+  const selectedCount = selectedRows.length;
+  const selectedIds = useMemo(() => new Set(selectedRows.map((row) => row.id)), [selectedRows]);
 
   const openRow = useCallback(
     (id) => {
@@ -71,6 +77,51 @@ export default function ReviewQueue({
     [gridApi],
   );
 
+  const handleSelectionChanged = useCallback((selected) => {
+    setSelectedRows(selected);
+  }, []);
+
+  const clearGridSelection = useCallback(() => {
+    gridApi?.deselectAll?.();
+    setSelectedRows([]);
+  }, [gridApi]);
+
+  const updateSelectedStatus = useCallback(
+    (status) => {
+      if (!selectedIds.size) return;
+      setRows((prev) =>
+        prev.map((row) => (selectedIds.has(row.id) ? { ...row, status } : row)),
+      );
+      setNote(`${selectedIds.size} case${selectedIds.size === 1 ? "" : "s"} marked ${status}.`);
+      clearGridSelection();
+    },
+    [selectedIds, setRows, clearGridSelection],
+  );
+
+  const cycleAssignSelected = useCallback(() => {
+    if (!selectedIds.size) return;
+    setRows((prev) =>
+      prev.map((row) => {
+        if (!selectedIds.has(row.id)) return row;
+        const i = ANALYSTS.indexOf(row.assignee);
+        const nextAnalyst = ANALYSTS[(i + 1) % ANALYSTS.length];
+        return { ...row, assignee: nextAnalyst };
+      }),
+    );
+    setNote(`Assigned ${selectedIds.size} case${selectedIds.size === 1 ? "" : "s"}.`);
+  }, [selectedIds, setRows]);
+
+  const flashAction = useCallback((message) => {
+    setNote(message);
+  }, []);
+
+  const submitBulkNote = useCallback(() => {
+    const text = actionNote.trim();
+    if (!text || !selectedIds.size) return;
+    setNote(`Note added to ${selectedIds.size} case${selectedIds.size === 1 ? "" : "s"}.`);
+    setActionNote("");
+  }, [actionNote, selectedIds]);
+
   if (!productPath && caseId) {
     return (
       <CaseDetail
@@ -89,7 +140,7 @@ export default function ReviewQueue({
     <div className="ts-queue">
       <header className="ts-queue__header">
         <div className="ts-queue__heading">
-          <h1 className="ts-queue__title">Transaction Queue</h1>
+          <h1 className="ts-queue__title">Case Queue</h1>
           {view === "loaded" ? (
             <Pill tone="warning">
               {reviewCount} need a decision
@@ -154,6 +205,23 @@ export default function ReviewQueue({
             merchantViewId={merchantViewId}
             onMerchantViewChange={handleMerchantViewChange}
           />
+          <div className="ts-queue__actions">
+            <ActionBar
+              variant="paymentsFraud"
+              note={actionNote}
+              onNoteChange={setActionNote}
+              onAddNote={submitBulkNote}
+              disabled={selectedCount === 0}
+              onApprove={() => updateSelectedStatus("approved")}
+              onDecline={() => updateSelectedStatus("declined")}
+              onHold={() => updateSelectedStatus("held")}
+              onAssign={cycleAssignSelected}
+              onHistory={() => flashAction("Case history is available on the open case.")}
+              onChargeback={() => flashAction("Chargeback marked on the selection.")}
+              onFraudStatus={() => flashAction("Fraud status updated for the selection.")}
+              onRefunds={() => flashAction("Refund recorded for the selection.")}
+            />
+          </div>
           <div className="ts-queue__workspace">
             <section className="ts-queue__panel ts-queue__panel--grid">
               <QueueGrid
@@ -164,6 +232,7 @@ export default function ReviewQueue({
                 onOpen={openRow}
                 onReady={handleGridReady}
                 onDisplayedCount={setShown}
+                onSelectionChanged={handleSelectionChanged}
               />
             </section>
             {optionsOpen ? (

@@ -1,4 +1,4 @@
-import { money } from "../../lib/queue";
+import { formatSlaMinutes, money } from "../../lib/queue";
 import { QUEUE_SELECT_COL_ID } from "../../lib/queueViews";
 import QueueMerchantCell from "../QueueMerchantCell/QueueMerchantCell";
 import QueueOpenCell from "../QueueOpenCell/QueueOpenCell";
@@ -25,6 +25,7 @@ export function getQueueSelectionColumnDef() {
     resizable: false,
     sortable: false,
     headerName: "",
+    getQuickFilterText: () => "",
   };
 }
 
@@ -39,6 +40,7 @@ export function createQueueColumnDefs() {
       minWidth: 180,
       filter: "agTextColumnFilter",
       cellRenderer: QueueMerchantCell,
+      getQuickFilterText: (params) => params.value ?? "",
     },
     {
       colId: "id",
@@ -84,6 +86,27 @@ export function createQueueColumnDefs() {
       filter: "agTextColumnFilter",
       valueGetter: (params) => STATUS_LABEL[params.data?.status] ?? params.data?.status ?? "",
       cellRenderer: QueueStatusCell,
+      getQuickFilterText: (params) =>
+        STATUS_LABEL[params.data?.status] ?? params.data?.status ?? "",
+    },
+    {
+      colId: "assignee",
+      field: "assignee",
+      headerName: "Assigned Agent",
+      flex: 1,
+      minWidth: 160,
+      filter: "agTextColumnFilter",
+      getQuickFilterText: (params) => params.value ?? "",
+    },
+    {
+      colId: "sla",
+      field: "slaMinutes",
+      headerName: "SLA",
+      width: 110,
+      minWidth: 96,
+      filter: "agNumberColumnFilter",
+      valueFormatter: (params) => formatSlaMinutes(params.value),
+      getQuickFilterText: (params) => formatSlaMinutes(params.value),
     },
     {
       colId: "time",
@@ -100,6 +123,7 @@ export function createQueueColumnDefs() {
       filter: false,
       resizable: false,
       cellRenderer: QueueOpenCell,
+      getQuickFilterText: () => "",
     },
   ];
 }

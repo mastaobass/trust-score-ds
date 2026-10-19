@@ -150,10 +150,10 @@ export default function ActionBar({
         </Button>
       </ActionBarSection>
       <ActionBarSection label="Controls">
-        <Button variant="accent" size="sm" onClick={onAssign}>
+        <Button variant="accent" size="sm" disabled={disabled} onClick={onAssign}>
           Assign User
         </Button>
-        <Button variant="accent" size="sm" onClick={onHistory}>
+        <Button variant="accent" size="sm" disabled={disabled} onClick={onHistory}>
           History
         </Button>
         {onHold ? (
@@ -163,13 +163,13 @@ export default function ActionBar({
         ) : null}
       </ActionBarSection>
       <ActionBarSection label="Reversals">
-        <Button variant="accent" size="sm" onClick={onChargeback}>
+        <Button variant="accent" size="sm" disabled={disabled} onClick={onChargeback}>
           Chargeback
         </Button>
-        <Button variant="accent" size="sm" onClick={onFraudStatus}>
+        <Button variant="accent" size="sm" disabled={disabled} onClick={onFraudStatus}>
           Fraud Status
         </Button>
-        <Button variant="accent" size="sm" onClick={onRefunds}>
+        <Button variant="accent" size="sm" disabled={disabled} onClick={onRefunds}>
           Refunds
         </Button>
       </ActionBarSection>

@@ -9,10 +9,17 @@ export default {
     docs: {
       description: {
         component:
-          "Transaction queue built on AG Grid Community. A row opens the Payments Fraud case. The score explainer is on that case, not a modal from this table.",
+          "Case Queue built on AG Grid Community. A row opens the Payments Fraud case. The score explainer is on that case, not a modal from this table.",
       },
     },
   },
+  decorators: [
+    (Story) => (
+      <div style={{ height: "100vh", display: "flex", flexDirection: "column", minHeight: 0 }}>
+        <Story />
+      </div>
+    ),
+  ],
 };
 
 export const Loaded = {

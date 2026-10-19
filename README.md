@@ -42,7 +42,7 @@ Figma file: [Fraud-Risk-Score-Explainer](https://www.figma.com/design/4xUv7jvv0s
 - Page **Score Modal**: light/dark explainer. The `Modal` component lives here.
 - Page **Case Detail View**: reconstructed case-management screens (mostly flattened frames).
 - Page **Kit**: componentized primitives plus a ReviewQueue composition.
-- Page **Transaction Queue**: product queue composition.
+- Page **Case Queue**: product queue composition.
 - Variable collection **Trust Score Tokens** (Light / Dark).
 
 Code Connect needs an Organization plan, which this file does not have. Sync is a deliberate step.
