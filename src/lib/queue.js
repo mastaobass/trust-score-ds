@@ -1,4 +1,4 @@
-/** Ten reconstructed review-queue rows. Reasons are the pre-scripted vocabulary. */
+/** One hundred reconstructed review-queue rows. Reasons are the pre-scripted vocabulary. */
 
 const POS_VOCAB = [
   { label: "Established customer history · 2+ years", weight: 4.2, active: true },
@@ -34,16 +34,45 @@ function reasons(source, activeLabels, weights = {}) {
   });
 }
 
-export const QUEUE = [
+const MERCHANTS = [
+  "Northwind Outfitters",
+  "Harbor & Co",
+  "Lumen Digital",
+  "Atlas Provisions",
+];
+
+const ASSIGNEES = ["Salvador Perez", "Camila Rios", "Jordan Hale"];
+
+const PAYMENTS = [
+  "Visa •••• 4021",
+  "MC •••• 7742",
+  "Visa •••• 1188",
+  "Amex •••• 3002",
+  "Visa •••• 8890",
+  "Visa •••• 4410",
+  "MC •••• 2201",
+  "Visa •••• 9077",
+  "MC •••• 5519",
+  "Visa •••• 6623",
+];
+
+const STATUS_CYCLE = [
+  "review",
+  "review",
+  "review",
+  "approved",
+  "held",
+  "review",
+  "declined",
+  "review",
+  "approved",
+  "review",
+];
+
+const TEMPLATES = [
   {
-    id: "48291-C",
-    merchant: "Northwind Outfitters",
-    amount: 412.8,
-    payment: "Visa •••• 4021",
-    time: "Jul 14, 2026 9:42 AM",
     score: 85.6,
     confidence: 92,
-    status: "review",
     steps: [
       { label: "History", delta: 4.2 },
       { label: "Device", delta: 2.8 },
@@ -58,14 +87,8 @@ export const QUEUE = [
     negativeReasons: NEG_VOCAB,
   },
   {
-    id: "11904-A",
-    merchant: "Harbor & Co",
-    amount: 1288.0,
-    payment: "MC •••• 7742",
-    time: "Jul 14, 2026 9:38 AM",
     score: 51.2,
     confidence: 88,
-    status: "review",
     steps: [
       { label: "History", delta: -6.1 },
       { label: "Device", delta: -4.8 },
@@ -102,14 +125,8 @@ export const QUEUE = [
     ),
   },
   {
-    id: "77320-F",
-    merchant: "Kite & Kiln",
-    amount: 86.4,
-    payment: "Visa •••• 1188",
-    time: "Jul 14, 2026 9:31 AM",
     score: 73.4,
     confidence: 81,
-    status: "held",
     steps: [
       { label: "History", delta: 2.1 },
       { label: "Device", delta: -1.8 },
@@ -150,14 +167,8 @@ export const QUEUE = [
     ),
   },
   {
-    id: "33011-B",
-    merchant: "Atlas Provisions",
-    amount: 54.0,
-    payment: "Amex •••• 3002",
-    time: "Jul 14, 2026 9:22 AM",
     score: 91.2,
     confidence: 96,
-    status: "approved",
     steps: [
       { label: "History", delta: 5.1 },
       { label: "Device", delta: 3.4 },
@@ -183,14 +194,8 @@ export const QUEUE = [
     }),
   },
   {
-    id: "90412-D",
-    merchant: "Redwood Supply",
-    amount: 640.15,
-    payment: "Visa •••• 8890",
-    time: "Jul 14, 2026 9:18 AM",
     score: 64.8,
     confidence: 79,
-    status: "review",
     steps: [
       { label: "History", delta: 1.4 },
       { label: "Device", delta: -3.2 },
@@ -233,14 +238,8 @@ export const QUEUE = [
     ),
   },
   {
-    id: "55108-E",
-    merchant: "Lumen Digital",
-    amount: 2199.0,
-    payment: "Visa •••• 4410",
-    time: "Jul 14, 2026 9:11 AM",
     score: 42.1,
     confidence: 90,
-    status: "declined",
     steps: [
       { label: "History", delta: -8.4 },
       { label: "Device", delta: -6.2 },
@@ -255,14 +254,8 @@ export const QUEUE = [
     negativeReasons: NEG_VOCAB.map((r) => ({ ...r, active: true, weight: r.weight ?? -2.4 })),
   },
   {
-    id: "66217-G",
-    merchant: "Cedar & Copper",
-    amount: 198.5,
-    payment: "MC •••• 2201",
-    time: "Jul 14, 2026 8:59 AM",
     score: 88.0,
     confidence: 94,
-    status: "review",
     steps: [
       { label: "History", delta: 3.8 },
       { label: "Device", delta: 3.0 },
@@ -290,14 +283,8 @@ export const QUEUE = [
     ),
   },
   {
-    id: "22845-H",
-    merchant: "Brightline Labs",
-    amount: 311.2,
-    payment: "Visa •••• 9077",
-    time: "Jul 14, 2026 8:51 AM",
     score: 77.5,
     confidence: 84,
-    status: "review",
     steps: [
       { label: "History", delta: 2.6 },
       { label: "Device", delta: 1.4 },
@@ -340,14 +327,8 @@ export const QUEUE = [
     ),
   },
   {
-    id: "81002-J",
-    merchant: "Oak & Iron",
-    amount: 975.0,
-    payment: "MC •••• 5519",
-    time: "Jul 14, 2026 8:44 AM",
     score: 58.9,
     confidence: 86,
-    status: "review",
     steps: [
       { label: "History", delta: -2.4 },
       { label: "Device", delta: -3.6 },
@@ -382,14 +363,8 @@ export const QUEUE = [
     ),
   },
   {
-    id: "44760-K",
-    merchant: "Sable Market",
-    amount: 27.9,
-    payment: "Visa •••• 6623",
-    time: "Jul 14, 2026 8:36 AM",
     score: 82.3,
     confidence: 91,
-    status: "approved",
     steps: [
       { label: "History", delta: 3.2 },
       { label: "Device", delta: 2.1 },
@@ -422,6 +397,55 @@ export const QUEUE = [
     ),
   },
 ];
+
+const SUFFIXES = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+
+function formatQueueTime(index) {
+  const totalMinutes = 9 * 60 + 42 - index;
+  const hour24 = Math.floor(((totalMinutes % (24 * 60)) + 24 * 60) % (24 * 60) / 60);
+  const minute = ((totalMinutes % 60) + 60) % 60;
+  const period = hour24 >= 12 ? "PM" : "AM";
+  const hour12 = hour24 % 12 || 12;
+  return `Jul 14, 2026 ${hour12}:${String(minute).padStart(2, "0")} ${period}`;
+}
+
+function buildQueueRow(index) {
+  const template = TEMPLATES[index % TEMPLATES.length];
+  const idNum = 10000 + ((index * 997) % 90000);
+  const suffix = SUFFIXES[index % SUFFIXES.length];
+  const scoreJitter = ((index * 7) % 17) - 8;
+  const score = Math.max(18, Math.min(98, Number((template.score + scoreJitter * 0.35).toFixed(1))));
+  const amountBase = [412.8, 1288.0, 86.4, 54.0, 640.15, 2199.0, 198.5, 311.2, 975.0, 27.9][index % 10];
+  const amount = Number((amountBase * (0.85 + (index % 7) * 0.05)).toFixed(2));
+
+  return {
+    id: `${idNum}-${suffix}`,
+    merchant: MERCHANTS[index % MERCHANTS.length],
+    amount,
+    payment: PAYMENTS[index % PAYMENTS.length],
+    time: formatQueueTime(index),
+    score,
+    confidence: Math.max(70, Math.min(98, template.confidence + (index % 5) - 2)),
+    status: STATUS_CYCLE[index % STATUS_CYCLE.length],
+    assignee: ASSIGNEES[index % ASSIGNEES.length],
+    // Spread 24:00 → 00:00 across the demo set for sort + display.
+    slaMinutes: Math.round(1440 - (index * 1440) / 99),
+    steps: template.steps,
+    positiveReasons: template.positiveReasons,
+    negativeReasons: template.negativeReasons,
+  };
+}
+
+export const QUEUE = Array.from({ length: 100 }, (_, index) => buildQueueRow(index));
+
+/** Format SLA minutes (0–1440) as HH:MM, including 24:00. */
+export function formatSlaMinutes(minutes) {
+  if (minutes == null || Number.isNaN(Number(minutes))) return "";
+  const clamped = Math.max(0, Math.min(1440, Math.round(Number(minutes))));
+  const hours = Math.floor(clamped / 60);
+  const mins = clamped % 60;
+  return `${String(hours).padStart(2, "0")}:${String(mins).padStart(2, "0")}`;
+}
 
 export function money(n) {
   return n.toLocaleString("en-US", { style: "currency", currency: "USD" });

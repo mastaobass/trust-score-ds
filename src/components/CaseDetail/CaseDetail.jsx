@@ -52,7 +52,7 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
         <main className="ts-case__missing">
           <h1>No case for that order</h1>
           <p>The queue only holds the reconstructed payments in this console.</p>
-          <a href="#/">Back to transaction queue</a>
+          <a href="#/">Back to case queue</a>
         </main>
       </div>
     );

@@ -157,7 +157,7 @@ function buildCase(item) {
   const compact = item.id.replace("-", "");
   return {
     ...item,
-    assignee: persona.assignee,
+    assignee: item.assignee ?? persona.assignee,
     caseStatus: caseStatusFor(item.status),
     customerName: persona.name,
     customerEmail: persona.email,

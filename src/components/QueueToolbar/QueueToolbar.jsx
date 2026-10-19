@@ -42,7 +42,7 @@ export default function QueueToolbar({
         <input
           type="search"
           value={value}
-          placeholder="Filter merchants, orders, status…"
+          placeholder="Filter merchants, orders, agent, SLA, status…"
           aria-label="Quick filter"
           onChange={(event) => onChange(event.target.value)}
         />

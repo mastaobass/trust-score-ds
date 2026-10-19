@@ -13,12 +13,25 @@ export const QUEUE_COL_IDS = [
   "payment",
   "score",
   "status",
+  "assignee",
+  "sla",
   "time",
   "open",
 ];
 
 /** Order when a single merchant is selected: Order first, Merchant hidden. */
-const MERCHANT_ORDER = ["id", "amount", "payment", "score", "status", "time", "open", "merchant"];
+const MERCHANT_ORDER = [
+  "id",
+  "amount",
+  "payment",
+  "score",
+  "status",
+  "assignee",
+  "sla",
+  "time",
+  "open",
+  "merchant",
+];
 
 /**
  * Merchant filter options. `all` shows every row + Merchant column;

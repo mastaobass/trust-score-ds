@@ -38,6 +38,7 @@ export default function QueueGrid({
   onOpen,
   onReady,
   onDisplayedCount,
+  onSelectionChanged,
 }) {
   const [theme, setTheme] = useState(buildQueueTheme);
   const size = QUEUE_DENSITY[density] ?? QUEUE_DENSITY.comfortable;
@@ -79,6 +80,7 @@ export default function QueueGrid({
           defaultColDef={defaultColDef}
           context={context}
           quickFilterText={quickFilter}
+          includeHiddenColumnsInQuickFilter
           rowHeight={size.rowHeight}
           headerHeight={size.headerHeight}
           getRowId={(params) => params.data.id}
@@ -89,6 +91,10 @@ export default function QueueGrid({
           overlayNoRowsTemplate='<span class="ts-queue-grid__empty">No matching transactions</span>'
           onGridReady={(event) => onReady?.(event.api)}
           onModelUpdated={(event) => onDisplayedCount?.(event.api.getDisplayedRowCount())}
+          onSelectionChanged={(event) => {
+            const selected = event.api.getSelectedRows() ?? [];
+            onSelectionChanged?.(selected);
+          }}
           onRowClicked={openFromEvent}
           onCellKeyDown={(event) => {
             if (event.event?.key === "Enter") openFromEvent(event);

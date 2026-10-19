@@ -40,4 +40,4 @@ export {
   getQueueSelectionColumnDef,
 } from "./components/QueueGrid/queueColumnDefs";
 export { BANDS, bandFor, gaugePosition } from "./lib/score";
-export { QUEUE } from "./lib/queue";
+export { QUEUE, formatSlaMinutes, money, transactionLine } from "./lib/queue";
