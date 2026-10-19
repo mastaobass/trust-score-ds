@@ -1,17 +1,20 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import Button from "../Button/Button";
 import CaseDetail from "../CaseDetail/CaseDetail";
+import Pill from "../Pill/Pill";
 import QueueGrid from "../QueueGrid/QueueGrid";
 import QueueOptionsPanel from "../QueueOptionsPanel/QueueOptionsPanel";
 import QueueToolbar from "../QueueToolbar/QueueToolbar";
-import QueueViews from "../QueueViews/QueueViews";
 import { QUEUE } from "../../lib/queue";
 import {
   applyQueueView,
+  filterQueueRows,
   getStoredQueueViewId,
   setStoredQueueViewId,
 } from "../../lib/queueViews";
 import "./ReviewQueue.css";
+
+const DEMO_STATES = ["loaded", "loading", "empty", "error"];
 
 /**
  * Review console composition.
@@ -31,7 +34,7 @@ export default function ReviewQueue({
   const [caseId, setCaseId] = useState(null);
   const [note, setNote] = useState(flash ?? null);
   const [quickFilter, setQuickFilter] = useState("");
-  const [optionsOpen, setOptionsOpen] = useState(true);
+  const [optionsOpen, setOptionsOpen] = useState(false);
   const [density, setDensity] = useState("comfortable");
   const [gridApi, setGridApi] = useState(null);
   const [shown, setShown] = useState(null);
@@ -41,6 +44,7 @@ export default function ReviewQueue({
 
   const rows = rowsProp ?? internalRows;
   const setRows = onRowsChange ?? setInternalRows;
+  const viewRows = useMemo(() => filterQueueRows(rows, merchantViewId), [rows, merchantViewId]);
   const reviewCount = rows.filter((row) => row.status === "review").length;
   const productPath = typeof onOpenCase === "function";
 
@@ -84,25 +88,17 @@ export default function ReviewQueue({
   return (
     <div className="ts-queue">
       <header className="ts-queue__header">
-        <h1 className="ts-queue__title">Transaction queue</h1>
-        <p className="ts-queue__count">
+        <div className="ts-queue__heading">
+          <h1 className="ts-queue__title">Transaction Queue</h1>
           {view === "loaded" ? (
-            <>
-              <strong>{reviewCount}</strong> need a decision
-            </>
+            <Pill tone="warning">
+              {reviewCount} need a decision
+            </Pill>
           ) : (
-            <>Demo state: {view}</>
+            <p className="ts-queue__count">Demo state: {view}</p>
           )}
-        </p>
+        </div>
       </header>
-
-      <div className="ts-queue__states" role="group" aria-label="Queue demo states">
-        {["loaded", "loading", "empty", "error"].map((state) => (
-          <Button key={state} size="sm" variant={view === state ? "primary" : "ghost"} onClick={() => setView(state)}>
-            {state === "loaded" ? "Queue" : state[0].toUpperCase() + state.slice(1)}
-          </Button>
-        ))}
-      </div>
 
       {note && view === "loaded" ? (
         <p className="ts-queue__note" role="status">
@@ -153,14 +149,15 @@ export default function ReviewQueue({
             onChange={setQuickFilter}
             optionsOpen={optionsOpen}
             onToggleOptions={() => setOptionsOpen((open) => !open)}
-            shown={shown ?? rows.length}
-            total={rows.length}
+            shown={shown ?? viewRows.length}
+            total={viewRows.length}
+            merchantViewId={merchantViewId}
+            onMerchantViewChange={handleMerchantViewChange}
           />
-          <QueueViews value={merchantViewId} onChange={handleMerchantViewChange} />
           <div className="ts-queue__workspace">
             <section className="ts-queue__panel ts-queue__panel--grid">
               <QueueGrid
-                rows={rows}
+                rows={viewRows}
                 quickFilter={quickFilter}
                 density={density}
                 productPath={productPath}
@@ -186,6 +183,24 @@ export default function ReviewQueue({
         factor weights that would let someone reverse-engineer detection. Inactive reason codes stay visible
         because absence is information.
       </p>
+
+      <div className="ts-queue__states" role="group" aria-label="Queue demo states">
+        {DEMO_STATES.map((state) => {
+          const selected = view === state;
+          return (
+            <Button
+              key={state}
+              size="sm"
+              variant="ghost"
+              className={selected ? "ts-queue__state-btn--selected" : undefined}
+              aria-pressed={selected}
+              onClick={() => setView(state)}
+            >
+              {state === "loaded" ? "Queue" : state[0].toUpperCase() + state.slice(1)}
+            </Button>
+          );
+        })}
+      </div>
     </div>
   );
 }

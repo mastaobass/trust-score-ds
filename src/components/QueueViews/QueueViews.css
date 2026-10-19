@@ -3,7 +3,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--ts-space-sm) var(--ts-space-md);
-  margin: 12px 24px 0;
+  margin: 0;
   font-family: var(--ts-font-family);
   color: var(--ts-color-text-primary);
 }

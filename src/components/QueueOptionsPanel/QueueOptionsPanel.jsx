@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
 import Button from "../Button/Button";
 import { QUEUE_DENSITY } from "../QueueGrid/queueMeta";
+import { QUEUE_SELECT_COL_ID } from "../../lib/queueViews";
 import "./QueueOptionsPanel.css";
 
 function readColumns(api) {
   if (!api || api.isDestroyed?.()) return [];
-  return (api.getColumns() ?? []).map((column) => ({
-    id: column.getColId(),
-    label: column.getColDef().headerName || column.getColId(),
-    visible: column.isVisible(),
-  }));
+  return (api.getColumns() ?? [])
+    .filter((column) => column.getColId() !== QUEUE_SELECT_COL_ID)
+    .map((column) => ({
+      id: column.getColId(),
+      label: column.getColDef().headerName || column.getColId(),
+      visible: column.isVisible(),
+    }));
 }
 
 /** Right-hand table options: visibility, reset, and density. Community only — not the Enterprise sidebar. */

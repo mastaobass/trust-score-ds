@@ -23,15 +23,21 @@ export { default as QueueOptionsPanel } from "./components/QueueOptionsPanel/Que
 export {
   QUEUE_VIEWS,
   QUEUE_VIEW_KEY,
+  QUEUE_SELECT_COL_ID,
+  QUEUE_COL_IDS,
   getQueueView,
   getStoredQueueViewId,
   setStoredQueueViewId,
+  filterQueueRows,
   applyQueueView,
 } from "./lib/queueViews";
 export { default as QueueScoreCell } from "./components/QueueScoreCell/QueueScoreCell";
 export { default as QueueStatusCell } from "./components/QueueStatusCell/QueueStatusCell";
 export { default as QueueMerchantCell } from "./components/QueueMerchantCell/QueueMerchantCell";
 export { default as QueueOpenCell } from "./components/QueueOpenCell/QueueOpenCell";
-export { createQueueColumnDefs } from "./components/QueueGrid/queueColumnDefs";
+export {
+  createQueueColumnDefs,
+  getQueueSelectionColumnDef,
+} from "./components/QueueGrid/queueColumnDefs";
 export { BANDS, bandFor, gaugePosition } from "./lib/score";
 export { QUEUE } from "./lib/queue";

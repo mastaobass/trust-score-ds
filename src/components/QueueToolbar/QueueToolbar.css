@@ -2,7 +2,6 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
   gap: var(--ts-space-md);
   margin: 16px 24px 0;
 }
@@ -10,8 +9,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  flex: 1 1 240px;
-  max-width: 420px;
+  flex: 1 1 200px;
+  max-width: 360px;
   height: 36px;
   padding: 0 12px;
   border: 1px solid var(--ts-color-border-default);
@@ -40,8 +39,14 @@
 .ts-queue-toolbar__search input::placeholder {
   color: var(--ts-color-text-muted);
 }
+.ts-queue-toolbar .ts-queue-views {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+}
 .ts-queue-toolbar__count {
   margin: 0;
+  margin-left: auto;
   padding: 6px 12px;
   border: 1px solid var(--ts-color-border-default);
   border-radius: var(--ts-radius-pill);
@@ -55,7 +60,16 @@
   color: var(--ts-color-text-primary);
   font-weight: 600;
 }
-.ts-queue-toolbar .ts-btn[aria-pressed="true"] {
+.ts-queue-toolbar__cog {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  flex-shrink: 0;
+}
+.ts-queue-toolbar__cog[aria-pressed="true"] {
   background: var(--ts-color-surface-raised);
   border-color: var(--ts-color-accent-primary);
   color: var(--ts-color-text-primary);
