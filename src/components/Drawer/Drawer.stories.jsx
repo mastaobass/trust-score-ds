@@ -11,7 +11,7 @@ export default {
     docs: {
       description: {
         component:
-          "Right slide-over panel with overlay. Closes on Esc, overlay click, or the close control. Used for Case Detail saved widget views.",
+          "Right panel. Overlay mode is a fixed slide-over with scrim. Push mode docks beside content for Case Detail widget layout.",
       },
     },
   },
@@ -29,6 +29,30 @@ export const BasicOpenClose = {
         <Drawer open={open} title="Widget layout" onClose={() => setOpen(false)}>
           <p style={{ margin: 0, color: "var(--ts-color-text-muted)", fontSize: "var(--ts-font-size-sm)" }}>
             Saved views and page options appear here.
+          </p>
+        </Drawer>
+      </div>
+    );
+  },
+};
+
+export const PushMode = {
+  name: "Push mode",
+  render: function PushDemo() {
+    const [open, setOpen] = useState(true);
+    return (
+      <div style={{ display: "flex", minHeight: 280, border: "1px solid var(--ts-color-border-default)" }}>
+        <div style={{ flex: 1, padding: 16 }}>
+          <Button size="sm" variant="secondary" onClick={() => setOpen((v) => !v)}>
+            Toggle push drawer
+          </Button>
+          <p style={{ marginTop: 12, color: "var(--ts-color-text-muted)", fontSize: "var(--ts-font-size-sm)" }}>
+            Main column shrinks when the drawer is open — no overlay scrim.
+          </p>
+        </div>
+        <Drawer mode="push" open={open} title="Widget layout" onClose={() => setOpen(false)}>
+          <p style={{ margin: 0, color: "var(--ts-color-text-muted)", fontSize: "var(--ts-font-size-sm)" }}>
+            PAGE VIEWS list lives here on Case Detail.
           </p>
         </Drawer>
       </div>

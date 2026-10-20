@@ -1,11 +1,11 @@
 import { useMemo, useState } from "react";
 import ActionBar from "../ActionBar/ActionBar";
+import Banner from "../Banner/Banner";
 import Button from "../Button/Button";
 import Drawer from "../Drawer/Drawer";
 import FieldRow from "../FieldRow/FieldRow";
 import NetworkStat from "../NetworkStat/NetworkStat";
 import ScoreHero from "../ScoreHero/ScoreHero";
-import SectionCard from "../SectionCard/SectionCard";
 import SosRow from "../SosRow/SosRow";
 import StatusChip from "../StatusChip/StatusChip";
 import TrustScoreModal from "../TrustScoreModal/TrustScoreModal";
@@ -15,14 +15,21 @@ import WidgetGrid from "../WidgetGrid/WidgetGrid";
 import { ANALYSTS, neighborIds, seedCase } from "../../lib/cases";
 import { money, transactionLine } from "../../lib/queue";
 import {
-  applyWidgetLayout,
   getStoredWidgetLayoutId,
+  loadWidgetLayout,
+  moveWidgetItem,
   setStoredWidgetLayoutId,
+  setStoredWidgetLayoutItems,
   WIDGET_LAYOUTS,
 } from "../../lib/widgetLayouts";
 import "./CaseDetail.css";
 
 const NOTE_MAX = 250;
+const GRID_MAX_ROWS = 6;
+
+function initialLayout() {
+  return loadWidgetLayout(getStoredWidgetLayoutId());
+}
 
 function PageCogIcon() {
   return (
@@ -45,24 +52,6 @@ function PageCogIcon() {
   );
 }
 
-/** id → renderer. Grid stays content-agnostic; CaseDetail owns the map. */
-function renderCaseWidget(itemId, item, layoutItem, onSizeChange) {
-  if (itemId === "trust-score") {
-    return (
-      <Widget
-        title="Trust score"
-        colSpan={layoutItem.colSpan}
-        rowSpan={layoutItem.rowSpan}
-        resizable
-        onSizeChange={onSizeChange}
-      >
-        <ScoreHero score={item.score} confidence={item.confidence} />
-      </Widget>
-    );
-  }
-  return null;
-}
-
 function VelocityChart({ series }) {
   const w = 520;
   const h = 120;
@@ -82,6 +71,174 @@ function VelocityChart({ series }) {
   );
 }
 
+function widgetChrome(layoutItem, { title, className, ariaLabel, children, onSizeChange, onPositionChange }) {
+  return (
+    <Widget
+      title={title}
+      className={className}
+      aria-label={ariaLabel}
+      colSpan={layoutItem.colSpan}
+      rowSpan={layoutItem.rowSpan}
+      resizable
+      onSizeChange={onSizeChange}
+      onPositionChange={onPositionChange}
+    >
+      {children}
+    </Widget>
+  );
+}
+
+/** id → renderer. Grid stays content-agnostic; CaseDetail owns the map. */
+function renderCaseWidget(itemId, ctx) {
+  const { item, layoutItem, events, onSizeChange, onPositionChange, onExplain } = ctx;
+  const chrome = (props) =>
+    widgetChrome(layoutItem, {
+      ...props,
+      onSizeChange,
+      onPositionChange,
+    });
+
+  switch (itemId) {
+    case "trust-score":
+      return chrome({
+        title: "Trust score",
+        children: <ScoreHero score={item.score} confidence={item.confidence} />,
+      });
+    case "banner":
+      return chrome({
+        className: "ts-widget--banner",
+        ariaLabel: "Case banner",
+        children: (
+          <Banner
+            variant="paymentsFraud"
+            queued={item.time}
+            score={item.score}
+            topReason={item.topReason}
+            caughtBy={item.caughtBy}
+            standing={item.standing}
+          />
+        ),
+      });
+    case "case-history":
+      return chrome({
+        title: "Case history",
+        children:
+          events.length === 0 ? (
+            <p className="ts-case__muted">No analyst notes or decisions yet.</p>
+          ) : (
+            <ul className="ts-history">
+              {events.map((ev) => (
+                <li key={ev.id}>
+                  <strong>{ev.kind}</strong> · {ev.at}
+                  <div>{ev.detail}</div>
+                </li>
+              ))}
+            </ul>
+          ),
+      });
+    case "sos":
+      return chrome({
+        title: "SOS",
+        children: item.sos.map((row) => (
+          <SosRow key={row.label} tone={row.tone}>
+            {row.label}
+          </SosRow>
+        )),
+      });
+    case "network":
+      return chrome({
+        title: "Across the network",
+        children: item.network.map((row) => <NetworkStat key={row.label} {...row} />),
+      });
+    case "payment":
+      return chrome({
+        title: "Payment",
+        children: (
+          <>
+            <div className="ts-verify-row">
+              {item.paymentMeta.flags.map((f) => (
+                <VerificationChip key={f.code} code={f.code} result={f.result} />
+              ))}
+            </div>
+            <dl className="ts-payfields">
+              <FieldRow label="Total" value={money(item.amount)} />
+              <FieldRow label="Type" value={item.paymentMeta.type} />
+              <FieldRow label="Currency" value={item.paymentMeta.currency} />
+              <FieldRow label="BIN country" value={item.paymentMeta.binCountry} />
+              <FieldRow label="Brand" value={item.paymentMeta.brand} />
+              <FieldRow label="Instrument" value={item.payment} />
+            </dl>
+          </>
+        ),
+      });
+    case "velocities":
+      return chrome({
+        title: "Velocities",
+        children: (
+          <>
+            <div className="ts-card__head-row">
+              <Button size="sm" variant="ghost" onClick={onExplain}>
+                Explain score {item.score.toFixed(1)}
+              </Button>
+            </div>
+            <VelocityChart series={item.velocity} />
+          </>
+        ),
+      });
+    case "identity":
+      return chrome({
+        title: "Identity check",
+        children: (
+          <>
+            <p className="ts-case__muted">
+              Score {item.identity.score} / 500. Reconstructed identity signals, not a live bureau call.
+            </p>
+            <div className="ts-idmeter" aria-hidden="true">
+              <span style={{ width: `${Math.min(100, (item.identity.score / 500) * 100)}%` }} />
+            </div>
+            <FieldRow label="IP" value={item.identity.ip} />
+            <FieldRow label="Phone" value={item.identity.phone} />
+          </>
+        ),
+      });
+    case "transaction":
+      return chrome({
+        title: "Transaction info",
+        children: (
+          <dl className="ts-fields">
+            <FieldRow label="Customer name" value={item.customerName} />
+            <FieldRow label="Customer e-mail" value={item.customerEmail} />
+            <FieldRow label="Shipping e-mail" value={item.shippingEmail} />
+            <FieldRow label="Transaction date" value={item.time} />
+            <FieldRow label="Customer created" value={item.customerCreated} />
+            <FieldRow label="E-mail age (days)" value={String(item.emailAgeDays)} />
+            <FieldRow label="Priority" value={item.priority} />
+            <FieldRow label="Customer ID" value={item.customerId} />
+            <FieldRow label="Transaction ID" value={item.transactionId} />
+            <FieldRow label="Order number" value={item.orderNumber} />
+            <FieldRow label="Chargeback status" value={item.chargebackStatus} />
+          </dl>
+        ),
+      });
+    case "policies":
+      return chrome({
+        title: "Policies triggered",
+        children: item.policies.map((block) => (
+          <div key={block.heading}>
+            <p className="ts-case__policy-h">{block.heading}</p>
+            <ul>
+              {block.items.map((entry) => (
+                <li key={entry}>{entry}</li>
+              ))}
+            </ul>
+          </div>
+        )),
+      });
+    default:
+      return null;
+  }
+}
+
 export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onBack, onOpen }) {
   const row = rows.find((r) => r.id === id);
   const item = useMemo(() => {
@@ -91,12 +248,13 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
   }, [id, row]);
 
   const [explain, setExplain] = useState(false);
-  const [historyOpen, setHistoryOpen] = useState(Boolean(flash));
+  // `flash` is owned by the parent toast; case-history lives in the widget grid.
+  void flash;
   const [events, setEvents] = useState([]);
   const [note, setNote] = useState("");
   const [viewsOpen, setViewsOpen] = useState(false);
-  const [layoutId, setLayoutId] = useState(() => getStoredWidgetLayoutId());
-  const [layoutItems, setLayoutItems] = useState(() => applyWidgetLayout(getStoredWidgetLayoutId()).items);
+  const [layoutId, setLayoutId] = useState(() => initialLayout().id);
+  const [layoutItems, setLayoutItems] = useState(() => initialLayout().items);
 
   if (!item) {
     return (
@@ -112,6 +270,11 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
 
   const closed = item.status === "approved" || item.status === "declined";
   const { prev, next } = neighborIds(id);
+
+  function persistItems(nextItems) {
+    setLayoutItems(nextItems);
+    setStoredWidgetLayoutItems(layoutId, nextItems);
+  }
 
   function patch(partial, event) {
     onRowsChange((prevRows) => prevRows.map((r) => (r.id === item.id ? { ...r, ...partial } : r)));
@@ -134,7 +297,6 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
     if (!text) return;
     patch({}, { kind: "Note", detail: text });
     setNote("");
-    setHistoryOpen(true);
     onFlash?.("Note added to the case.");
   }
 
@@ -144,20 +306,25 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
     patch({ assignee: nextAnalyst }, { kind: "Assign", detail: `Assigned to ${nextAnalyst}` });
   }
 
-  function selectLayout(id) {
-    const next = setStoredWidgetLayoutId(id);
-    setLayoutId(next);
-    setLayoutItems(applyWidgetLayout(next).items);
+  function selectLayout(nextId) {
+    const next = setStoredWidgetLayoutId(nextId);
+    const loaded = loadWidgetLayout(next);
+    setLayoutId(loaded.id);
+    setLayoutItems(loaded.items);
   }
 
   function updateWidgetSize(widgetId, size) {
-    setLayoutItems((prev) =>
-      prev.map((entry) =>
+    persistItems(
+      layoutItems.map((entry) =>
         entry.id === widgetId
           ? { ...entry, colSpan: size.colSpan, rowSpan: size.rowSpan }
           : entry,
       ),
     );
+  }
+
+  function updateWidgetPosition(widgetId, { column, row: nextRow, cols }) {
+    persistItems(moveWidgetItem(layoutItems, widgetId, column, nextRow, cols ?? 4, GRID_MAX_ROWS));
   }
 
   const caseStatus =
@@ -169,203 +336,150 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
           ? "Active review"
           : "Under investigation";
 
+  const workspaceClass = ["ts-case__workspace", viewsOpen ? "ts-case__workspace--drawer-open" : null]
+    .filter(Boolean)
+    .join(" ");
+  const mainClass = ["ts-case__main", viewsOpen ? "ts-case__main--drawer-open" : null]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <div className="ts-case">
-      <main className="ts-case__main">
-        <div className="ts-case__header">
-          <a href="#/" className="ts-case__back" onClick={(e) => { e.preventDefault(); onBack(); }}>
-            ← Case details
-          </a>
-          <StatusChip status={item.status} />
-          <span className="ts-meta">
-            <span className="ts-meta__label">Case status</span>
-            <span className="ts-meta__value">{caseStatus}</span>
-          </span>
-          <span className="ts-meta">
-            <span className="ts-meta__label">Assignee</span>
-            <span className="ts-meta__value">{item.assignee}</span>
-          </span>
-          <span className="ts-meta">
-            <span className="ts-meta__label">Priority</span>
-            <span className="ts-meta__value">{item.priority}</span>
-          </span>
-          <div className="ts-case__nav">
-            <Button size="sm" variant="ghost" disabled={!prev} onClick={() => prev && onOpen(prev)}>
-              Prev
-            </Button>
-            <Button size="sm" variant="ghost" disabled={!next} onClick={() => next && onOpen(next)}>
-              Next
-            </Button>
-            <Button
-              size="sm"
-              variant="secondary"
-              className="ts-case__nav-cog"
-              aria-label="Page views"
-              aria-pressed={viewsOpen}
-              aria-expanded={viewsOpen}
-              onClick={() => setViewsOpen(true)}
-            >
-              <PageCogIcon />
-            </Button>
-          </div>
-        </div>
-
-        <ActionBar
-          variant="paymentsFraud"
-          note={note}
-          onNoteChange={setNote}
-          onAddNote={submitNote}
-          noteMax={NOTE_MAX}
-          disabled={closed}
-          onApprove={() => decide("approved")}
-          onDecline={() => decide("declined")}
-          onHold={() => decide("held")}
-          onAssign={cycleAssign}
-          onHistory={() => setHistoryOpen((v) => !v)}
-          onChargeback={() => patch({}, { kind: "Chargeback", detail: "Chargeback marked on the case" })}
-          onFraudStatus={() => patch({}, { kind: "Fraud", detail: "Fraud status updated" })}
-          onRefunds={() => patch({}, { kind: "Refund", detail: "Refund recorded on the case" })}
-        />
-
-        <WidgetGrid aria-label="Case widgets" maxRows={6}>
-          {layoutItems.map((layoutItem) => {
-            const content = renderCaseWidget(layoutItem.id, item, layoutItem, (size) =>
-              updateWidgetSize(layoutItem.id, size),
-            );
-            if (!content) return null;
-            return (
-              <WidgetGrid.Item
-                key={layoutItem.id}
-                column={layoutItem.column}
-                row={layoutItem.row}
-                colSpan={layoutItem.colSpan}
-                rowSpan={layoutItem.rowSpan}
-              >
-                {content}
-              </WidgetGrid.Item>
-            );
-          })}
-        </WidgetGrid>
-
-        <div className="ts-banner">
-          <span>
-            <b>Queued</b> {item.time}
-          </span>
-          <span>
-            <b>Score</b> {item.score.toFixed(1)}
-          </span>
-          <span>
-            <b>Top reason</b> {item.topReason}
-          </span>
-          <span>
-            <b>Caught by</b> {item.caughtBy}
-          </span>
-          <span>
-            <b>Standing</b> {item.standing}
-          </span>
-        </div>
-
-        {historyOpen && (
-          <SectionCard title="Case history">
-            {events.length === 0 ? (
-              <p className="ts-case__muted">No analyst notes or decisions yet.</p>
-            ) : (
-              <ul className="ts-history">
-                {events.map((ev) => (
-                  <li key={ev.id}>
-                    <strong>{ev.kind}</strong> · {ev.at}
-                    <div>{ev.detail}</div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </SectionCard>
-        )}
-
-        <div className="ts-summary">
-          <SectionCard title="SOS">
-            {item.sos.map((row) => (
-              <SosRow key={row.label} tone={row.tone}>
-                {row.label}
-              </SosRow>
-            ))}
-          </SectionCard>
-          <SectionCard title="Across the network">
-            {item.network.map((row) => (
-              <NetworkStat key={row.label} {...row} />
-            ))}
-          </SectionCard>
-          <SectionCard title="Payment">
-            <div className="ts-verify-row">
-              {item.paymentMeta.flags.map((f) => (
-                <VerificationChip key={f.code} code={f.code} result={f.result} />
-              ))}
-            </div>
-            <dl className="ts-payfields">
-              <FieldRow label="Total" value={money(item.amount)} />
-              <FieldRow label="Type" value={item.paymentMeta.type} />
-              <FieldRow label="Currency" value={item.paymentMeta.currency} />
-              <FieldRow label="BIN country" value={item.paymentMeta.binCountry} />
-              <FieldRow label="Brand" value={item.paymentMeta.brand} />
-              <FieldRow label="Instrument" value={item.payment} />
-            </dl>
-          </SectionCard>
-        </div>
-
-        <div className="ts-case__grid">
-          <SectionCard title="Velocities">
-            <div className="ts-card__head-row">
-              <Button size="sm" variant="ghost" onClick={() => setExplain(true)}>
-                Explain score {item.score.toFixed(1)}
-              </Button>
-            </div>
-            <VelocityChart series={item.velocity} />
-          </SectionCard>
-          <SectionCard title="Identity check">
-            <p className="ts-case__muted">Score {item.identity.score} / 500. Reconstructed identity signals, not a live bureau call.</p>
-            <div className="ts-idmeter" aria-hidden="true">
-              <span style={{ width: `${Math.min(100, (item.identity.score / 500) * 100)}%` }} />
-            </div>
-            <FieldRow label="IP" value={item.identity.ip} />
-            <FieldRow label="Phone" value={item.identity.phone} />
-          </SectionCard>
-        </div>
-
-        <div className="ts-case__grid">
-          <SectionCard title="Transaction info">
-            <dl className="ts-fields">
-              <FieldRow label="Customer name" value={item.customerName} />
-              <FieldRow label="Customer e-mail" value={item.customerEmail} />
-              <FieldRow label="Shipping e-mail" value={item.shippingEmail} />
-              <FieldRow label="Transaction date" value={item.time} />
-              <FieldRow label="Customer created" value={item.customerCreated} />
-              <FieldRow label="E-mail age (days)" value={String(item.emailAgeDays)} />
-              <FieldRow label="Priority" value={item.priority} />
-              <FieldRow label="Customer ID" value={item.customerId} />
-              <FieldRow label="Transaction ID" value={item.transactionId} />
-              <FieldRow label="Order number" value={item.orderNumber} />
-              <FieldRow label="Chargeback status" value={item.chargebackStatus} />
-            </dl>
-          </SectionCard>
-          <SectionCard title="Policies triggered">
-            {item.policies.map((block) => (
-              <div key={block.heading}>
-                <p className="ts-case__policy-h">{block.heading}</p>
-                <ul>
-                  {block.items.map((entry) => (
-                    <li key={entry}>{entry}</li>
-                  ))}
-                </ul>
+      <div className={workspaceClass}>
+        <main className={mainClass}>
+          <div className="ts-case__blur-zone">
+            <div className="ts-case__header">
+              <a href="#/" className="ts-case__back" onClick={(e) => { e.preventDefault(); onBack(); }}>
+                ← Case details
+              </a>
+              <StatusChip status={item.status} />
+              <span className="ts-meta">
+                <span className="ts-meta__label">Case status</span>
+                <span className="ts-meta__value">{caseStatus}</span>
+              </span>
+              <span className="ts-meta">
+                <span className="ts-meta__label">Assignee</span>
+                <span className="ts-meta__value">{item.assignee}</span>
+              </span>
+              <span className="ts-meta">
+                <span className="ts-meta__label">Priority</span>
+                <span className="ts-meta__value">{item.priority}</span>
+              </span>
+              <div className="ts-case__nav">
+                <Button size="sm" variant="ghost" disabled={!prev} onClick={() => prev && onOpen(prev)}>
+                  Prev
+                </Button>
+                <Button size="sm" variant="ghost" disabled={!next} onClick={() => next && onOpen(next)}>
+                  Next
+                </Button>
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  className="ts-case__nav-cog"
+                  aria-label="Page views"
+                  aria-pressed={viewsOpen}
+                  aria-expanded={viewsOpen}
+                  onClick={() => setViewsOpen(true)}
+                >
+                  <PageCogIcon />
+                </Button>
               </div>
-            ))}
-          </SectionCard>
-        </div>
+            </div>
 
-        <p className="ts-case__footnote">
-          Reconstruction of a payments-fraud case view. Queue rows open this screen, not the score modal.
-          The explainer is still available from Velocities. Weights stay hidden. Reason codes stay pre-scripted.
-        </p>
-      </main>
+            <ActionBar
+              variant="paymentsFraud"
+              note={note}
+              onNoteChange={setNote}
+              onAddNote={submitNote}
+              noteMax={NOTE_MAX}
+              disabled={closed}
+              onApprove={() => decide("approved")}
+              onDecline={() => decide("declined")}
+              onHold={() => decide("held")}
+              onAssign={cycleAssign}
+              onHistory={() => {
+                /* case-history is a grid widget; flash scroll target via flash helper */
+                onFlash?.("Case history is in the widget grid.");
+              }}
+              onChargeback={() => patch({}, { kind: "Chargeback", detail: "Chargeback marked on the case" })}
+              onFraudStatus={() => patch({}, { kind: "Fraud", detail: "Fraud status updated" })}
+              onRefunds={() => patch({}, { kind: "Refund", detail: "Refund recorded on the case" })}
+            />
+          </div>
+
+          <WidgetGrid
+            className="ts-case__widget-grid"
+            aria-label="Case widgets"
+            maxRows={GRID_MAX_ROWS}
+          >
+            {layoutItems.map((layoutItem) => {
+              const content = renderCaseWidget(layoutItem.id, {
+                item,
+                layoutItem,
+                events,
+                onSizeChange: (size) => updateWidgetSize(layoutItem.id, size),
+                onPositionChange: (pos) => updateWidgetPosition(layoutItem.id, pos),
+                onExplain: () => setExplain(true),
+              });
+              if (!content) return null;
+              return (
+                <WidgetGrid.Item
+                  key={layoutItem.id}
+                  column={layoutItem.column}
+                  row={layoutItem.row}
+                  colSpan={layoutItem.colSpan}
+                  rowSpan={layoutItem.rowSpan}
+                >
+                  {content}
+                </WidgetGrid.Item>
+              );
+            })}
+          </WidgetGrid>
+
+          <p className="ts-case__footnote ts-case__blur-zone">
+            Reconstruction of a payments-fraud case view. Queue rows open this screen, not the score modal.
+            The explainer is still available from Velocities. Weights stay hidden. Reason codes stay pre-scripted.
+          </p>
+        </main>
+
+        <Drawer
+          mode="push"
+          open={viewsOpen}
+          title="Widget layout"
+          onClose={() => setViewsOpen(false)}
+        >
+          <p className="ts-case__drawer-help">
+            Saved views place case widgets on the grid. Per-widget size and position can also be changed
+            from each widget&apos;s settings gear.
+          </p>
+          <div className="ts-case__views">
+            <span className="ts-case__views-label" id="ts-case-views-label">
+              Page views
+            </span>
+            <div
+              className="ts-case__views-options"
+              role="radiogroup"
+              aria-labelledby="ts-case-views-label"
+            >
+              {WIDGET_LAYOUTS.map((layout) => {
+                const selected = layoutId === layout.id;
+                return (
+                  <button
+                    key={layout.id}
+                    type="button"
+                    role="radio"
+                    aria-checked={selected}
+                    className="ts-case__views-option"
+                    onClick={() => selectLayout(layout.id)}
+                  >
+                    {layout.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </Drawer>
+      </div>
 
       {explain && (
         <TrustScoreModal
@@ -382,39 +496,6 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
           onDecline={() => decide("declined")}
         />
       )}
-
-      <Drawer open={viewsOpen} title="Widget layout" onClose={() => setViewsOpen(false)}>
-        <p className="ts-case__drawer-help">
-          Saved views place case widgets on the grid. Per-widget size can also be changed from
-          each widget&apos;s settings gear.
-        </p>
-        <div className="ts-case__views">
-          <span className="ts-case__views-label" id="ts-case-views-label">
-            Page views
-          </span>
-          <div
-            className="ts-case__views-options"
-            role="radiogroup"
-            aria-labelledby="ts-case-views-label"
-          >
-            {WIDGET_LAYOUTS.map((layout) => {
-              const selected = layoutId === layout.id;
-              return (
-                <button
-                  key={layout.id}
-                  type="button"
-                  role="radio"
-                  aria-checked={selected}
-                  className="ts-case__views-option"
-                  onClick={() => selectLayout(layout.id)}
-                >
-                  {layout.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </Drawer>
     </div>
   );
 }

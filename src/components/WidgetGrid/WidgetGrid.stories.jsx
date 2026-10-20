@@ -12,7 +12,7 @@ export default {
     docs: {
       description: {
         component:
-          "Content-agnostic equal-track grid for Widgets. Desktop: 4 columns; tablet (`max-width: 900px`): 3. Caps at `maxRows` (default 6) equal row tracks. `WidgetGrid.Item` accepts `column`/`row` starts and `colSpan`/`rowSpan` ∈ {1,2}; starts clamp so spans stay in bounds. Children are opaque — the grid only reads Item layout props.",
+          "Content-agnostic equal-track grid for Widgets. Desktop: 4 columns; tablet (`max-width: 900px`): 3. Caps at `maxRows` (default 6) equal row tracks sized to column×3/4 (4∶3 cells). `WidgetGrid.Item` accepts `column`/`row` starts and `colSpan`/`rowSpan` ∈ {1,2}; starts clamp so spans stay in bounds. Children are opaque — the grid only reads Item layout props.",
       },
     },
   },

@@ -12,6 +12,7 @@ export { default as NetworkStat } from "./components/NetworkStat/NetworkStat";
 export { default as SectionCard } from "./components/SectionCard/SectionCard";
 export { default as Widget } from "./components/Widget/Widget";
 export { default as WidgetGrid } from "./components/WidgetGrid/WidgetGrid";
+export { default as Banner } from "./components/Banner/Banner";
 export { default as Drawer } from "./components/Drawer/Drawer";
 export { default as BandGauge } from "./components/BandGauge/BandGauge";
 export { default as OmniscoreGauge } from "./components/OmniscoreGauge/OmniscoreGauge";
@@ -37,13 +38,22 @@ export {
 export {
   WIDGET_LAYOUTS,
   WIDGET_LAYOUT_KEY,
+  WIDGET_LAYOUT_ITEMS_KEY,
   WIDGET_SIZES,
+  CASE_WIDGET_IDS,
   getWidgetLayout,
   getStoredWidgetLayoutId,
   setStoredWidgetLayoutId,
+  getStoredWidgetLayoutItems,
+  setStoredWidgetLayoutItems,
   applyWidgetLayout,
+  loadWidgetLayout,
   clampWidgetSpan,
+  clampWidgetOrigin,
   snapWidgetSize,
+  rectsOverlap,
+  moveWidgetItem,
+  pointerToGridCell,
 } from "./lib/widgetLayouts";
 export { default as QueueScoreCell } from "./components/QueueScoreCell/QueueScoreCell";
 export { default as QueueStatusCell } from "./components/QueueStatusCell/QueueStatusCell";

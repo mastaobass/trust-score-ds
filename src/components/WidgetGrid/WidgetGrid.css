@@ -3,11 +3,12 @@
   --wg-tablet-cols: 3;
   --wg-rows: 6;
   --wg-used-rows: 1;
-  /* Equal row track size derived from column width (1×1 ≈ square). */
+  /* Row track = column × 3/4 so 1×1 cells stay 4∶3 (width∶height). */
   container-type: inline-size;
-  --wg-row-size: calc(
+  --wg-col-size: calc(
     (100cqw - (var(--wg-cols) - 1) * var(--ts-space-md)) / var(--wg-cols)
   );
+  --wg-row-size: calc(var(--wg-col-size) * 3 / 4);
   display: grid;
   grid-template-columns: repeat(var(--wg-cols), minmax(0, 1fr));
   /* Equal tracks for used rows; placement clamps against --wg-rows (max 6). */
