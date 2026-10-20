@@ -3,11 +3,13 @@ import ActionBar from "../ActionBar/ActionBar";
 import Button from "../Button/Button";
 import FieldRow from "../FieldRow/FieldRow";
 import NetworkStat from "../NetworkStat/NetworkStat";
+import ScoreHero from "../ScoreHero/ScoreHero";
 import SectionCard from "../SectionCard/SectionCard";
 import SosRow from "../SosRow/SosRow";
 import StatusChip from "../StatusChip/StatusChip";
 import TrustScoreModal from "../TrustScoreModal/TrustScoreModal";
 import VerificationChip from "../VerificationChip/VerificationChip";
+import Widget from "../Widget/Widget";
 import { ANALYSTS, neighborIds, seedCase } from "../../lib/cases";
 import { money, transactionLine } from "../../lib/queue";
 import "./CaseDetail.css";
@@ -147,6 +149,12 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
           onFraudStatus={() => patch({}, { kind: "Fraud", detail: "Fraud status updated" })}
           onRefunds={() => patch({}, { kind: "Refund", detail: "Refund recorded on the case" })}
         />
+
+        <section className="ts-case__widgets" aria-label="Case widgets">
+          <Widget title="Trust score" className="ts-widget--square ts-case__widget--score">
+            <ScoreHero score={item.score} confidence={item.confidence} />
+          </Widget>
+        </section>
 
         <div className="ts-banner">
           <span>
