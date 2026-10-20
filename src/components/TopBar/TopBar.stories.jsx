@@ -1,7 +1,7 @@
 import TopBar from "./TopBar";
 
 export default {
-  title: "Primitives/TopBar",
+  title: "Layouts/TopBar",
   component: TopBar,
   tags: ["autodocs"],
   parameters: {

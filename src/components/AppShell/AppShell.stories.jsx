@@ -1,7 +1,7 @@
 import AppShell from "./AppShell";
 
 export default {
-  title: "Compositions/AppShell",
+  title: "Layouts/AppShell",
   component: AppShell,
   tags: ["autodocs"],
   parameters: {

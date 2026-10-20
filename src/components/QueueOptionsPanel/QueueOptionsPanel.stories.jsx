@@ -4,7 +4,7 @@ import QueueOptionsPanel from "./QueueOptionsPanel";
 import { QUEUE } from "../../lib/queue";
 
 export default {
-  title: "Components/QueueOptionsPanel",
+  title: "Patterns/QueueOptionsPanel",
   component: QueueOptionsPanel,
   parameters: { layout: "fullscreen" },
 };

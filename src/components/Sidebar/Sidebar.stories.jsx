@@ -1,7 +1,7 @@
 import Sidebar from "./Sidebar";
 
 export default {
-  title: "Primitives/Sidebar",
+  title: "Layouts/Sidebar",
   component: Sidebar,
   tags: ["autodocs"],
   parameters: {

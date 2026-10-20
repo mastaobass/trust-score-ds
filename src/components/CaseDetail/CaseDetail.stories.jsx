@@ -17,7 +17,7 @@ function CaseHarness({ id }) {
 }
 
 export default {
-  title: "Compositions/CaseDetail",
+  title: "Pages/CaseDetail",
   component: CaseDetail,
   parameters: { layout: "fullscreen" },
 };

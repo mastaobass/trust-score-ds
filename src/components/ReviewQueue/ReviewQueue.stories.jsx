@@ -1,7 +1,7 @@
 import ReviewQueue from "./ReviewQueue";
 
 export default {
-  title: "Compositions/ReviewQueue",
+  title: "Patterns/ReviewQueue",
   component: ReviewQueue,
   tags: ["autodocs"],
   parameters: {

@@ -1,7 +1,7 @@
 import NetworkStat from "./NetworkStat";
 
 export default {
-  title: "Primitives/NetworkStat",
+  title: "Components/NetworkStat",
   component: NetworkStat,
   tags: ["autodocs"],
 };

@@ -6,7 +6,7 @@ const appDesign =
   "https://www.figma.com/design/4xUv7jvv0soZmmXwCo830e/Fraud-Risk-Score-Explainer?node-id=141-381";
 
 export default {
-  title: "Compositions/ActionBar",
+  title: "Patterns/ActionBar",
   component: ActionBar,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

@@ -3,7 +3,7 @@ import SosRow from "../SosRow/SosRow";
 import VerificationChip from "../VerificationChip/VerificationChip";
 
 export default {
-  title: "Primitives/SectionCard",
+  title: "Components/SectionCard",
   component: SectionCard,
   tags: ["autodocs"],
 };

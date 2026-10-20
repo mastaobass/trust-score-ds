@@ -7,7 +7,7 @@ import {
 } from "./fixtures";
 
 export default {
-  title: "Compositions/TrustScoreModal",
+  title: "Patterns/TrustScoreModal",
   component: TrustScoreModal,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

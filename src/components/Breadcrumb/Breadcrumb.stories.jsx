@@ -14,7 +14,7 @@ const CASE = [
 ];
 
 export default {
-  title: "Primitives/Breadcrumb",
+  title: "Components/Breadcrumb",
   component: Breadcrumb,
   tags: ["autodocs"],
   parameters: {

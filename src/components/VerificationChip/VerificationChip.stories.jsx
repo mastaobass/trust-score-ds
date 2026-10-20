@@ -1,7 +1,7 @@
 import VerificationChip from "./VerificationChip";
 
 export default {
-  title: "Primitives/VerificationChip",
+  title: "Components/VerificationChip",
   component: VerificationChip,
   tags: ["autodocs"],
 };
