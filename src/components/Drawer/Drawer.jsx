@@ -2,8 +2,8 @@ import { useEffect, useRef } from "react";
 import "./Drawer.css";
 
 /**
- * Right slide-over panel with overlay. Esc / overlay / close dismiss.
- * Pattern sibling to queue options — overlay instead of a docked aside.
+ * Right panel. `mode="overlay"` (default) is a fixed slide-over with scrim.
+ * `mode="push"` docks beside content (no overlay) for layout placement.
  */
 export default function Drawer({
   open = false,
@@ -11,9 +11,11 @@ export default function Drawer({
   onClose,
   children,
   className,
+  mode = "overlay",
   ...rest
 }) {
   const closeRef = useRef(null);
+  const isPush = mode === "push";
 
   useEffect(() => {
     if (!open) return undefined;
@@ -23,31 +25,39 @@ export default function Drawer({
       if (e.key === "Escape") onClose?.();
     };
     window.addEventListener("keydown", onKey);
-    const original = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    let original;
+    if (!isPush) {
+      original = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+    }
     return () => {
       window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = original;
+      if (!isPush) document.body.style.overflow = original;
       prev?.focus?.();
     };
-  }, [open, onClose]);
+  }, [open, onClose, isPush]);
 
   if (!open) return null;
 
+  const rootClasses = ["ts-drawer", isPush ? "ts-drawer--push" : "ts-drawer--overlay"]
+    .filter(Boolean)
+    .join(" ");
   const panelClasses = ["ts-drawer__panel", className].filter(Boolean).join(" ");
 
   return (
-    <div className="ts-drawer" {...rest}>
-      <button
-        type="button"
-        className="ts-drawer__overlay"
-        aria-label="Close drawer"
-        onClick={onClose}
-      />
+    <div className={rootClasses} {...rest}>
+      {!isPush ? (
+        <button
+          type="button"
+          className="ts-drawer__overlay"
+          aria-label="Close drawer"
+          onClick={onClose}
+        />
+      ) : null}
       <aside
         className={panelClasses}
         role="dialog"
-        aria-modal="true"
+        aria-modal={!isPush}
         aria-label={title}
       >
         <div className="ts-drawer__head">

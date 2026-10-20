@@ -11,7 +11,7 @@ export default {
     docs: {
       description: {
         component:
-          "Raised widget chrome with optional title, settings gear (size toggles 1×1 / 1×2 / 2×1 / 2×2), and snap resize handle. Square aspect only for 1×1; larger sizes fill their grid cell.",
+          "Raised widget chrome with optional title, settings gear (size toggles 1×1 / 1×2 / 2×1 / 2×2, plus Move handle), and snap resize handle. 4∶3 aspect only for 1×1; larger sizes fill their grid cell.",
       },
     },
   },
@@ -22,8 +22,8 @@ const cellStyle = {
   maxWidth: "100%",
 };
 
-export const EmptySquare = {
-  name: "Empty square",
+export const EmptyRatio = {
+  name: "Empty 4∶3",
   render: () => (
     <div style={cellStyle}>
       <Widget title="Empty" colSpan={1} rowSpan={1} aria-label="Empty widget">

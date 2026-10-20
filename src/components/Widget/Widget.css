@@ -13,9 +13,9 @@
   color: var(--ts-color-text-primary);
 }
 
-/* Square only for 1×1; taller/wider sizes fill spanned cells. */
-.ts-widget--square {
-  aspect-ratio: 1 / 1;
+/* 4∶3 only for 1×1; taller/wider sizes fill spanned cells. */
+.ts-widget--ratio {
+  aspect-ratio: 4 / 3;
   width: 100%;
   height: auto;
   overflow: hidden;
@@ -29,9 +29,15 @@
   container-type: size;
 }
 
-.ts-widget--resizing {
+.ts-widget--resizing,
+.ts-widget--moving {
   z-index: 2;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.ts-widget--moving {
+  opacity: 0.72;
+  cursor: grabbing;
 }
 
 .ts-widget__header {
@@ -80,6 +86,7 @@
 
 .ts-widget__gear:focus-visible,
 .ts-widget__size-btn:focus-visible,
+.ts-widget__move:focus-visible,
 .ts-widget__resize:focus-visible {
   outline: 2px solid var(--ts-color-accent-primary);
   outline-offset: 1px;
@@ -100,11 +107,33 @@
   grid-template-columns: 1fr 1fr;
   gap: 4px;
   padding: 6px;
-  min-width: 112px;
+  min-width: 124px;
   background: var(--ts-color-surface-default);
   border: 1px solid var(--ts-color-border-default);
   border-radius: var(--ts-radius-md);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.ts-widget__move {
+  grid-column: 1 / -1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border: 1px solid var(--ts-color-border-default);
+  border-radius: var(--ts-radius-sm);
+  background: var(--ts-color-surface-raised);
+  color: var(--ts-color-text-primary);
+  font: inherit;
+  font-size: var(--ts-font-size-sm);
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: grab;
+}
+
+.ts-widget__move:active {
+  cursor: grabbing;
 }
 
 .ts-widget__size-btn {

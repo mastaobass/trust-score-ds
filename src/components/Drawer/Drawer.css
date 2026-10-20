@@ -1,10 +1,23 @@
 .ts-drawer {
+  font-family: var(--ts-font-family);
+}
+
+.ts-drawer--overlay {
   position: fixed;
   inset: 0;
   z-index: 50;
   display: flex;
   justify-content: flex-end;
-  font-family: var(--ts-font-family);
+}
+
+.ts-drawer--push {
+  position: relative;
+  z-index: 2;
+  flex: 0 0 min(320px, 100%);
+  width: min(320px, 100%);
+  align-self: stretch;
+  display: flex;
+  min-height: 0;
 }
 
 .ts-drawer__overlay {
@@ -29,6 +42,12 @@
   box-shadow: -12px 0 40px rgba(0, 0, 0, 0.18);
   color: var(--ts-color-text-primary);
   animation: ts-drawer-in 160ms ease-out;
+}
+
+.ts-drawer--push .ts-drawer__panel {
+  width: 100%;
+  box-shadow: none;
+  border-left: 1px solid var(--ts-color-border-default);
 }
 
 @keyframes ts-drawer-in {
