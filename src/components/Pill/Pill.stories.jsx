@@ -32,7 +32,7 @@ function AlertIcon() {
 }
 
 export default {
-  title: "Primitives/Pill",
+  title: "Components/Pill",
   component: Pill,
   tags: ["autodocs"],
   argTypes: {

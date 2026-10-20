@@ -1,7 +1,7 @@
 import StatusChip from "./StatusChip";
 
 export default {
-  title: "Primitives/StatusChip",
+  title: "Components/StatusChip",
   component: StatusChip,
   tags: ["autodocs"],
 };

@@ -2,7 +2,7 @@ import ScoreHero from "../ScoreHero/ScoreHero";
 import Widget from "./Widget";
 
 export default {
-  title: "Primitives/Widget",
+  title: "Components/Widget",
   component: Widget,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

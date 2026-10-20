@@ -3,7 +3,7 @@ import QueueGrid from "./QueueGrid";
 import { QUEUE } from "../../lib/queue";
 
 export default {
-  title: "Components/QueueGrid",
+  title: "Patterns/QueueGrid",
   component: QueueGrid,
   parameters: { layout: "fullscreen" },
 };

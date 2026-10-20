@@ -1,7 +1,7 @@
 import FieldRow from "./FieldRow";
 
 export default {
-  title: "Primitives/FieldRow",
+  title: "Patterns/FieldRow",
   component: FieldRow,
   tags: ["autodocs"],
   args: { label: "Customer Name", value: "Jane Doe" },

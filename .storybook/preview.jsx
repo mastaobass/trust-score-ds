@@ -44,6 +44,22 @@ const preview = {
       },
     },
 
+    options: {
+      // Smallest → largest (modernized Atomic Design).
+      storySort: {
+        order: [
+          "Foundations",
+          ["Color", "Type", "Spacing", "Radius"],
+          "Primitives",
+          "Components",
+          "Patterns",
+          "Layouts",
+          "Pages",
+        ],
+        method: "alphabetical",
+      },
+    },
+
     a11y: {
       // 'todo' - show a11y violations in the test UI only
       // 'error' - fail CI on a11y violations

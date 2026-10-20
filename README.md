@@ -6,9 +6,9 @@ A fraud-risk-score explainer managed in code. Vite + React + Storybook.
 
 Open a queue row to the Payments Fraud case. The score explainer lives on the case (Velocities → Explain score), not on the table.
 
-**Live Storybook:** https://mastaobass.github.io/trust-score-ds/?path=/story/compositions-reviewqueue--loaded
+**Live Storybook:** https://mastaobass.github.io/trust-score-ds/?path=/story/patterns-reviewqueue--loaded
 
-Storybook still isolates the table and modal as components. The console above is the product path.
+Storybook groups the kit smallest → largest: Foundations → Primitives → Components → Patterns → Layouts → Pages. The console above is the product path.
 
 ## Constraints (read this first)
 
@@ -29,11 +29,14 @@ npm run storybook   # component kit
 
 ## What's inside
 
-- `src/tokens/tokens.json` and `src/tokens/tokens.css`
-- Score primitives: `Button`, `Pill`, `ReasonRow`
-- Case primitives: `VerificationChip`, `StatusChip`, `SosRow`, `FieldRow`, `NetworkStat`, `SectionCard`
-- Components: `BandGauge`, `WaterfallChart`, `ScoreHero`
-- Compositions: `TrustScoreModal`, `ReviewQueue`, `CaseDetail`
+Storybook taxonomy (see sidebar):
+
+- **Foundations** — tokens: Color, Type, Spacing, Radius (`src/tokens/`)
+- **Primitives** — `ActionBarField`, `ActionBarSection`
+- **Components** — `Button`, `Pill`, chips, gauges, `SectionCard`, `Widget`, `ScoreHero`, …
+- **Patterns** — `ActionBar`, `FieldRow`, `QueueGrid`, `ReviewQueue`, `TrustScoreModal`, …
+- **Layouts** — `AppShell`, `Sidebar`, `TopBar`
+- **Pages** — `CaseDetail`
 
 ## Design and code sync
 
@@ -41,8 +44,8 @@ Figma file: [Fraud-Risk-Score-Explainer](https://www.figma.com/design/4xUv7jvv0s
 
 - Page **Score Modal**: light/dark explainer. The `Modal` component lives here.
 - Page **Case Detail View**: reconstructed case-management screens (mostly flattened frames).
-- Page **Kit**: componentized primitives plus a ReviewQueue composition.
-- Page **Case Queue**: product queue composition.
+- Page **Kit**: componentized primitives plus a ReviewQueue pattern.
+- Page **Case Queue**: product queue pattern.
 - Variable collection **Trust Score Tokens** (Light / Dark).
 
 Code Connect needs an Organization plan, which this file does not have. Sync is a deliberate step.

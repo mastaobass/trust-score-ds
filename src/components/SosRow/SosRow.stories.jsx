@@ -1,7 +1,7 @@
 import SosRow from "./SosRow";
 
 export default {
-  title: "Primitives/SosRow",
+  title: "Components/SosRow",
   component: SosRow,
   tags: ["autodocs"],
 };
