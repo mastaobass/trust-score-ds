@@ -1,0 +1,23 @@
+.ts-widget-grid {
+  --wg-cols: 4;
+  --wg-tablet-cols: 3;
+  display: grid;
+  grid-template-columns: repeat(var(--wg-cols), minmax(0, 1fr));
+  gap: var(--ts-space-md);
+  align-items: start;
+}
+
+.ts-widget-grid__item[data-column] {
+  /* Clamp to current track count so column={4} lands on the last tablet track. */
+  grid-column: min(var(--wg-item-col), var(--wg-cols));
+}
+
+.ts-widget-grid__item[data-row] {
+  grid-row: var(--wg-item-row);
+}
+
+@media (max-width: 900px) {
+  .ts-widget-grid {
+    --wg-cols: var(--wg-tablet-cols);
+  }
+}

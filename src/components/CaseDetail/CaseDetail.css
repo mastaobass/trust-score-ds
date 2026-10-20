@@ -20,17 +20,7 @@
 .ts-meta__label { color: var(--ts-color-text-muted); font-weight: 500; }
 .ts-meta__value { font-weight: 600; }
 .ts-case__main > .ts-action-bar { margin-bottom: 12px; }
-.ts-case__widgets {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--ts-space-md);
-  align-items: start;
-  margin-bottom: 12px;
-}
-.ts-case__widget--score {
-  grid-column: 4;
-  grid-row: 1;
-}
+.ts-case__main > .ts-widget-grid { margin-bottom: 12px; }
 .ts-banner {
   display: flex;
   flex-wrap: wrap;
@@ -97,8 +87,6 @@
 .ts-case__missing { max-width: 32rem; margin: 4rem auto; text-align: center; }
 .ts-card__head-row { display: flex; justify-content: flex-end; margin-bottom: 8px; }
 @media (max-width: 900px) {
-  .ts-case__widgets { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .ts-case__widget--score { grid-column: 3; }
   .ts-summary, .ts-case__grid, .ts-payfields { grid-template-columns: 1fr; }
   .ts-case__main { padding: 12px; }
 }
