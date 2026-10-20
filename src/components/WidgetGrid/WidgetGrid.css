@@ -1,19 +1,66 @@
 .ts-widget-grid {
   --wg-cols: 4;
   --wg-tablet-cols: 3;
+  --wg-rows: 6;
+  --wg-used-rows: 1;
+  /* Equal row track size derived from column width (1×1 ≈ square). */
+  container-type: inline-size;
+  --wg-row-size: calc(
+    (100cqw - (var(--wg-cols) - 1) * var(--ts-space-md)) / var(--wg-cols)
+  );
   display: grid;
   grid-template-columns: repeat(var(--wg-cols), minmax(0, 1fr));
+  /* Equal tracks for used rows; placement clamps against --wg-rows (max 6). */
+  grid-template-rows: repeat(var(--wg-used-rows), minmax(0, 1fr));
+  grid-auto-rows: 0;
   gap: var(--ts-space-md);
-  align-items: start;
+  align-items: stretch;
+  height: calc(
+    var(--wg-used-rows) * var(--wg-row-size) + (var(--wg-used-rows) - 1) * var(--ts-space-md)
+  );
+  max-height: calc(
+    var(--wg-rows) * var(--wg-row-size) + (var(--wg-rows) - 1) * var(--ts-space-md)
+  );
+  overflow: hidden;
 }
 
+.ts-widget-grid__item {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ts-widget-grid__item > * {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  width: 100%;
+}
+
+/* Explicit start + span; clamp so column+span-1 and row+span-1 stay in bounds. */
 .ts-widget-grid__item[data-column] {
-  /* Clamp to current track count so column={4} lands on the last tablet track. */
-  grid-column: min(var(--wg-item-col), var(--wg-cols));
+  grid-column: min(
+      var(--wg-item-col),
+      calc(var(--wg-cols) - var(--wg-col-span, 1) + 1)
+    )
+    / span var(--wg-col-span, 1);
+}
+
+.ts-widget-grid__item:not([data-column]) {
+  grid-column: span var(--wg-col-span, 1);
 }
 
 .ts-widget-grid__item[data-row] {
-  grid-row: var(--wg-item-row);
+  grid-row: min(
+      var(--wg-item-row),
+      calc(var(--wg-rows) - var(--wg-row-span, 1) + 1)
+    )
+    / span var(--wg-row-span, 1);
+}
+
+.ts-widget-grid__item:not([data-row]) {
+  grid-row: span var(--wg-row-span, 1);
 }
 
 @media (max-width: 900px) {

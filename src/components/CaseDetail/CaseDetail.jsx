@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import ActionBar from "../ActionBar/ActionBar";
 import Button from "../Button/Button";
+import Drawer from "../Drawer/Drawer";
 import FieldRow from "../FieldRow/FieldRow";
 import NetworkStat from "../NetworkStat/NetworkStat";
 import ScoreHero from "../ScoreHero/ScoreHero";
@@ -13,9 +14,54 @@ import Widget from "../Widget/Widget";
 import WidgetGrid from "../WidgetGrid/WidgetGrid";
 import { ANALYSTS, neighborIds, seedCase } from "../../lib/cases";
 import { money, transactionLine } from "../../lib/queue";
+import {
+  applyWidgetLayout,
+  getStoredWidgetLayoutId,
+  setStoredWidgetLayoutId,
+  WIDGET_LAYOUTS,
+} from "../../lib/widgetLayouts";
 import "./CaseDetail.css";
 
 const NOTE_MAX = 250;
+
+function PageCogIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852 1.01 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** id → renderer. Grid stays content-agnostic; CaseDetail owns the map. */
+function renderCaseWidget(itemId, item, layoutItem, onSizeChange) {
+  if (itemId === "trust-score") {
+    return (
+      <Widget
+        title="Trust score"
+        colSpan={layoutItem.colSpan}
+        rowSpan={layoutItem.rowSpan}
+        resizable
+        onSizeChange={onSizeChange}
+      >
+        <ScoreHero score={item.score} confidence={item.confidence} />
+      </Widget>
+    );
+  }
+  return null;
+}
 
 function VelocityChart({ series }) {
   const w = 520;
@@ -48,6 +94,9 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
   const [historyOpen, setHistoryOpen] = useState(Boolean(flash));
   const [events, setEvents] = useState([]);
   const [note, setNote] = useState("");
+  const [viewsOpen, setViewsOpen] = useState(false);
+  const [layoutId, setLayoutId] = useState(() => getStoredWidgetLayoutId());
+  const [layoutItems, setLayoutItems] = useState(() => applyWidgetLayout(getStoredWidgetLayoutId()).items);
 
   if (!item) {
     return (
@@ -95,6 +144,22 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
     patch({ assignee: nextAnalyst }, { kind: "Assign", detail: `Assigned to ${nextAnalyst}` });
   }
 
+  function selectLayout(id) {
+    const next = setStoredWidgetLayoutId(id);
+    setLayoutId(next);
+    setLayoutItems(applyWidgetLayout(next).items);
+  }
+
+  function updateWidgetSize(widgetId, size) {
+    setLayoutItems((prev) =>
+      prev.map((entry) =>
+        entry.id === widgetId
+          ? { ...entry, colSpan: size.colSpan, rowSpan: size.rowSpan }
+          : entry,
+      ),
+    );
+  }
+
   const caseStatus =
     item.status === "approved"
       ? "Closed · approved"
@@ -131,6 +196,17 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
             <Button size="sm" variant="ghost" disabled={!next} onClick={() => next && onOpen(next)}>
               Next
             </Button>
+            <Button
+              size="sm"
+              variant="secondary"
+              className="ts-case__nav-cog"
+              aria-label="Page views"
+              aria-pressed={viewsOpen}
+              aria-expanded={viewsOpen}
+              onClick={() => setViewsOpen(true)}
+            >
+              <PageCogIcon />
+            </Button>
           </div>
         </div>
 
@@ -151,12 +227,24 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
           onRefunds={() => patch({}, { kind: "Refund", detail: "Refund recorded on the case" })}
         />
 
-        <WidgetGrid aria-label="Case widgets">
-          <WidgetGrid.Item column={4}>
-            <Widget title="Trust score" className="ts-widget--square">
-              <ScoreHero score={item.score} confidence={item.confidence} />
-            </Widget>
-          </WidgetGrid.Item>
+        <WidgetGrid aria-label="Case widgets" maxRows={6}>
+          {layoutItems.map((layoutItem) => {
+            const content = renderCaseWidget(layoutItem.id, item, layoutItem, (size) =>
+              updateWidgetSize(layoutItem.id, size),
+            );
+            if (!content) return null;
+            return (
+              <WidgetGrid.Item
+                key={layoutItem.id}
+                column={layoutItem.column}
+                row={layoutItem.row}
+                colSpan={layoutItem.colSpan}
+                rowSpan={layoutItem.rowSpan}
+              >
+                {content}
+              </WidgetGrid.Item>
+            );
+          })}
         </WidgetGrid>
 
         <div className="ts-banner">
@@ -294,6 +382,39 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
           onDecline={() => decide("declined")}
         />
       )}
+
+      <Drawer open={viewsOpen} title="Widget layout" onClose={() => setViewsOpen(false)}>
+        <p className="ts-case__drawer-help">
+          Saved views place case widgets on the grid. Per-widget size can also be changed from
+          each widget&apos;s settings gear.
+        </p>
+        <div className="ts-case__views">
+          <span className="ts-case__views-label" id="ts-case-views-label">
+            Page views
+          </span>
+          <div
+            className="ts-case__views-options"
+            role="radiogroup"
+            aria-labelledby="ts-case-views-label"
+          >
+            {WIDGET_LAYOUTS.map((layout) => {
+              const selected = layoutId === layout.id;
+              return (
+                <button
+                  key={layout.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={selected}
+                  className="ts-case__views-option"
+                  onClick={() => selectLayout(layout.id)}
+                >
+                  {layout.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </Drawer>
     </div>
   );
 }
