@@ -10,6 +10,7 @@ export { default as SosRow } from "./components/SosRow/SosRow";
 export { default as FieldRow } from "./components/FieldRow/FieldRow";
 export { default as NetworkStat } from "./components/NetworkStat/NetworkStat";
 export { default as SectionCard } from "./components/SectionCard/SectionCard";
+export { default as Widget } from "./components/Widget/Widget";
 export { default as BandGauge } from "./components/BandGauge/BandGauge";
 export { default as OmniscoreGauge } from "./components/OmniscoreGauge/OmniscoreGauge";
 export { default as WaterfallChart } from "./components/WaterfallChart/WaterfallChart";
