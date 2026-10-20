@@ -10,6 +10,7 @@ import StatusChip from "../StatusChip/StatusChip";
 import TrustScoreModal from "../TrustScoreModal/TrustScoreModal";
 import VerificationChip from "../VerificationChip/VerificationChip";
 import Widget from "../Widget/Widget";
+import WidgetGrid from "../WidgetGrid/WidgetGrid";
 import { ANALYSTS, neighborIds, seedCase } from "../../lib/cases";
 import { money, transactionLine } from "../../lib/queue";
 import "./CaseDetail.css";
@@ -150,11 +151,13 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
           onRefunds={() => patch({}, { kind: "Refund", detail: "Refund recorded on the case" })}
         />
 
-        <section className="ts-case__widgets" aria-label="Case widgets">
-          <Widget title="Trust score" className="ts-widget--square ts-case__widget--score">
-            <ScoreHero score={item.score} confidence={item.confidence} />
-          </Widget>
-        </section>
+        <WidgetGrid aria-label="Case widgets">
+          <WidgetGrid.Item column={4}>
+            <Widget title="Trust score" className="ts-widget--square">
+              <ScoreHero score={item.score} confidence={item.confidence} />
+            </Widget>
+          </WidgetGrid.Item>
+        </WidgetGrid>
 
         <div className="ts-banner">
           <span>
