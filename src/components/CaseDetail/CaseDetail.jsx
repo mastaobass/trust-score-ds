@@ -15,6 +15,9 @@ import WidgetGrid from "../WidgetGrid/WidgetGrid";
 import { ANALYSTS, neighborIds, seedCase } from "../../lib/cases";
 import { money, transactionLine } from "../../lib/queue";
 import {
+  addWidgetItem,
+  CASE_WIDGET_CATALOG,
+  clampWidgetOrigin,
   getStoredWidgetLayoutId,
   loadWidgetLayout,
   moveWidgetItem,
@@ -26,6 +29,7 @@ import "./CaseDetail.css";
 
 const NOTE_MAX = 250;
 const GRID_MAX_ROWS = 6;
+const GRID_COLS = 4;
 
 function initialLayout() {
   return loadWidgetLayout(getStoredWidgetLayoutId());
@@ -71,7 +75,15 @@ function VelocityChart({ series }) {
   );
 }
 
-function widgetChrome(layoutItem, { title, className, ariaLabel, children, onSizeChange, onPositionChange }) {
+function widgetChrome(layoutItem, {
+  title,
+  className,
+  ariaLabel,
+  children,
+  onSizeChange,
+  onPositionChange,
+  onPositionPreview,
+}) {
   return (
     <Widget
       title={title}
@@ -82,20 +94,52 @@ function widgetChrome(layoutItem, { title, className, ariaLabel, children, onSiz
       resizable
       onSizeChange={onSizeChange}
       onPositionChange={onPositionChange}
+      onPositionPreview={onPositionPreview}
     >
       {children}
     </Widget>
   );
 }
 
+function RadioGlyph({ checked }) {
+  return (
+    <span className="ts-case__radio-glyph" data-checked={checked ? "true" : "false"} aria-hidden="true">
+      {checked ? <span className="ts-case__radio-glyph-fill" /> : null}
+    </span>
+  );
+}
+
+function ChevronIcon({ open }) {
+  return (
+    <svg
+      className="ts-case__widgets-chevron"
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+      data-open={open ? "true" : "false"}
+    >
+      <path
+        d="M6 9l6 6 6-6"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 /** id → renderer. Grid stays content-agnostic; CaseDetail owns the map. */
 function renderCaseWidget(itemId, ctx) {
-  const { item, layoutItem, events, onSizeChange, onPositionChange, onExplain } = ctx;
+  const { item, layoutItem, events, onSizeChange, onPositionChange, onPositionPreview, onExplain } = ctx;
   const chrome = (props) =>
     widgetChrome(layoutItem, {
       ...props,
       onSizeChange,
       onPositionChange,
+      onPositionPreview,
     });
 
   switch (itemId) {
@@ -253,8 +297,10 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
   const [events, setEvents] = useState([]);
   const [note, setNote] = useState("");
   const [viewsOpen, setViewsOpen] = useState(false);
+  const [paymentsOpen, setPaymentsOpen] = useState(true);
   const [layoutId, setLayoutId] = useState(() => initialLayout().id);
   const [layoutItems, setLayoutItems] = useState(() => initialLayout().items);
+  const [dropTarget, setDropTarget] = useState(null);
 
   if (!item) {
     return (
@@ -324,8 +370,37 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
   }
 
   function updateWidgetPosition(widgetId, { column, row: nextRow, cols }) {
-    persistItems(moveWidgetItem(layoutItems, widgetId, column, nextRow, cols ?? 4, GRID_MAX_ROWS));
+    setDropTarget(null);
+    persistItems(moveWidgetItem(layoutItems, widgetId, column, nextRow, cols ?? GRID_COLS, GRID_MAX_ROWS));
   }
+
+  function previewWidgetPosition(widgetId, preview) {
+    if (!preview) {
+      setDropTarget(null);
+      return;
+    }
+    const layoutItem = layoutItems.find((entry) => entry.id === widgetId);
+    if (!layoutItem) {
+      setDropTarget(null);
+      return;
+    }
+    const cols = preview.cols ?? GRID_COLS;
+    const origin = clampWidgetOrigin(
+      preview.column,
+      preview.row,
+      layoutItem.colSpan,
+      layoutItem.rowSpan,
+      cols,
+      GRID_MAX_ROWS,
+    );
+    setDropTarget(origin);
+  }
+
+  function addCatalogWidget(catalogEntry) {
+    persistItems(addWidgetItem(layoutItems, catalogEntry, GRID_COLS, GRID_MAX_ROWS));
+  }
+
+  const placedWidgetIds = new Set(layoutItems.map((entry) => entry.id));
 
   const caseStatus =
     item.status === "approved"
@@ -419,6 +494,7 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
                 events,
                 onSizeChange: (size) => updateWidgetSize(layoutItem.id, size),
                 onPositionChange: (pos) => updateWidgetPosition(layoutItem.id, pos),
+                onPositionPreview: (preview) => previewWidgetPosition(layoutItem.id, preview),
                 onExplain: () => setExplain(true),
               });
               if (!content) return null;
@@ -434,6 +510,14 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
                 </WidgetGrid.Item>
               );
             })}
+            {dropTarget ? (
+              <WidgetGrid.DropTarget
+                column={dropTarget.column}
+                row={dropTarget.row}
+                colSpan={dropTarget.colSpan}
+                rowSpan={dropTarget.rowSpan}
+              />
+            ) : null}
           </WidgetGrid>
 
           <p className="ts-case__footnote ts-case__blur-zone">
@@ -445,38 +529,86 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
         <Drawer
           mode="push"
           open={viewsOpen}
-          title="Widget layout"
+          title="Settings"
           onClose={() => setViewsOpen(false)}
         >
-          <p className="ts-case__drawer-help">
-            Saved views place case widgets on the grid. Per-widget size and position can also be changed
-            from each widget&apos;s settings gear.
-          </p>
-          <div className="ts-case__views">
-            <span className="ts-case__views-label" id="ts-case-views-label">
-              Page views
-            </span>
-            <div
-              className="ts-case__views-options"
-              role="radiogroup"
-              aria-labelledby="ts-case-views-label"
-            >
-              {WIDGET_LAYOUTS.map((layout) => {
-                const selected = layoutId === layout.id;
-                return (
-                  <button
-                    key={layout.id}
-                    type="button"
-                    role="radio"
-                    aria-checked={selected}
-                    className="ts-case__views-option"
-                    onClick={() => selectLayout(layout.id)}
+          <div className="ts-case__drawer-body">
+            <section className="ts-case__drawer-section" aria-labelledby="ts-case-views-label">
+              <h3 className="ts-case__drawer-heading" id="ts-case-views-label">
+                Saved Views
+              </h3>
+              <div
+                className="ts-case__views-options"
+                role="radiogroup"
+                aria-labelledby="ts-case-views-label"
+              >
+                {WIDGET_LAYOUTS.map((layout) => {
+                  const selected = layoutId === layout.id;
+                  return (
+                    <button
+                      key={layout.id}
+                      type="button"
+                      role="radio"
+                      aria-checked={selected}
+                      className="ts-case__views-option"
+                      onClick={() => selectLayout(layout.id)}
+                    >
+                      <RadioGlyph checked={selected} />
+                      <span className="ts-case__views-option-label">{layout.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+
+            <section className="ts-case__drawer-section" aria-labelledby="ts-case-widgets-label">
+              <h3 className="ts-case__drawer-heading" id="ts-case-widgets-label">
+                Widgets
+              </h3>
+              <div className="ts-case__widgets-category">
+                <button
+                  type="button"
+                  className="ts-case__widgets-category-toggle"
+                  aria-expanded={paymentsOpen}
+                  aria-controls="ts-case-widgets-payments"
+                  onClick={() => setPaymentsOpen((open) => !open)}
+                >
+                  <span>Payments</span>
+                  <ChevronIcon open={paymentsOpen} />
+                </button>
+                {paymentsOpen ? (
+                  <div
+                    id="ts-case-widgets-payments"
+                    className="ts-case__widgets-list"
+                    role="group"
+                    aria-label="Payments widgets"
                   >
-                    {layout.label}
-                  </button>
-                );
-              })}
-            </div>
+                    {CASE_WIDGET_CATALOG.map((entry) => {
+                      const alreadyPlaced = placedWidgetIds.has(entry.id);
+                      return (
+                        <button
+                          key={entry.id}
+                          type="button"
+                          className="ts-case__widget-add"
+                          disabled={alreadyPlaced}
+                          aria-label={
+                            alreadyPlaced
+                              ? `${entry.title} already on the grid`
+                              : `Add ${entry.title}`
+                          }
+                          onClick={() => addCatalogWidget(entry)}
+                        >
+                          <span className="ts-case__widget-add-plus" aria-hidden="true">
+                            +
+                          </span>
+                          <span>{entry.title}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                ) : null}
+              </div>
+            </section>
           </div>
         </Drawer>
       </div>

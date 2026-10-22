@@ -24,10 +24,10 @@ export default {
 
 export const Northwind = {
   name: "Northwind · Payments Fraud case",
-  render: () => <CaseHarness id="48291-C" />,
+  render: () => <CaseHarness id={QUEUE[0]?.id ?? "10000-A"} />,
 };
 
 export const Harbor = {
   name: "Harbor · Payments Fraud case",
-  render: () => <CaseHarness id="11904-A" />,
+  render: () => <CaseHarness id={QUEUE[1]?.id ?? "10997-B"} />,
 };

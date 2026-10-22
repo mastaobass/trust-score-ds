@@ -26,6 +26,23 @@ export const CASE_WIDGET_IDS = [
 ];
 
 /**
+ * Add-widget catalog for Case Detail drawer. Titles match widget headers;
+ * all under Payments. Spans match Default preset defaults.
+ */
+export const CASE_WIDGET_CATALOG = [
+  { id: "banner", title: "Case banner", category: "Payments", defaultColSpan: 2, defaultRowSpan: 1 },
+  { id: "trust-score", title: "Trust score", category: "Payments", defaultColSpan: 1, defaultRowSpan: 1 },
+  { id: "case-history", title: "Case history", category: "Payments", defaultColSpan: 2, defaultRowSpan: 1 },
+  { id: "sos", title: "SOS", category: "Payments", defaultColSpan: 1, defaultRowSpan: 1 },
+  { id: "network", title: "Across the network", category: "Payments", defaultColSpan: 1, defaultRowSpan: 1 },
+  { id: "payment", title: "Payment", category: "Payments", defaultColSpan: 2, defaultRowSpan: 1 },
+  { id: "velocities", title: "Velocities", category: "Payments", defaultColSpan: 2, defaultRowSpan: 1 },
+  { id: "identity", title: "Identity check", category: "Payments", defaultColSpan: 2, defaultRowSpan: 1 },
+  { id: "transaction", title: "Transaction info", category: "Payments", defaultColSpan: 2, defaultRowSpan: 1 },
+  { id: "policies", title: "Policies triggered", category: "Payments", defaultColSpan: 2, defaultRowSpan: 1 },
+];
+
+/**
  * Presets. Shape: `{ id, label, items: [{ id, column, row, colSpan, rowSpan }] }`.
  * Default mirrors the former fixed Case Detail stack inside the 4×6 grid.
  */
@@ -199,6 +216,46 @@ export function rectsOverlap(a, b) {
   const bColEnd = b.column + b.colSpan - 1;
   const bRowEnd = b.row + b.rowSpan - 1;
   return !(aColEnd < b.column || bColEnd < a.column || aRowEnd < b.row || bRowEnd < a.row);
+}
+
+/**
+ * Scan row-major for the first origin that fits colSpan×rowSpan without
+ * overlapping any existing item (after clampWidgetOrigin).
+ */
+export function findNextFreeCell(items, { colSpan = 1, rowSpan = 1 } = {}, cols = 4, maxRows = 6) {
+  const cs = clampWidgetSpan(colSpan);
+  const rs = clampWidgetSpan(rowSpan);
+  const maxCol = Math.max(1, cols - cs + 1);
+  const maxRow = Math.max(1, maxRows - rs + 1);
+  for (let row = 1; row <= maxRow; row += 1) {
+    for (let column = 1; column <= maxCol; column += 1) {
+      const candidate = clampWidgetOrigin(column, row, cs, rs, cols, maxRows);
+      const overlaps = (items ?? []).some((item) => rectsOverlap(candidate, item));
+      if (!overlaps) return candidate;
+    }
+  }
+  return null;
+}
+
+/**
+ * Append a catalog entry at the next free cell. No-op (returns items) if the
+ * id is already present or no free cell fits.
+ */
+export function addWidgetItem(items, catalogEntry, cols = 4, maxRows = 6) {
+  if (!catalogEntry?.id) return items;
+  const list = items ?? [];
+  if (list.some((item) => item.id === catalogEntry.id)) return list;
+  const cell = findNextFreeCell(
+    list,
+    {
+      colSpan: catalogEntry.defaultColSpan ?? 1,
+      rowSpan: catalogEntry.defaultRowSpan ?? 1,
+    },
+    cols,
+    maxRows,
+  );
+  if (!cell) return list;
+  return [...list, { id: catalogEntry.id, ...cell }];
 }
 
 /**

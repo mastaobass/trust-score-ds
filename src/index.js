@@ -41,6 +41,7 @@ export {
   WIDGET_LAYOUT_ITEMS_KEY,
   WIDGET_SIZES,
   CASE_WIDGET_IDS,
+  CASE_WIDGET_CATALOG,
   getWidgetLayout,
   getStoredWidgetLayoutId,
   setStoredWidgetLayoutId,
@@ -52,6 +53,8 @@ export {
   clampWidgetOrigin,
   snapWidgetSize,
   rectsOverlap,
+  findNextFreeCell,
+  addWidgetItem,
   moveWidgetItem,
   pointerToGridCell,
 } from "./lib/widgetLayouts";

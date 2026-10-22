@@ -25,7 +25,8 @@
   overflow: hidden;
 }
 
-.ts-widget-grid__item {
+.ts-widget-grid__item,
+.ts-widget-grid__drop-target {
   min-width: 0;
   min-height: 0;
   display: flex;
@@ -39,8 +40,28 @@
   width: 100%;
 }
 
+.ts-widget-grid__drop-target {
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  pointer-events: none;
+  border: 2px dashed var(--ts-color-accent-primary, #2563eb);
+  border-radius: var(--ts-radius-md);
+  background: color-mix(in srgb, var(--ts-color-accent-primary, #2563eb) 14%, transparent);
+  color: var(--ts-color-accent-primary, #2563eb);
+  font-family: var(--ts-font-family);
+  font-size: var(--ts-font-size-sm);
+  font-weight: 600;
+  z-index: 1;
+}
+
+.ts-widget-grid__drop-target-label {
+  pointer-events: none;
+}
+
 /* Explicit start + span; clamp so column+span-1 and row+span-1 stay in bounds. */
-.ts-widget-grid__item[data-column] {
+.ts-widget-grid__item[data-column],
+.ts-widget-grid__drop-target[data-column] {
   grid-column: min(
       var(--wg-item-col),
       calc(var(--wg-cols) - var(--wg-col-span, 1) + 1)
@@ -48,11 +69,13 @@
     / span var(--wg-col-span, 1);
 }
 
-.ts-widget-grid__item:not([data-column]) {
+.ts-widget-grid__item:not([data-column]),
+.ts-widget-grid__drop-target:not([data-column]) {
   grid-column: span var(--wg-col-span, 1);
 }
 
-.ts-widget-grid__item[data-row] {
+.ts-widget-grid__item[data-row],
+.ts-widget-grid__drop-target[data-row] {
   grid-row: min(
       var(--wg-item-row),
       calc(var(--wg-rows) - var(--wg-row-span, 1) + 1)
@@ -60,7 +83,8 @@
     / span var(--wg-row-span, 1);
 }
 
-.ts-widget-grid__item:not([data-row]) {
+.ts-widget-grid__item:not([data-row]),
+.ts-widget-grid__drop-target:not([data-row]) {
   grid-row: span var(--wg-row-span, 1);
 }
 
