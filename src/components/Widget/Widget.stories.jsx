@@ -11,7 +11,7 @@ export default {
     docs: {
       description: {
         component:
-          "Raised widget chrome with optional title, header move grip, settings gear (size toggles 1×1 / 1×2 / 2×1 / 2×2), remove X, and snap resize handle. 4∶3 aspect only for 1×1; larger sizes fill their grid cell.",
+          "Raised widget chrome with optional title, headerActions (quiet icon CTAs before layout chrome), header move grip, settings gear (size toggles 1×1 / 1×2 / 2×1 / 2×2), remove X, and snap resize handle. 4∶3 aspect only for 1×1; larger sizes fill their grid cell.",
       },
     },
   },
@@ -53,6 +53,55 @@ export const SettingsAndSize = {
           <ScoreHero score={71.3} confidence={84} />
           <p style={{ margin: "8px 0 0", color: "var(--ts-color-text-muted)", fontSize: "var(--ts-font-size-sm)" }}>
             {size.colSpan}×{size.rowSpan}
+          </p>
+        </Widget>
+      </div>
+    );
+  },
+};
+
+function ExpandIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path
+        d="M9.5 2.5H13.5V6.5M6.5 13.5H2.5V9.5M13.5 2.5L9 7M2.5 13.5L7 9"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export const WithHeaderActions = {
+  name: "Header expand action",
+  render: function HeaderActionsDemo() {
+    const [expanded, setExpanded] = useState(false);
+    return (
+      <div style={cellStyle}>
+        <Widget
+          title="Trust score"
+          colSpan={1}
+          rowSpan={1}
+          onSizeChange={() => {}}
+          onRemove={() => {}}
+          headerActions={
+            <button
+              type="button"
+              className="ts-widget__action"
+              aria-label="Expand Trust score"
+              onClick={() => setExpanded(true)}
+            >
+              <ExpandIcon />
+            </button>
+          }
+        >
+          <ScoreHero score={71.3} confidence={84} />
+          <p style={{ margin: "8px 0 0", color: "var(--ts-color-text-muted)", fontSize: "var(--ts-font-size-sm)" }}>
+            {expanded
+              ? "Expand fired (CaseDetail wires this to TrustScoreModal)."
+              : "Quiet expand sits left of gear / remove."}
           </p>
         </Widget>
       </div>

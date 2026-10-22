@@ -52,7 +52,7 @@ function CloseIcon() {
 
 /**
  * Raised chrome for dashboard / case widgets.
- * Optional title + header grip (move), settings gear (size toggles), and remove X.
+ * Optional title + headerActions + header grip (move), settings gear (size toggles), and remove X.
  * 4∶3 aspect only when colSpan===1 && rowSpan===1 (or className forces it).
  */
 export default function Widget({
@@ -67,6 +67,7 @@ export default function Widget({
   onPositionChange,
   onPositionPreview,
   onRemove,
+  headerActions,
   showSettings = Boolean(onSizeChange || onPositionChange || onRemove),
   ...rest
 }) {
@@ -89,7 +90,9 @@ export default function Widget({
     .filter(Boolean)
     .join(" ");
   const label = title ? undefined : ariaLabel;
-  const showHeader = Boolean(title || showSettings);
+  const hasHeaderActions = Boolean(headerActions);
+  const showHeader = Boolean(title || showSettings || hasHeaderActions);
+  const showTrailing = Boolean(showSettings || hasHeaderActions);
   const showSizePanel = Boolean(onSizeChange);
 
   useEffect(() => {
@@ -243,8 +246,11 @@ export default function Widget({
       {showHeader ? (
         <div className="ts-widget__header">
           {title ? <h2 className="ts-widget__title">{title}</h2> : <span />}
-          {showSettings ? (
+          {showTrailing ? (
             <div className="ts-widget__actions">
+              {hasHeaderActions ? (
+                <div className="ts-widget__header-actions">{headerActions}</div>
+              ) : null}
               {onPositionChange ? (
                 <button
                   type="button"

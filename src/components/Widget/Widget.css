@@ -71,6 +71,14 @@
   flex: 0 0 auto;
 }
 
+.ts-widget__header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  flex: 0 0 auto;
+}
+
+.ts-widget__action,
 .ts-widget__gear,
 .ts-widget__grip,
 .ts-widget__remove {
@@ -95,6 +103,7 @@
   cursor: grabbing;
 }
 
+.ts-widget__action:hover,
 .ts-widget__gear:hover,
 .ts-widget__grip:hover,
 .ts-widget__remove:hover {
@@ -103,6 +112,7 @@
   border-color: var(--ts-color-border-default);
 }
 
+.ts-widget__action:focus-visible,
 .ts-widget__gear:focus-visible,
 .ts-widget__grip:focus-visible,
 .ts-widget__remove:focus-visible,

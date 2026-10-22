@@ -76,6 +76,20 @@ function VelocityChart({ series }) {
   );
 }
 
+function ExpandIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path
+        d="M9.5 2.5H13.5V6.5M6.5 13.5H2.5V9.5M13.5 2.5L9 7M2.5 13.5L7 9"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 function widgetChrome(layoutItem, {
   title,
   className,
@@ -85,6 +99,7 @@ function widgetChrome(layoutItem, {
   onPositionChange,
   onPositionPreview,
   onRemove,
+  headerActions,
 }) {
   return (
     <Widget
@@ -98,6 +113,7 @@ function widgetChrome(layoutItem, {
       onPositionChange={onPositionChange}
       onPositionPreview={onPositionPreview}
       onRemove={onRemove}
+      headerActions={headerActions}
     >
       {children}
     </Widget>
@@ -165,6 +181,16 @@ function renderCaseWidget(itemId, ctx) {
     case "trust-score":
       return chrome({
         title: "Trust score",
+        headerActions: (
+          <button
+            type="button"
+            className="ts-widget__action"
+            aria-label="Expand Trust score"
+            onClick={onExplain}
+          >
+            <ExpandIcon />
+          </button>
+        ),
         children: <ScoreHero score={item.score} confidence={item.confidence} />,
       });
     case "case-history":
@@ -641,7 +667,8 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
 
           <p className="ts-case__footnote ts-case__blur-zone">
             Reconstruction of a payments-fraud case view. Queue rows open this screen, not the score modal.
-            The explainer is still available from Velocities. Weights stay hidden. Reason codes stay pre-scripted.
+            Open the explainer from Trust score Expand or Velocities. Weights stay hidden. Reason codes stay
+            pre-scripted.
           </p>
         </main>
 
