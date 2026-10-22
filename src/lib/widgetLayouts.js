@@ -14,7 +14,6 @@ export const WIDGET_SIZES = [
 /** Registered Case Detail widget ids (renderer lives on CaseDetail). */
 export const CASE_WIDGET_IDS = [
   "trust-score",
-  "banner",
   "case-history",
   "sos",
   "network",
@@ -23,14 +22,18 @@ export const CASE_WIDGET_IDS = [
   "identity",
   "transaction",
   "policies",
+  "custom-fields",
+  "email-insights",
+  "order-history",
+  "shopping-cart",
+  "comparisons",
 ];
 
 /**
  * Add-widget catalog for Case Detail drawer. Titles match widget headers;
- * all under Payments. Spans match Default preset defaults.
+ * all under Payments. Spans match Default preset defaults (or mock weight).
  */
 export const CASE_WIDGET_CATALOG = [
-  { id: "banner", title: "Case banner", category: "Payments", defaultColSpan: 2, defaultRowSpan: 1 },
   { id: "trust-score", title: "Trust score", category: "Payments", defaultColSpan: 1, defaultRowSpan: 1 },
   { id: "case-history", title: "Case history", category: "Payments", defaultColSpan: 2, defaultRowSpan: 1 },
   { id: "sos", title: "SOS", category: "Payments", defaultColSpan: 1, defaultRowSpan: 1 },
@@ -40,22 +43,41 @@ export const CASE_WIDGET_CATALOG = [
   { id: "identity", title: "Identity check", category: "Payments", defaultColSpan: 2, defaultRowSpan: 1 },
   { id: "transaction", title: "Transaction info", category: "Payments", defaultColSpan: 2, defaultRowSpan: 1 },
   { id: "policies", title: "Policies triggered", category: "Payments", defaultColSpan: 2, defaultRowSpan: 1 },
+  { id: "custom-fields", title: "Custom fields", category: "Payments", defaultColSpan: 2, defaultRowSpan: 1 },
+  { id: "email-insights", title: "Email insights", category: "Payments", defaultColSpan: 1, defaultRowSpan: 1 },
+  { id: "order-history", title: "Order history", category: "Payments", defaultColSpan: 2, defaultRowSpan: 2 },
+  { id: "shopping-cart", title: "Shopping cart", category: "Payments", defaultColSpan: 2, defaultRowSpan: 1 },
+  { id: "comparisons", title: "Comparisons", category: "Payments", defaultColSpan: 1, defaultRowSpan: 1 },
 ];
 
 /**
  * Presets. Shape: `{ id, label, items: [{ id, column, row, colSpan, rowSpan }] }`.
- * Default mirrors the former fixed Case Detail stack inside the 4×6 grid.
+ * Default fills the 4×6 grid without the APP-oriented banner strip.
  */
 export const WIDGET_LAYOUTS = [
   {
     id: "default",
     label: "Default",
     items: [
-      { id: "banner", column: 1, row: 1, colSpan: 2, rowSpan: 1 },
+      { id: "case-history", column: 1, row: 1, colSpan: 2, rowSpan: 1 },
+      { id: "sos", column: 3, row: 1, colSpan: 1, rowSpan: 1 },
       { id: "trust-score", column: 4, row: 1, colSpan: 1, rowSpan: 1 },
-      { id: "case-history", column: 1, row: 2, colSpan: 2, rowSpan: 1 },
-      { id: "sos", column: 3, row: 2, colSpan: 1, rowSpan: 1 },
-      { id: "network", column: 4, row: 2, colSpan: 1, rowSpan: 1 },
+      { id: "payment", column: 1, row: 2, colSpan: 2, rowSpan: 1 },
+      { id: "network", column: 3, row: 2, colSpan: 1, rowSpan: 1 },
+      { id: "velocities", column: 1, row: 3, colSpan: 2, rowSpan: 1 },
+      { id: "identity", column: 3, row: 3, colSpan: 2, rowSpan: 1 },
+      { id: "transaction", column: 1, row: 4, colSpan: 2, rowSpan: 1 },
+      { id: "policies", column: 3, row: 4, colSpan: 2, rowSpan: 1 },
+    ],
+  },
+  {
+    id: "wide-score",
+    label: "Wide score",
+    items: [
+      { id: "trust-score", column: 3, row: 1, colSpan: 2, rowSpan: 2 },
+      { id: "case-history", column: 1, row: 1, colSpan: 2, rowSpan: 1 },
+      { id: "sos", column: 1, row: 2, colSpan: 1, rowSpan: 1 },
+      { id: "network", column: 2, row: 2, colSpan: 1, rowSpan: 1 },
       { id: "payment", column: 1, row: 3, colSpan: 2, rowSpan: 1 },
       { id: "velocities", column: 3, row: 3, colSpan: 2, rowSpan: 1 },
       { id: "identity", column: 1, row: 4, colSpan: 2, rowSpan: 1 },
@@ -64,35 +86,18 @@ export const WIDGET_LAYOUTS = [
     ],
   },
   {
-    id: "wide-score",
-    label: "Wide score",
-    items: [
-      { id: "trust-score", column: 3, row: 1, colSpan: 2, rowSpan: 2 },
-      { id: "banner", column: 1, row: 1, colSpan: 2, rowSpan: 1 },
-      { id: "case-history", column: 1, row: 2, colSpan: 2, rowSpan: 1 },
-      { id: "sos", column: 1, row: 3, colSpan: 1, rowSpan: 1 },
-      { id: "network", column: 2, row: 3, colSpan: 1, rowSpan: 1 },
-      { id: "payment", column: 3, row: 3, colSpan: 2, rowSpan: 1 },
-      { id: "velocities", column: 1, row: 4, colSpan: 2, rowSpan: 1 },
-      { id: "identity", column: 3, row: 4, colSpan: 2, rowSpan: 1 },
-      { id: "transaction", column: 1, row: 5, colSpan: 2, rowSpan: 1 },
-      { id: "policies", column: 3, row: 5, colSpan: 2, rowSpan: 1 },
-    ],
-  },
-  {
     id: "compact",
     label: "Compact",
     items: [
       { id: "trust-score", column: 4, row: 1, colSpan: 1, rowSpan: 1 },
-      { id: "banner", column: 1, row: 1, colSpan: 2, rowSpan: 1 },
-      { id: "sos", column: 1, row: 2, colSpan: 1, rowSpan: 1 },
-      { id: "network", column: 2, row: 2, colSpan: 1, rowSpan: 1 },
-      { id: "payment", column: 3, row: 2, colSpan: 1, rowSpan: 1 },
-      { id: "case-history", column: 4, row: 2, colSpan: 1, rowSpan: 1 },
-      { id: "velocities", column: 1, row: 3, colSpan: 2, rowSpan: 1 },
-      { id: "identity", column: 3, row: 3, colSpan: 2, rowSpan: 1 },
-      { id: "transaction", column: 1, row: 4, colSpan: 2, rowSpan: 1 },
-      { id: "policies", column: 3, row: 4, colSpan: 2, rowSpan: 1 },
+      { id: "sos", column: 1, row: 1, colSpan: 1, rowSpan: 1 },
+      { id: "network", column: 2, row: 1, colSpan: 1, rowSpan: 1 },
+      { id: "payment", column: 3, row: 1, colSpan: 1, rowSpan: 1 },
+      { id: "case-history", column: 1, row: 2, colSpan: 2, rowSpan: 1 },
+      { id: "velocities", column: 3, row: 2, colSpan: 2, rowSpan: 1 },
+      { id: "identity", column: 1, row: 3, colSpan: 2, rowSpan: 1 },
+      { id: "transaction", column: 3, row: 3, colSpan: 2, rowSpan: 1 },
+      { id: "policies", column: 1, row: 4, colSpan: 2, rowSpan: 1 },
     ],
   },
 ];
@@ -256,6 +261,12 @@ export function addWidgetItem(items, catalogEntry, cols = 4, maxRows = 6) {
   );
   if (!cell) return list;
   return [...list, { id: catalogEntry.id, ...cell }];
+}
+
+/** Remove a widget by id. Returns items unchanged if id is absent. */
+export function removeWidgetItem(items, widgetId) {
+  if (!widgetId) return items ?? [];
+  return (items ?? []).filter((item) => item.id !== widgetId);
 }
 
 /**

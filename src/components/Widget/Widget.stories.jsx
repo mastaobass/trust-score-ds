@@ -11,7 +11,7 @@ export default {
     docs: {
       description: {
         component:
-          "Raised widget chrome with optional title, settings gear (size toggles 1×1 / 1×2 / 2×1 / 2×2, plus Move handle), and snap resize handle. 4∶3 aspect only for 1×1; larger sizes fill their grid cell.",
+          "Raised widget chrome with optional title, header move grip, settings gear (size toggles 1×1 / 1×2 / 2×1 / 2×2), remove X, and snap resize handle. 4∶3 aspect only for 1×1; larger sizes fill their grid cell.",
       },
     },
   },
@@ -53,6 +53,67 @@ export const SettingsAndSize = {
           <ScoreHero score={71.3} confidence={84} />
           <p style={{ margin: "8px 0 0", color: "var(--ts-color-text-muted)", fontSize: "var(--ts-font-size-sm)" }}>
             {size.colSpan}×{size.rowSpan}
+          </p>
+        </Widget>
+      </div>
+    );
+  },
+};
+
+export const WithRemove = {
+  name: "Header remove X",
+  render: function RemoveDemo() {
+    const [removed, setRemoved] = useState(false);
+    if (removed) {
+      return (
+        <button type="button" onClick={() => setRemoved(false)}>
+          Restore widget
+        </button>
+      );
+    }
+    return (
+      <div style={cellStyle}>
+        <Widget
+          title="Custom fields"
+          colSpan={1}
+          rowSpan={1}
+          onRemove={() => setRemoved(true)}
+          onSizeChange={() => {}}
+        >
+          <p style={{ margin: 0, color: "var(--ts-color-text-muted)", fontSize: "var(--ts-font-size-sm)" }}>
+            Close removes the widget from the layout.
+          </p>
+        </Widget>
+      </div>
+    );
+  },
+};
+
+export const GripGearRemove = {
+  name: "Grip + gear + remove",
+  render: function FullChromeDemo() {
+    const [size, setSize] = useState({ colSpan: 1, rowSpan: 1 });
+    const [gone, setGone] = useState(false);
+    if (gone) {
+      return (
+        <button type="button" onClick={() => setGone(false)}>
+          Restore widget
+        </button>
+      );
+    }
+    return (
+      <div style={{ width: size.colSpan === 1 ? 280 : 420, maxWidth: "100%" }}>
+        <Widget
+          title="Payment"
+          colSpan={size.colSpan}
+          rowSpan={size.rowSpan}
+          resizable
+          onSizeChange={setSize}
+          onPositionChange={() => {}}
+          onRemove={() => setGone(true)}
+        >
+          <p style={{ margin: 0, color: "var(--ts-color-text-muted)", fontSize: "var(--ts-font-size-sm)" }}>
+            Header grip moves; gear sets size; X removes.
           </p>
         </Widget>
       </div>

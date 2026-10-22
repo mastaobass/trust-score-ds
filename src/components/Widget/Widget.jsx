@@ -36,9 +36,23 @@ function GripIcon() {
   );
 }
 
+function CloseIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M18 6L6 18M6 6l12 12"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 /**
  * Raised chrome for dashboard / case widgets.
- * Optional title + settings gear (size toggles + move handle) and snap resize handle.
+ * Optional title + header grip (move), settings gear (size toggles), and remove X.
  * 4∶3 aspect only when colSpan===1 && rowSpan===1 (or className forces it).
  */
 export default function Widget({
@@ -52,7 +66,8 @@ export default function Widget({
   onSizeChange,
   onPositionChange,
   onPositionPreview,
-  showSettings = Boolean(onSizeChange || onPositionChange),
+  onRemove,
+  showSettings = Boolean(onSizeChange || onPositionChange || onRemove),
   ...rest
 }) {
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -74,6 +89,8 @@ export default function Widget({
     .filter(Boolean)
     .join(" ");
   const label = title ? undefined : ariaLabel;
+  const showHeader = Boolean(title || showSettings);
+  const showSizePanel = Boolean(onSizeChange);
 
   useEffect(() => {
     if (!settingsOpen) return undefined;
@@ -223,43 +240,43 @@ export default function Widget({
       onPointerCancel={onRootPointerUp}
       {...rest}
     >
-      {(title || showSettings) && (
+      {showHeader ? (
         <div className="ts-widget__header">
           {title ? <h2 className="ts-widget__title">{title}</h2> : <span />}
           {showSettings ? (
-            <div className="ts-widget__settings">
-              <button
-                ref={gearRef}
-                type="button"
-                className="ts-widget__gear"
-                aria-label="Widget settings"
-                aria-expanded={settingsOpen}
-                aria-controls={panelId}
-                onClick={() => setSettingsOpen((v) => !v)}
-              >
-                <CogIcon />
-              </button>
-              {settingsOpen ? (
-                <div
-                  ref={panelRef}
-                  id={panelId}
-                  className="ts-widget__size-panel"
-                  role="group"
-                  aria-label="Widget settings"
+            <div className="ts-widget__actions">
+              {onPositionChange ? (
+                <button
+                  type="button"
+                  className="ts-widget__grip"
+                  aria-label="Move widget"
+                  onPointerDown={onMovePointerDown}
                 >
-                  {onPositionChange ? (
-                    <button
-                      type="button"
-                      className="ts-widget__move"
-                      aria-label="Move widget"
-                      onPointerDown={onMovePointerDown}
+                  <GripIcon />
+                </button>
+              ) : null}
+              {showSizePanel ? (
+                <div className="ts-widget__settings">
+                  <button
+                    ref={gearRef}
+                    type="button"
+                    className="ts-widget__gear"
+                    aria-label="Widget settings"
+                    aria-expanded={settingsOpen}
+                    aria-controls={panelId}
+                    onClick={() => setSettingsOpen((v) => !v)}
+                  >
+                    <CogIcon />
+                  </button>
+                  {settingsOpen ? (
+                    <div
+                      ref={panelRef}
+                      id={panelId}
+                      className="ts-widget__size-panel"
+                      role="group"
+                      aria-label="Widget size"
                     >
-                      <GripIcon />
-                      <span>Move</span>
-                    </button>
-                  ) : null}
-                  {onSizeChange
-                    ? WIDGET_SIZES.map((size) => {
+                      {WIDGET_SIZES.map((size) => {
                         const selected =
                           Number(colSpan) === size.colSpan && Number(rowSpan) === size.rowSpan;
                         return (
@@ -276,14 +293,25 @@ export default function Widget({
                             {size.label}
                           </button>
                         );
-                      })
-                    : null}
+                      })}
+                    </div>
+                  ) : null}
                 </div>
+              ) : null}
+              {onRemove ? (
+                <button
+                  type="button"
+                  className="ts-widget__remove"
+                  aria-label="Remove widget"
+                  onClick={() => onRemove()}
+                >
+                  <CloseIcon />
+                </button>
               ) : null}
             </div>
           ) : null}
         </div>
-      )}
+      ) : null}
       <div className="ts-widget__body">{children}</div>
       {resizable && onSizeChange ? (
         <button

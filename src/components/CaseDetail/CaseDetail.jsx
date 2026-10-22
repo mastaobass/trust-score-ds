@@ -1,10 +1,10 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import ActionBar from "../ActionBar/ActionBar";
-import Banner from "../Banner/Banner";
 import Button from "../Button/Button";
 import Drawer from "../Drawer/Drawer";
 import FieldRow from "../FieldRow/FieldRow";
 import NetworkStat from "../NetworkStat/NetworkStat";
+import Pill from "../Pill/Pill";
 import ScoreHero from "../ScoreHero/ScoreHero";
 import SosRow from "../SosRow/SosRow";
 import StatusChip from "../StatusChip/StatusChip";
@@ -21,6 +21,7 @@ import {
   getStoredWidgetLayoutId,
   loadWidgetLayout,
   moveWidgetItem,
+  removeWidgetItem,
   setStoredWidgetLayoutId,
   setStoredWidgetLayoutItems,
   WIDGET_LAYOUTS,
@@ -83,6 +84,7 @@ function widgetChrome(layoutItem, {
   onSizeChange,
   onPositionChange,
   onPositionPreview,
+  onRemove,
 }) {
   return (
     <Widget
@@ -95,6 +97,7 @@ function widgetChrome(layoutItem, {
       onSizeChange={onSizeChange}
       onPositionChange={onPositionChange}
       onPositionPreview={onPositionPreview}
+      onRemove={onRemove}
     >
       {children}
     </Widget>
@@ -131,15 +134,31 @@ function ChevronIcon({ open }) {
   );
 }
 
+function emailInsightTone(risk) {
+  if (risk === "Low") return "positive";
+  if (risk === "Moderate") return "warning";
+  return "negative";
+}
+
 /** id → renderer. Grid stays content-agnostic; CaseDetail owns the map. */
 function renderCaseWidget(itemId, ctx) {
-  const { item, layoutItem, events, onSizeChange, onPositionChange, onPositionPreview, onExplain } = ctx;
+  const {
+    item,
+    layoutItem,
+    events,
+    onSizeChange,
+    onPositionChange,
+    onPositionPreview,
+    onRemove,
+    onExplain,
+  } = ctx;
   const chrome = (props) =>
     widgetChrome(layoutItem, {
       ...props,
       onSizeChange,
       onPositionChange,
       onPositionPreview,
+      onRemove,
     });
 
   switch (itemId) {
@@ -147,21 +166,6 @@ function renderCaseWidget(itemId, ctx) {
       return chrome({
         title: "Trust score",
         children: <ScoreHero score={item.score} confidence={item.confidence} />,
-      });
-    case "banner":
-      return chrome({
-        className: "ts-widget--banner",
-        ariaLabel: "Case banner",
-        children: (
-          <Banner
-            variant="paymentsFraud"
-            queued={item.time}
-            score={item.score}
-            topReason={item.topReason}
-            caughtBy={item.caughtBy}
-            standing={item.standing}
-          />
-        ),
       });
     case "case-history":
       return chrome({
@@ -278,6 +282,114 @@ function renderCaseWidget(itemId, ctx) {
           </div>
         )),
       });
+    case "custom-fields":
+      return chrome({
+        title: "Custom fields",
+        children: (
+          <dl className="ts-payfields">
+            {item.customFields.map((field) => (
+              <FieldRow key={field.label} label={field.label} value={field.value} />
+            ))}
+          </dl>
+        ),
+      });
+    case "email-insights": {
+      const insights = item.emailInsights;
+      return chrome({
+        title: "Email insights",
+        children: (
+          <div className="ts-case__email-insights">
+            <div className="ts-case__email-score">
+              <span className="ts-case__email-score-value">{insights.trustScore}</span>
+              <span className="ts-case__email-score-label">Email trust</span>
+              <Pill tone={emailInsightTone(insights.risk)}>{insights.risk}</Pill>
+            </div>
+            <dl className="ts-fields">
+              <FieldRow label="Domain" value={insights.domain} />
+              <FieldRow label="Age (days)" value={String(insights.ageDays)} />
+              <FieldRow label="Mailbox" value={insights.mailbox} />
+            </dl>
+            <ul className="ts-case__email-signals">
+              {insights.signals.map((signal) => (
+                <li key={signal}>{signal}</li>
+              ))}
+            </ul>
+          </div>
+        ),
+      });
+    }
+    case "order-history":
+      return chrome({
+        title: "Order history",
+        children: (
+          <table className="ts-case__table">
+            <thead>
+              <tr>
+                <th scope="col">Order</th>
+                <th scope="col">Date</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {item.orderHistory.map((row) => (
+                <tr key={row.orderId}>
+                  <td>{row.orderId}</td>
+                  <td>{row.date}</td>
+                  <td>{money(row.amount)}</td>
+                  <td>{row.status}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ),
+      });
+    case "shopping-cart":
+      return chrome({
+        title: "Shopping cart",
+        children: (
+          <table className="ts-case__table">
+            <thead>
+              <tr>
+                <th scope="col">Item</th>
+                <th scope="col">Qty</th>
+                <th scope="col">Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              {item.shoppingCart.map((line) => (
+                <tr key={line.sku}>
+                  <td>
+                    <span className="ts-case__cart-name">{line.name}</span>
+                    <span className="ts-case__cart-sku">{line.sku}</span>
+                  </td>
+                  <td>{line.qty}</td>
+                  <td>{money(line.price)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ),
+      });
+    case "comparisons":
+      return chrome({
+        title: "Comparisons",
+        children: (
+          <ul className="ts-case__comparisons">
+            {item.comparisons.map((row) => (
+              <li key={row.label} className="ts-case__compare-row">
+                <span className="ts-case__compare-label">{row.label}</span>
+                <span className="ts-case__compare-pair">
+                  <span>{row.left}</span>
+                  <span aria-hidden="true">·</span>
+                  <span>{row.right}</span>
+                </span>
+                <Pill tone={row.match ? "positive" : "warning"}>{row.match ? "Match" : "Differ"}</Pill>
+              </li>
+            ))}
+          </ul>
+        ),
+      });
     default:
       return null;
   }
@@ -301,6 +413,8 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
   const [layoutId, setLayoutId] = useState(() => initialLayout().id);
   const [layoutItems, setLayoutItems] = useState(() => initialLayout().items);
   const [dropTarget, setDropTarget] = useState(null);
+  const closeViewsDrawer = useCallback(() => setViewsOpen(false), []);
+  const toggleViewsDrawer = useCallback(() => setViewsOpen((open) => !open), []);
 
   if (!item) {
     return (
@@ -400,6 +514,10 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
     persistItems(addWidgetItem(layoutItems, catalogEntry, GRID_COLS, GRID_MAX_ROWS));
   }
 
+  function removeCatalogWidget(widgetId) {
+    persistItems(removeWidgetItem(layoutItems, widgetId));
+  }
+
   const placedWidgetIds = new Set(layoutItems.map((entry) => entry.id));
 
   const caseStatus =
@@ -451,10 +569,10 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
                   size="sm"
                   variant="secondary"
                   className="ts-case__nav-cog"
-                  aria-label="Page views"
+                  aria-label="Layout settings"
                   aria-pressed={viewsOpen}
                   aria-expanded={viewsOpen}
-                  onClick={() => setViewsOpen(true)}
+                  onClick={toggleViewsDrawer}
                 >
                   <PageCogIcon />
                 </Button>
@@ -495,6 +613,7 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
                 onSizeChange: (size) => updateWidgetSize(layoutItem.id, size),
                 onPositionChange: (pos) => updateWidgetPosition(layoutItem.id, pos),
                 onPositionPreview: (preview) => previewWidgetPosition(layoutItem.id, preview),
+                onRemove: () => removeCatalogWidget(layoutItem.id),
                 onExplain: () => setExplain(true),
               });
               if (!content) return null;
@@ -530,7 +649,7 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
           mode="push"
           open={viewsOpen}
           title="Settings"
-          onClose={() => setViewsOpen(false)}
+          onClose={closeViewsDrawer}
         >
           <div className="ts-case__drawer-body">
             <section className="ts-case__drawer-section" aria-labelledby="ts-case-views-label">
@@ -585,17 +704,26 @@ export default function CaseDetail({ id, rows, onRowsChange, flash, onFlash, onB
                   >
                     {CASE_WIDGET_CATALOG.map((entry) => {
                       const alreadyPlaced = placedWidgetIds.has(entry.id);
+                      if (alreadyPlaced) {
+                        return (
+                          <button
+                            key={entry.id}
+                            type="button"
+                            className="ts-case__widget-remove"
+                            aria-label={`Remove ${entry.title}`}
+                            onClick={() => removeCatalogWidget(entry.id)}
+                          >
+                            <span>Remove</span>
+                            <span className="ts-case__widget-remove-title">{entry.title}</span>
+                          </button>
+                        );
+                      }
                       return (
                         <button
                           key={entry.id}
                           type="button"
                           className="ts-case__widget-add"
-                          disabled={alreadyPlaced}
-                          aria-label={
-                            alreadyPlaced
-                              ? `${entry.title} already on the grid`
-                              : `Add ${entry.title}`
-                          }
+                          aria-label={`Add ${entry.title}`}
                           onClick={() => addCatalogWidget(entry)}
                         >
                           <span className="ts-case__widget-add-plus" aria-hidden="true">

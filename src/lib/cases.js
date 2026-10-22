@@ -152,6 +152,103 @@ function policiesFor(item) {
   ];
 }
 
+function customFieldsFor(item, persona) {
+  return [
+    { label: "Loyalty tier", value: item.score >= 80 ? "Gold" : item.score >= 60 ? "Silver" : "None" },
+    { label: "Promo code", value: item.amount > 500 ? "SAVE15" : "—" },
+    { label: "Gift message", value: item.score < 55 ? "Present for guest" : "—" },
+    { label: "Channel", value: persona.binCountry === "United States" ? "Web · desktop" : "Web · mobile" },
+    { label: "Affiliate ID", value: item.score < 70 ? `AFF-${item.id.slice(0, 4)}` : "—" },
+    { label: "Storefront", value: "Default" },
+  ];
+}
+
+function emailInsightsFor(item, persona) {
+  const trust = Math.max(12, Math.min(98, Math.round(item.score + (persona.emailAge > 100 ? 8 : -12))));
+  return {
+    trustScore: trust,
+    domain: persona.email.split("@")[1] ?? "example.com",
+    ageDays: persona.emailAge,
+    mailbox: persona.emailAge < 2 ? "Disposable / new" : "Established",
+    risk:
+      trust >= 75 ? "Low" : trust >= 50 ? "Moderate" : "Elevated",
+    signals: [
+      persona.emailAge < 2 ? "Mailbox created within 48 hours" : "Mailbox older than 90 days",
+      persona.email === persona.shipping ? "Billing and shipping emails match" : "Shipping email differs",
+      item.score < 60 ? "Domain seen in prior incidents" : "Domain clean on network",
+    ],
+  };
+}
+
+function orderHistoryFor(item) {
+  const base = item.amount;
+  const statuses =
+    item.score >= 80
+      ? ["Delivered", "Delivered", "Delivered"]
+      : item.score >= 60
+        ? ["Delivered", "Returned", "Delivered"]
+        : ["Declined", "Delivered", "Chargeback"];
+  return [
+    {
+      orderId: `${item.id}-01`,
+      date: "Jun 12, 2026",
+      amount: Math.round(base * 0.42),
+      status: statuses[0],
+    },
+    {
+      orderId: `${item.id}-02`,
+      date: "Mar 3, 2026",
+      amount: Math.round(base * 0.78),
+      status: statuses[1],
+    },
+    {
+      orderId: `${item.id}-03`,
+      date: "Nov 18, 2025",
+      amount: Math.round(base * 1.1),
+      status: statuses[2],
+    },
+  ];
+}
+
+function shoppingCartFor(item) {
+  const unit = Math.max(19, Math.round(item.amount / 3));
+  return [
+    { sku: "SKU-1842", name: "Wireless earbuds", qty: 1, price: unit },
+    { sku: "SKU-2201", name: "Protective case", qty: 2, price: Math.round(unit * 0.35) },
+    {
+      sku: "SKU-0911",
+      name: item.amount > 400 ? "Extended warranty" : "Cable pack",
+      qty: 1,
+      price: Math.max(12, Math.round(item.amount - unit - Math.round(unit * 0.35) * 2)),
+    },
+  ];
+}
+
+function comparisonsFor(item, persona) {
+  return [
+    {
+      label: "Billing vs shipping",
+      left: persona.email.split("@")[0],
+      right: persona.shipping.split("@")[0],
+      match: persona.email === persona.shipping,
+    },
+    {
+      label: "BIN vs IP region",
+      left: persona.binCountry,
+      right: item.score > 70 ? persona.binCountry : "Distant IP",
+      match: item.score > 70,
+    },
+    {
+      label: "Device vs prior",
+      left: "Current session",
+      right: item.positiveReasons.some((r) => r.active && r.label.includes("Device"))
+        ? "Known device"
+        : "New fingerprint",
+      match: item.positiveReasons.some((r) => r.active && r.label.includes("Device")),
+    },
+  ];
+}
+
 function buildCase(item) {
   const persona = PERSONA[item.id] ?? PERSONA["48291-C"];
   const compact = item.id.replace("-", "");
@@ -194,6 +291,11 @@ function buildCase(item) {
       phone: item.score > 80 ? "Billing phone on file" : "No subscriber match on shipping phone",
     },
     policies: policiesFor(item),
+    customFields: customFieldsFor(item, persona),
+    emailInsights: emailInsightsFor(item, persona),
+    orderHistory: orderHistoryFor(item),
+    shoppingCart: shoppingCartFor(item),
+    comparisons: comparisonsFor(item, persona),
     topReason: topReason(item),
     caughtBy: caughtBy(item),
     standing: standing(item),

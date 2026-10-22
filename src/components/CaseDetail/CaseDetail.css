@@ -25,6 +25,16 @@
   opacity: 0.72;
 }
 
+/* Keep layout settings cog clickable so it can toggle the drawer closed. */
+.ts-case__main--drawer-open .ts-case__blur-zone .ts-case__nav-cog {
+  position: relative;
+  z-index: 3;
+  pointer-events: auto;
+  filter: none;
+  opacity: 1;
+  user-select: auto;
+}
+
 .ts-case__main--drawer-open .ts-case__widget-grid {
   position: relative;
   z-index: 1;
@@ -205,15 +215,39 @@
   outline: 2px solid var(--ts-color-accent-primary);
   outline-offset: 2px;
 }
-.ts-case__widget-add:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-  filter: none;
-}
 .ts-case__widget-add-plus {
   flex: 0 0 auto;
   font-size: 1.1em;
   line-height: 1;
+}
+.ts-case__widget-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--ts-color-border-default);
+  border-radius: var(--ts-radius-sm);
+  background: var(--ts-color-surface-raised, #f2f3f6);
+  color: var(--ts-color-text-primary);
+  font: inherit;
+  font-size: var(--ts-font-size-sm);
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: left;
+  cursor: pointer;
+}
+.ts-case__widget-remove:hover {
+  background: var(--ts-color-surface-page);
+}
+.ts-case__widget-remove:focus-visible {
+  outline: 2px solid var(--ts-color-accent-primary);
+  outline-offset: 2px;
+}
+.ts-case__widget-remove-title {
+  color: var(--ts-color-text-muted);
+  font-weight: 500;
 }
 .ts-meta {
   display: inline-flex;
@@ -270,6 +304,83 @@
 }
 .ts-case__missing { max-width: 32rem; margin: 4rem auto; text-align: center; }
 .ts-card__head-row { display: flex; justify-content: flex-end; margin-bottom: 8px; }
+.ts-case__email-insights {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+}
+.ts-case__email-score {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 10px;
+}
+.ts-case__email-score-value {
+  font-size: var(--ts-font-size-xl);
+  font-weight: 700;
+  line-height: 1;
+}
+.ts-case__email-score-label {
+  font-size: var(--ts-font-size-sm);
+  color: var(--ts-color-text-muted);
+}
+.ts-case__email-signals {
+  margin: 0;
+  padding-left: 1.1em;
+  font-size: var(--ts-font-size-sm);
+  color: var(--ts-color-text-muted);
+}
+.ts-case__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--ts-font-size-sm);
+}
+.ts-case__table th,
+.ts-case__table td {
+  padding: 6px 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--ts-color-border-default);
+  vertical-align: top;
+}
+.ts-case__table th {
+  color: var(--ts-color-text-muted);
+  font-weight: 600;
+}
+.ts-case__cart-name {
+  display: block;
+  font-weight: 600;
+}
+.ts-case__cart-sku {
+  display: block;
+  color: var(--ts-color-text-muted);
+  font-size: var(--ts-font-size-xs);
+}
+.ts-case__comparisons {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ts-case__compare-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ts-case__compare-label {
+  font-size: var(--ts-font-size-xs);
+  font-weight: 600;
+  color: var(--ts-color-text-muted);
+}
+.ts-case__compare-pair {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--ts-font-size-sm);
+}
 @media (max-width: 900px) {
   .ts-payfields { grid-template-columns: 1fr; }
   .ts-case__main { padding: 12px; }

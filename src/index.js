@@ -55,6 +55,7 @@ export {
   rectsOverlap,
   findNextFreeCell,
   addWidgetItem,
+  removeWidgetItem,
   moveWidgetItem,
   pointerToGridCell,
 } from "./lib/widgetLayouts";
