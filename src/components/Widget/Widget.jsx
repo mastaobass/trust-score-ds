@@ -51,6 +51,7 @@ export default function Widget({
   resizable = false,
   onSizeChange,
   onPositionChange,
+  onPositionPreview,
   showSettings = Boolean(onSizeChange || onPositionChange),
   ...rest
 }) {
@@ -179,6 +180,12 @@ export default function Widget({
   function onMovePointerMove(e) {
     const move = moveRef.current;
     if (!move || move.pointerId !== e.pointerId) return;
+    if (!onPositionPreview) return;
+    const el = rootRef.current;
+    const grid = el?.closest(".ts-widget-grid");
+    if (!grid) return;
+    const cell = pointerToGridCell(e.clientX, e.clientY, grid);
+    onPositionPreview({ column: cell.column, row: cell.row, cols: cell.cols });
   }
 
   function finishMove(e) {
@@ -186,6 +193,7 @@ export default function Widget({
     if (!move || (e.pointerId != null && move.pointerId !== e.pointerId)) return;
     moveRef.current = null;
     setMoving(false);
+    onPositionPreview?.(null);
     const el = rootRef.current;
     const grid = el?.closest(".ts-widget-grid");
     if (!grid || !onPositionChange) return;

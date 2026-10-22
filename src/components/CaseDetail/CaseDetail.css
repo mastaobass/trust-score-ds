@@ -59,35 +59,33 @@
   min-width: 32px;
   padding-inline: 8px;
 }
-.ts-case__drawer-help {
-  margin: 0;
-  font-size: var(--ts-font-size-sm);
-  color: var(--ts-color-text-muted);
-  line-height: 1.45;
-}
-.ts-case__views {
+.ts-case__drawer-body {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 20px;
 }
-.ts-case__views-label {
-  font-size: var(--ts-font-size-xs);
+.ts-case__drawer-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ts-case__drawer-heading {
+  margin: 0;
+  font-size: var(--ts-font-size-sm);
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ts-color-text-muted);
+  color: var(--ts-color-text-primary);
 }
 .ts-case__views-options {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 3px;
-  border: 1px solid var(--ts-color-border-default);
-  border-radius: var(--ts-radius-md);
-  background: var(--ts-color-surface-default);
+  gap: 6px;
 }
 .ts-case__views-option {
-  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
   border: 1px solid transparent;
   border-radius: var(--ts-radius-sm);
   background: transparent;
@@ -103,14 +101,119 @@
   color: var(--ts-color-text-primary);
 }
 .ts-case__views-option[aria-checked="true"] {
-  background: var(--ts-color-surface-raised);
-  border-color: var(--ts-color-border-default);
+  background: color-mix(
+    in srgb,
+    var(--ts-color-signal-positive, #2e9961) 22%,
+    var(--ts-color-surface-positive, #e6f7eb)
+  );
+  border-color: color-mix(in srgb, var(--ts-color-signal-positive, #2e9961) 35%, transparent);
   color: var(--ts-color-text-primary);
   font-weight: 600;
+}
+.ts-case__views-option[aria-checked="true"] .ts-case__views-option-label {
+  color: var(--ts-color-text-primary);
 }
 .ts-case__views-option:focus-visible {
   outline: 2px solid var(--ts-color-accent-primary);
   outline-offset: 1px;
+}
+.ts-case__radio-glyph {
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--ts-color-text-muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+}
+.ts-case__views-option[aria-checked="true"] .ts-case__radio-glyph {
+  border-color: var(--ts-color-signal-positive, #2e9961);
+  background: var(--ts-color-signal-positive, #2e9961);
+}
+.ts-case__radio-glyph-fill {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ts-color-surface-default, #fff);
+}
+.ts-case__widgets-category {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ts-case__widgets-category-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 4px;
+  border: none;
+  border-radius: var(--ts-radius-sm);
+  background: transparent;
+  color: var(--ts-color-text-primary);
+  font: inherit;
+  font-size: var(--ts-font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+.ts-case__widgets-category-toggle:hover {
+  background: var(--ts-color-surface-page);
+}
+.ts-case__widgets-category-toggle:focus-visible {
+  outline: 2px solid var(--ts-color-accent-primary);
+  outline-offset: 1px;
+}
+.ts-case__widgets-chevron {
+  flex: 0 0 auto;
+  color: var(--ts-color-text-muted);
+  transition: transform 140ms ease;
+}
+.ts-case__widgets-chevron[data-open="false"] {
+  transform: rotate(-90deg);
+}
+.ts-case__widgets-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ts-case__widget-add {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-radius: var(--ts-radius-sm);
+  background: var(--ts-color-accent-primary, #2563eb);
+  color: #fff;
+  font: inherit;
+  font-size: var(--ts-font-size-sm);
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: left;
+  cursor: pointer;
+}
+.ts-case__widget-add:hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+.ts-case__widget-add:focus-visible {
+  outline: 2px solid var(--ts-color-accent-primary);
+  outline-offset: 2px;
+}
+.ts-case__widget-add:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: none;
+}
+.ts-case__widget-add-plus {
+  flex: 0 0 auto;
+  font-size: 1.1em;
+  line-height: 1;
 }
 .ts-meta {
   display: inline-flex;

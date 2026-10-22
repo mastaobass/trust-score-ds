@@ -13,6 +13,8 @@ function usedRowCount(children, maxRows, columns) {
   let autoFlow = 0;
   Children.forEach(children, (child) => {
     if (!isValidElement(child)) return;
+    // Drop targets are visual-only and must not inflate row tracks.
+    if (child.type === WidgetGridDropTarget) return;
     if (child.props.row != null || child.type === WidgetGridItem) {
       const row = Number(child.props.row) || 1;
       const span = clampSpan(child.props.rowSpan, 1);
@@ -105,4 +107,46 @@ export default function WidgetGrid({
   );
 }
 
+/**
+ * Dashed accent landing zone shown while moving a widget.
+ * Same placement vars as Item; excluded from usedRowCount.
+ */
+function WidgetGridDropTarget({
+  column,
+  row,
+  colSpan = 1,
+  rowSpan = 1,
+  label = "Drop here",
+  className,
+  style,
+  ...rest
+}) {
+  const spanCols = clampSpan(colSpan);
+  const spanRows = clampSpan(rowSpan);
+  const classes = ["ts-widget-grid__drop-target", className].filter(Boolean).join(" ");
+  const itemStyle = {
+    ...style,
+    "--wg-col-span": spanCols,
+    "--wg-row-span": spanRows,
+  };
+  if (column != null) itemStyle["--wg-item-col"] = column;
+  if (row != null) itemStyle["--wg-item-row"] = row;
+
+  return (
+    <div
+      className={classes}
+      data-column={column != null ? String(column) : undefined}
+      data-row={row != null ? String(row) : undefined}
+      data-col-span={String(spanCols)}
+      data-row-span={String(spanRows)}
+      style={itemStyle}
+      aria-hidden="true"
+      {...rest}
+    >
+      <span className="ts-widget-grid__drop-target-label">{label}</span>
+    </div>
+  );
+}
+
 WidgetGrid.Item = WidgetGridItem;
+WidgetGrid.DropTarget = WidgetGridDropTarget;

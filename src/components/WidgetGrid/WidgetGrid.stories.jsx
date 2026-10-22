@@ -142,3 +142,25 @@ export const ScoreHeroColumnFour = {
     },
   },
 };
+
+export const DropTargetPreview = {
+  name: "Drop target",
+  render: () => (
+    <WidgetGrid aria-label="Drop target demo" maxRows={6}>
+      <WidgetGrid.Item column={1} row={1} colSpan={2} rowSpan={1}>
+        <Widget title="Payment" colSpan={2} rowSpan={1}>
+          <p style={muted}>Existing widget</p>
+        </Widget>
+      </WidgetGrid.Item>
+      <WidgetGrid.DropTarget column={3} row={1} colSpan={2} rowSpan={1} />
+    </WidgetGrid>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "`WidgetGrid.DropTarget` shows a dashed accent landing zone while a widget Move drag is active. It does not inflate used row tracks.",
+      },
+    },
+  },
+};
