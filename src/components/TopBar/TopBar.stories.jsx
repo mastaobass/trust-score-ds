@@ -30,7 +30,7 @@ export const Default = {
 
 export const CustomAccount = {
   args: {
-    email: "analyst@kount.com",
+    email: "analyst@trustco.com",
     org: "Acme Payments",
   },
 };

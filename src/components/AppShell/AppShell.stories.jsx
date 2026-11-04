@@ -16,7 +16,7 @@ export default {
     org: "Bancolombia",
     activeNavId: "case-management",
     breadcrumbs: [
-      { label: "Kount 360" },
+      { label: "Trust Co." },
       { label: "Payments Fraud" },
       { label: "Case Queue" },
     ],

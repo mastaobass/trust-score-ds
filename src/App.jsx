@@ -33,13 +33,13 @@ export default function App() {
   const breadcrumbs =
     route.name === "case"
       ? [
-          { label: "Kount 360" },
+          { label: "Trust Co." },
           { label: "Payments Fraud" },
           { label: "Case Queue", href: "#/" },
           { label: "Case Details" },
         ]
       : [
-          { label: "Kount 360" },
+          { label: "Trust Co." },
           { label: "Payments Fraud" },
           { label: "Case Queue" },
         ];

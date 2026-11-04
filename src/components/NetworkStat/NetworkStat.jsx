@@ -1,6 +1,6 @@
 import "./NetworkStat.css";
 
-/** One Across the Kount Network stat. share is 0-1 for bar length only. */
+/** One Across the Trust Co. network stat. share is 0-1 for bar length only. */
 export default function NetworkStat({ value, label, share = 0.5 }) {
   const width = Math.max(0, Math.min(1, share)) * 100;
   return (

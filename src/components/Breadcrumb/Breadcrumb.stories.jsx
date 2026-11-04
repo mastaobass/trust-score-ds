@@ -1,13 +1,13 @@
 import Breadcrumb from "./Breadcrumb";
 
 const QUEUE = [
-  { label: "Kount 360" },
+  { label: "Trust Co." },
   { label: "Payments Fraud" },
   { label: "Case Queue" },
 ];
 
 const CASE = [
-  { label: "Kount 360" },
+  { label: "Trust Co." },
   { label: "Payments Fraud" },
   { label: "Case Queue", href: "#/" },
   { label: "Case Details" },

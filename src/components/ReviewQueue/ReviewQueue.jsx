@@ -248,7 +248,7 @@ export default function ReviewQueue({
       ) : null}
 
       <p className="ts-queue__footnote">
-        Reconstruction of the Kount review surface. The model is proprietary, so this kit never exposes
+        Reconstruction of the Trust Co. review surface. The model is proprietary, so this kit never exposes
         factor weights that would let someone reverse-engineer detection. Inactive reason codes stay visible
         because absence is information.
       </p>

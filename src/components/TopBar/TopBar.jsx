@@ -112,12 +112,8 @@ export default function TopBar({
 
   return (
     <header className="ts-topbar" {...rest} ref={rootRef}>
-      <div className="ts-topbar__brand" aria-label="EQUIFAX Kount 360">
-        <span className="ts-topbar__equifax">EQUIFAX</span>
-        <span className="ts-topbar__pipe" aria-hidden="true">
-          |
-        </span>
-        <span className="ts-topbar__product">Kount® 360</span>
+      <div className="ts-topbar__brand" aria-label="Trust Co.">
+        <span className="ts-topbar__wordmark">Trust Co.</span>
       </div>
       <div className="ts-topbar__account">
         <label className="ts-topbar__search">
